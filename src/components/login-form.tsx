@@ -19,17 +19,26 @@ import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
 
-const formSchema = z.object({
-  fullName: z.string().min(2, {
-    message: "Please enter your full name.",
+const formSchema = z.discriminatedUnion("role", [
+  z.object({
+    role: z.literal("student"),
+    fullName: z.string().min(2, {
+      message: "Please enter your full name.",
+    }),
+    key: z.string().min(6, {
+      message: "Key must be at least 6 characters.",
+    }),
   }),
-  key: z.string().min(6, {
-    message: "Key must be at least 6 characters.",
+  z.object({
+    role: z.literal("admin"),
+    email: z.string().email({
+      message: "Please enter a valid email address.",
+    }),
+    password: z.string().min(6, {
+      message: "Password must be at least 6 characters.",
+    }),
   }),
-  role: z.enum(["student", "admin"], {
-    required_error: "You need to select a role.",
-  }),
-});
+]);
 
 export function LoginForm() {
   const router = useRouter();
@@ -38,11 +47,13 @@ export function LoginForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      role: "student",
       fullName: "",
       key: "",
-      role: "student",
     },
   });
+
+  const role = form.watch("role");
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     // In a real app, you'd handle authentication here.
@@ -64,39 +75,21 @@ export function LoginForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}
-          name="fullName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Full Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter your full name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="key"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Key</FormLabel>
-              <FormControl>
-                <Input type="password" placeholder="••••••••" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
           name="role"
           render={({ field }) => (
             <FormItem className="space-y-3">
               <FormLabel>Sign in as</FormLabel>
               <FormControl>
                 <RadioGroup
-                  onValueChange={field.onChange}
+                  onValueChange={(value) => {
+                    field.onChange(value);
+                    // Reset fields when role changes
+                    if (value === 'student') {
+                      form.reset({ role: 'student', fullName: '', key: '' });
+                    } else {
+                      form.reset({ role: 'admin', email: '', password: '' });
+                    }
+                  }}
                   defaultValue={field.value}
                   className="flex flex-col space-y-1"
                 >
@@ -118,6 +111,69 @@ export function LoginForm() {
             </FormItem>
           )}
         />
+
+        {role === "student" && (
+          <>
+            <FormField
+              control={form.control}
+              name="fullName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Full Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter your full name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="key"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Key</FormLabel>
+                  <FormControl>
+                    <Input type="password" placeholder="••••••••" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </>
+        )}
+
+        {role === "admin" && (
+          <>
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter your email" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input type="password" placeholder="••••••••" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </>
+        )}
+
         <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
           {form.formState.isSubmitting ? "Signing In..." : <>Sign In <LogIn /></>}
         </Button>
