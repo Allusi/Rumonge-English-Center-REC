@@ -25,10 +25,11 @@ import {
 import { useCollection, useFirestore } from "@/firebase";
 import { collection } from "firebase/firestore";
 import type { Course } from "@/lib/data";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function CoursesPage() {
   const firestore = useFirestore();
-  const { data: courses } = useCollection<Course>(
+  const { data: courses, loading } = useCollection<Course>(
     firestore ? collection(firestore, 'courses') : null
   );
 
@@ -61,7 +62,19 @@ export default function CoursesPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {courses?.map((course) => (
+              {loading && (
+                <>
+                  {[...Array(3)].map((_, i) => (
+                    <TableRow key={i}>
+                      <TableCell><Skeleton className="h-5 w-32" /></TableCell>
+                      <TableCell><Skeleton className="h-5 w-48" /></TableCell>
+                      <TableCell><Skeleton className="h-6 w-16" /></TableCell>
+                      <TableCell><Skeleton className="h-8 w-8 ml-auto" /></TableCell>
+                    </TableRow>
+                  ))}
+                </>
+              )}
+              {!loading && courses?.map((course) => (
                 <TableRow key={course.id}>
                   <TableCell className="font-medium">{course.name}</TableCell>
                   <TableCell>{course.description}</TableCell>
@@ -95,6 +108,13 @@ export default function CoursesPage() {
                   </TableCell>
                 </TableRow>
               ))}
+               {!loading && courses?.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={4} className="h-24 text-center">
+                    No courses found.
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </CardContent>
