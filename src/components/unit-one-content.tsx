@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -16,8 +17,35 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./ui/card";
+import { Button } from "./ui/button";
+import { Loader2, Volume2 } from "lucide-react";
+import { textToSpeech } from "@/ai/flows/tts-flow";
+
 
 export function UnitOneContent() {
+  const [playingLetter, setPlayingLetter] = useState<string | null>(null);
+  const [loadingLetter, setLoadingLetter] = useState<string | null>(null);
+
+  const playLetter = async (letter: string) => {
+    if (loadingLetter) return;
+    setLoadingLetter(letter);
+    try {
+      const { media } = await textToSpeech(letter);
+      const audio = new Audio(media);
+      setPlayingLetter(letter);
+      audio.play();
+      audio.onended = () => setPlayingLetter(null);
+    } catch (error) {
+      console.error("Error playing audio:", error);
+    } finally {
+      setLoadingLetter(null);
+    }
+  };
+
+  const alphabet = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z".split(',');
+  const vowels = ["A", "E", "I", "O", "U"];
+  const consonants = "B, C, D, F, G, H, J, K, L, M, N, P, Q, R, S, T, V, W, X, Y, Z".split(', ');
+
   return (
     <div className="space-y-6">
       <Card>
@@ -40,17 +68,44 @@ export function UnitOneContent() {
             <p className="mb-4 text-muted-foreground">
               In English, we have twenty-six (26) English letters. These are divided into two categories: consonants and vowels. We have twenty-one (21) consonants and five (5) vowels.
             </p>
+             <div className="mb-4 space-y-2">
+                <p className="font-semibold">Full Alphabet:</p>
+                <div className="flex flex-wrap gap-2">
+                  {alphabet.map(l => (
+                    <Button variant="outline" key={l} onClick={() => playLetter(l)} disabled={!!loadingLetter} className="w-12 h-12 text-lg">
+                       {loadingLetter === l ? <Loader2 className="animate-spin"/> : l}
+                       {playingLetter === l && <Volume2 className="ml-2 h-4 w-4 text-primary animate-pulse" />}
+                    </Button>
+                  ))}
+                </div>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <h4 className="font-semibold text-lg mb-2">Vowels (5)</h4>
-                <div className="flex gap-2">
-                  {["A", "E", "I", "O", "U"].map(l => <Badge variant="secondary" key={l} className="text-lg">{l}</Badge>)}
+                <div className="flex flex-wrap gap-2">
+                  {vowels.map(l => (
+                     <Button variant="secondary" key={l} onClick={() => playLetter(l)} disabled={!!loadingLetter} className="w-12 h-12 text-lg">
+                       {loadingLetter === l ? <Loader2 className="animate-spin"/> : l}
+                       {playingLetter === l && <Volume2 className="ml-2 h-4 w-4 text-primary animate-pulse" />}
+                    </Button>
+                  ))}
                 </div>
               </div>
               <div>
                 <h4 className="font-semibold text-lg mb-2">Consonants (21)</h4>
-                <p className="text-muted-foreground">B, C, D, F, G, H, J, K, L, M, N, P, Q, R, S, T, V, W, X, Y, Z</p>
+                 <div className="flex flex-wrap gap-1 text-muted-foreground">
+                  {consonants.map((c, i) => <span key={c}>{c}{i < consonants.length - 1 ? ', ' : ''}</span>)}
+                </div>
               </div>
+            </div>
+             <div className="mt-4 p-4 border rounded-md bg-muted/20">
+                <h4 className="font-semibold mb-2">Note:</h4>
+                <p className="text-sm text-muted-foreground">When writing, the letters can be written in two ways:</p>
+                <ol className="list-decimal pl-5 mt-2 space-y-1 text-sm text-muted-foreground">
+                    <li><strong>In upper case letters (Capital letters):</strong><br/> {alphabet.join(', ')}</li>
+                    <li><strong>In lower case letters (Small letters):</strong><br/> {alphabet.map(l => l.toLowerCase()).join(', ')}</li>
+                </ol>
+                <p className="mt-2 text-sm text-muted-foreground">When we speak we use sound and when we write we use letters.</p>
             </div>
             <div className="mt-4">
               <h4 className="font-semibold mb-2">Dialogue Practice</h4>
