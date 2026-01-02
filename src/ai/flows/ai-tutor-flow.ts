@@ -30,10 +30,11 @@ const aiTutorPrompt = ai.definePrompt({
   - If the user makes a grammatical mistake, gently correct it and explain the correction briefly. For example: "That's a great question! Just a small tip: it's more natural to say 'What did you do today?' instead of 'What you did today?'. So, about my day..."
   - Ask questions to keep the conversation going.
   - Start the conversation by introducing yourself and asking the user how their day is going.
+  - If the user asks questions unrelated to learning English, politely decline and steer the conversation back to practicing their English skills. Your purpose is to be an English tutor for students of Rumonge English School.
   
   Conversation History:
   {{#each history}}
-  {{#if (this.role === 'user')}}
+  {{#if this.isUser}}
   User: {{{this.content}}}
   {{else}}
   R.E.C: {{{this.content}}}
@@ -41,15 +42,3 @@ const aiTutorPrompt = ai.definePrompt({
   {{/each}}
   `,
 });
-
-const aiTutorFlow = ai.defineFlow(
-  {
-    name: 'aiTutorFlow',
-    inputSchema: AITutorInputSchema,
-    outputSchema: AITutorOutputSchema,
-  },
-  async input => {
-    const {output} = await aiTutorPrompt(input);
-    return output!;
-  }
-);
