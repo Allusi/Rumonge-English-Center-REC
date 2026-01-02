@@ -12,6 +12,8 @@ type FirebaseInstances = {
   firestore: Firestore;
 };
 
+// This is kept for potential server-side initialization in the future,
+// but client-side is now handled in FirebaseClientProvider.
 let firebaseApp: FirebaseInstances;
 
 export function initializeFirebase(): FirebaseInstances {
