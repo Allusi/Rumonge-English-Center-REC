@@ -24,16 +24,14 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
-import { useCollection, useFirestore } from '@/firebase';
-import { collection, query, where } from 'firebase/firestore';
+import { useCollection, useFirestore, useAuth } from '@/firebase';
+import { collection, query, where, doc, setDoc, runTransaction, serverTimestamp } from 'firebase/firestore';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import type { Course } from '@/lib/data';
 import { ArrowLeft, Image } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
-
-const CREATE_USER_URL = '/api/create-user';
-
 
 const formSchema = z.object({
   fullName: z.string().min(2, { message: 'Full name must be at least 2 characters.' }),
@@ -50,6 +48,7 @@ const formSchema = z.object({
 
 export default function NewStudentPage() {
     const firestore = useFirestore();
+    const auth = useAuth();
     const router = useRouter();
     const { toast } = useToast();
 
@@ -67,53 +66,76 @@ export default function NewStudentPage() {
     },
   });
 
+  const generateRandomKey = (length: number) => {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+  };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    
+    if (!firestore || !auth) {
+        toast({ variant: 'destructive', title: 'Error', description: 'Firebase is not properly configured.' });
+        return;
+    }
+
+    const loginKey = generateRandomKey(8);
+    const authEmail = `${loginKey}@rec-online.app`;
+    const tempPassword = "password"; 
+
     try {
-      const course = courses?.find(c => c.id === values.enrolledCourseId);
-      
-      const studentData = {
-        name: values.fullName,
-        age: values.age,
-        address: values.address,
-        enrolledCourseId: values.enrolledCourseId,
-        englishLevel: values.englishLevel,
-        phoneNumber: values.phoneNumber,
-        maritalStatus: values.maritalStatus,
-        educationalStatus: values.educationalStatus,
-        learningReason: values.learningReason,
-        courseName: course?.name || 'Unknown Course'
-      };
+        // Create the user in Firebase Auth first
+        const userCredential = await createUserWithEmailAndPassword(auth, authEmail, tempPassword);
+        const user = userCredential.user;
 
-      const response = await fetch(CREATE_USER_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(studentData),
-      });
+        // Now, save the profile information in Firestore
+        const userDocRef = doc(firestore, 'users', user.uid);
+        const course = courses?.find(c => c.id === values.enrolledCourseId);
 
-      const result = await response.json();
-      
-      if (response.ok && result.success) {
-         toast({
+        await setDoc(userDocRef, {
+            name: values.fullName,
+            email: authEmail, // Use the generated auth email
+            loginKey: loginKey,
+            role: 'student',
+            status: 'active',
+            age: values.age,
+            address: values.address,
+            enrolledCourseId: values.enrolledCourseId,
+            englishLevel: values.englishLevel,
+            phoneNumber: values.phoneNumber || null,
+            maritalStatus: values.maritalStatus,
+            educationalStatus: values.educationalStatus,
+            learningReason: values.learningReason,
+            createdAt: serverTimestamp(),
+            // photoURL will be handled separately if implemented
+        });
+        
+        // Also create the enrollment record
+        const enrollmentDocRef = doc(collection(firestore, 'enrollments'));
+        await setDoc(enrollmentDocRef, {
+            studentId: user.uid,
+            studentName: values.fullName,
+            courseId: values.enrolledCourseId,
+            courseName: course?.name || 'Unknown Course',
+            enrolledAt: serverTimestamp(),
+        });
+
+        toast({
             title: "Student Registered Successfully!",
-            description: `${values.fullName} has been added. Their registration key is ${result.loginKey}.`,
+            description: `${values.fullName} has been added. Their registration key is ${loginKey}.`,
             duration: 9000
         });
         router.push('/admin/students');
-      } else {
-        throw new Error(result.error || 'Failed to create user.');
-      }
 
     } catch (error: any) {
-      console.error("Error registering student: ", error);
-      toast({
-        variant: "destructive",
-        title: "Registration Failed",
-        description: error.message || "An unexpected error occurred during registration.",
-      });
+        console.error("Error registering student: ", error);
+        toast({
+            variant: "destructive",
+            title: "Registration Failed",
+            description: error.message || "An unexpected error occurred during registration.",
+        });
     }
   }
 
