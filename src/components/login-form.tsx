@@ -102,22 +102,12 @@ export function LoginForm() {
         const email = values.email!;
         const password = values.password!;
         
-        // In a real app, you'd have a more robust admin system
-        if (email.toLowerCase() === 'admin@rec-online.app' && password === 'password') {
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-                toast({
-                    title: "Login Successful",
-                    description: "Welcome, Admin! Redirecting to your dashboard...",
-                });
-                router.push("/admin/dashboard");
-            } catch (error) {
-                 throw new Error("Invalid admin credentials.");
-            }
-        } else {
-             // Throw a generic error to avoid confirming if an email exists
-             throw new Error("Invalid admin credentials.");
-        }
+        await signInWithEmailAndPassword(auth, email, password);
+        toast({
+            title: "Login Successful",
+            description: "Welcome, Admin! Redirecting to your dashboard...",
+        });
+        router.push("/admin/dashboard");
 
       } else { // Student login
         const loginKey = values.key!;
@@ -137,11 +127,9 @@ export function LoginForm() {
       console.error("Firebase Auth Error:", error);
       let description = "An unexpected error occurred.";
 
-      // Check for specific Firebase auth error codes or our custom error message
-      if (error.code === 'auth/invalid-credential' || error.message === 'Invalid admin credentials.') {
+      if (error.code === 'auth/invalid-credential') {
         description = "Incorrect credentials. Please check your details and try again."
       } else if (error.code) {
-        // Use the Firebase error message for other auth errors
         description = error.message;
       }
       
@@ -154,7 +142,6 @@ export function LoginForm() {
   }
   
   if (!isClient) {
-    // Render nothing on the server to avoid hydration mismatch
     return null; 
   }
 
@@ -221,7 +208,7 @@ export function LoginForm() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="admin@example.com" {...field} />
+                    <Input placeholder="admin@rec-online.app" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
