@@ -1311,6 +1311,86 @@ export function UnitOneContent() {
                                     <li>Datura: umunyare</li>
                                     <li>Cactus: igihahe</li>
                                     <li>Castol tree: ikibonobono</li>
+                                    <li>Whistling pines: umurinzi</li>
+                                    <li>Gmelina arborea: umukambati</li>
+                                    <li>Jacaranda acutifolia: umurama</li>
+                                    <li>Ledger’s quinine: umubirizi</li>
+                                    <li>Yellow bark quinine: umu arubayine</li>
+                                    <li>Eloquant: umushindwi</li>
+                                    <li>Capensis: umuvyiru</li>
+                                    <li>Hawthorn: umurarangwe</li>
+                                    <li>Rust weed: urubobi</li>
+                                    <li>Grevillea robusta: igereveriyo</li>
+                                    <li>Magroove: umunyegenyege</li>
+                                    <li>Cedar: isederi</li>
+                                    <li>Jambolan: umuzambarawu</li>
+                                    <li>Pepper tree: igiti cipiripiri</li>
+                                    <li>Avocado pear: ivoka</li>
+                                    <li>Thron bush: umugenge</li>
+                                    <li>Mangifora indica (mango tree): umwembe</li>
+                                    <li>Maesopsis emini: umuninga</li>
+                                    <li>Leucaena leucocephala: umusange</li>
+                                    <li>Silky oak/silver oak: igereveriyo</li>
+                                    <li>Carol tree: umukoyoyo</li>
+                                    <li>Lucky bean tree: umufumbere</li>
+                                    <li>Eriobotry japonica (the Roquat): umurembera</li>
+                                    <li>Coconut /cocos nucifera: igiti cinazi</li>
+                                    <li>Tangerine: itangawizi</li>
+                                    <li>Grape tree: igiti cumuzabibu</li>
+                                    <li>Guave tree: ipera</li>
+                                </ul>
+                            </CardContent>
+                        </Card>
+                         <Card className="mt-4">
+                            <CardHeader><CardTitle>Things We Find at the Market & Shop</CardTitle><CardDescription>Food & Clothings</CardDescription></CardHeader>
+                            <CardContent>
+                                <h4 className="font-semibold text-lg mb-2">A. Food</h4>
+                                <p className="text-sm mb-2">Paul is eating a banana. What is Paul eating? He is eating banana.</p>
+                                <p className="text-sm mb-2">We eat: bread: umutsima/ umukate, Egg: irigi, Cake: gateau, Meat: inyama etc.....</p>
+                                <p className="text-sm mb-4">We lick: sugar: isukari, Honey: ubuki etc......</p>
+                                
+                                <h5 className="font-semibold mb-2">See More Examples</h5>
+                                <ul className="list-disc pl-6 text-muted-foreground columns-2 md:columns-3 space-y-1 text-sm">
+                                    <li>Aubergine: intore</li>
+                                    <li>Maize: ibisoya</li>
+                                    <li>Eulesine: uburo</li>
+                                    <li>Sorghum: amasaka</li>
+                                    <li>Yams: ibisunzu</li>
+                                    <li>Lettuce: isarade</li>
+                                    <li>Okra: umurenda</li>
+                                    <li>Garlic: igitunguru sumu</li>
+                                    <li>Cassava leaves: isombe</li>
+                                    <li>Beans leaves: umukubi</li>
+                                    <li>Pumpukin leaves: umusoma</li>
+                                    <li>Spinach: ipinari</li>
+                                    <li>Ginger: itangawizi</li>
+                                    <li>Peanut / groundnuts: ibiyoba</li>
+                                    <li>Banana: igitoke</li>
+                                    <li>Yellow banana: umuhwi</li>
+                                    <li>Colocasia: amateke</li>
+                                    <li>Lima/fava bean: ibiharo</li>
+                                    <li>Fish: ifi</li>
+                                    <li>Rice: umuceri</li>
+                                    <li>Cassava: imyumbati</li>
+                                    <li>Pineapple: inanasi</li>
+                                    <li>Beans: ibiharage</li>
+                                    <li>Haricots: ibiharage</li>
+                                    <li>Cabbage: ishu</li>
+                                    <li>Potatoes: ibiraya</li>
+                                    <li>Carrot: ikaroti</li>
+                                    <li>Onion: igitunguru</li>
+                                    <li>Leek: poivreau( igitunguru)</li>
+                                    <li>Pumpkin: umwungu</li>
+                                    <li>Courgette: umwungu</li>
+                                    <li>Zucchini: umwungu</li>
+                                    <li>Tomatoes: itomate</li>
+                                    <li>Greenbeans: ibiharage bibisi</li>
+                                    <li>Peppers: ipiripiri ya mbuzi</li>
+                                    <li>Chillies: ipiripiri ya bushara</li>
+                                    <li>Peas: ubushaza</li>
+                                    <li>Split peas: ubushaza bukoboye</li>
+                                    <li>Paw cassava / cassava flour: ifu yimyumbati</li>
+                                    <li>Paw maize / maize flour: ifu yibigori</li>
                                 </ul>
                             </CardContent>
                         </Card>
