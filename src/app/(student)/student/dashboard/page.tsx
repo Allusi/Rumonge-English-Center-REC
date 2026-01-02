@@ -112,7 +112,7 @@ export default function StudentDashboard() {
                         <Badge>{course.grade}</Badge>
                       </TableCell>
                       <TableCell>
-                        <Link href={`/student/courses/${course.id}`} passHref>
+                        <Link href={`/student/courses/${course.courseId}`} passHref>
                             <Button variant="outline" size="sm">View Course</Button>
                         </Link>
                       </TableCell>
