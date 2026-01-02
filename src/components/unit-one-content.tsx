@@ -680,7 +680,89 @@ export function UnitOneContent() {
                             <li>At the airport: kukibuga cindege</li>
                             <li>City: igisagara</li>
                             <li>Market: akaguriro</li>
+                            <li>public Secretariat: aho bandikira</li>
+                            <li>Shop: ibutike</li>
+                            <li>Church: urushengero</li>
+                            <li>Dispensary: ivuriro</li>
+                            <li>School: ishure</li>
+                            <li>Mosque: umusigiti</li>
+                            <li>Play-ground: ikibuga</li>
+                            <li>Hospital: ibitaro</li>
+                            <li>University: kaminuza</li>
+                            <li>Bus-stand: igituro cibasi</li>
                         </ul>
+                         <div className="mt-6 space-y-4">
+                            <h4 className="font-semibold text-lg">Examples in a Sentence</h4>
+                            <div className="p-4 border rounded-lg bg-muted/20 space-y-3 text-sm">
+                                <div>
+                                    <p><strong>Things we find in the town:</strong> cars, lorries, houses, bus, electricity, bicycles, etc...</p>
+                                    <ul className="list-disc pl-6 text-muted-foreground">
+                                        <li>In the town, we find many houses that have electricity which is one of the sign of development in a country.</li>
+                                        <li>I am going to town to buy bicycle and other many things for my house.</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <p><strong>Things we find in the city:</strong> train, plane, luxurious bus, electricity, etc......</p>
+                                    <ul className="list-disc pl-6 text-muted-foreground">
+                                        <li>People in the city has luxurious life.</li>
+                                        <li>There are many skyscrapers(majengo marefu) in the city.</li>
+                                        <li>We bought our T.V from city center</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <p><strong>Things we find in the village:</strong> Hoe, panga, brooms, lantern, mat, etc...</p>
+                                    <ul className="list-disc pl-6 text-muted-foreground">
+                                        <li>Nyabigina is my home village.</li>
+                                        <li>We use lanterns in our village because there is no electricity.</li>
+                                    </ul>
+                               </div>
+                               <div>
+                                    <p><strong>Things we find at the church:</strong> drums, pews, Bibles, altar, rosary, etc..</p>
+                                     <ul className="list-disc pl-6 text-muted-foreground">
+                                        <li>Every Sunday, I go to church.</li>
+                                        <li>This church has been destroyed by the pagans, its pews and altar have been ruined too.</li>
+                                     </ul>
+                               </div>
+                               <div>
+                                    <p><strong>Things we find at the hospital:</strong> patients, pills, tablets, beds, etc.....</p>
+                                     <ul className="list-disc pl-6 text-muted-foreground">
+                                        <li>The patient has been taken to the hospital.</li>
+                                        <li>The injured woman was hospitalised at NYARUGUSU hospital.</li>
+                                     </ul>
+                               </div>
+                               <div>
+                                    <p><strong>Things we find at school:</strong> pens, books, copybooks, desk, chair, bench, brooms, blackboard, chalks, files, folders, papers, paperclips, correction fluid, tables, etc...</p>
+                                     <ul className="list-disc pl-6 text-muted-foreground">
+                                        <li>To day is a distribution of copybooks at our school.</li>
+                                     </ul>
+                               </div>
+                               <div>
+                                    <p><strong>Things or people we find at the playground:</strong> players, balls, nets, goals, referee, etc...</p>
+                                     <ul className="list-disc pl-6 text-muted-foreground">
+                                        <li>The playground was slippery (hanyerera) after it had rained a lot.</li>
+                                     </ul>
+                               </div>
+                               <div>
+                                   <h5 className="font-semibold">See more examples of other places.</h5>
+                                   <ol className="list-decimal pl-6 text-muted-foreground">
+                                        <li>Joseph was at the station.</li>
+                                        <li>I met him at the bus stand.</li>
+                                        <li>His parent will go to hunt in Kigwena forest</li>
+                                        <li>Your mother will wait you at the railway station.</li>
+                                        <li>400 Christians decided to be Moslems and change their church to a mosque in Burundi.</li>
+                                        <li>I have many files in my office.</li>
+                                        <li>In Tanzania, there are many zoos.</li>
+                                        <li>I will go to see my grandfather who lives in a small house at the village.</li>
+                                   </ol>
+                               </div>
+                            </div>
+                        </div>
+                    </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="things">
+                    <AccordionTrigger>B. Things</AccordionTrigger>
+                    <AccordionContent>
+                        <p className="text-muted-foreground">In the above examples, we see the place village which has houses, so let us see the things we find in a house.</p>
                     </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="family">
@@ -706,7 +788,7 @@ export function UnitOneContent() {
                         </ul>
                     </AccordionContent>
                 </AccordionItem>
-                <AccordionItem value="home">
+                <AccordionItem value="home-things">
                     <AccordionTrigger>Things at Home</AccordionTrigger>
                     <AccordionContent>
                         <ul className="list-disc pl-6 text-muted-foreground columns-2">
@@ -813,3 +895,4 @@ export function UnitOneContent() {
     </div>
   );
 }
+
