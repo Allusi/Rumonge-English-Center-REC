@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BookCopy, LayoutDashboard, LogOut, Megaphone, Users } from "lucide-react";
+import { BookCopy, LayoutDashboard, LogOut, Megaphone, Users, Info } from "lucide-react";
 
 import {
   Sidebar,
@@ -70,6 +70,14 @@ export default function AdminLayout({
                 <SidebarMenuButton tooltip="Announcements">
                   <Megaphone />
                   Announcements
+                </SidebarMenuButton>
+              </Link>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <Link href="/admin/guidelines" passHref>
+                <SidebarMenuButton tooltip="School Guidelines">
+                  <Info />
+                  School Guidelines
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>

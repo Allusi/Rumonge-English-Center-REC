@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { LayoutDashboard, LogOut, SpellCheck } from "lucide-react";
+import { LayoutDashboard, LogOut, SpellCheck, Info } from "lucide-react";
 
 import {
   Sidebar,
@@ -51,6 +51,14 @@ export default function StudentLayout({
                 <SidebarMenuButton tooltip="Grammar Checker">
                   <SpellCheck />
                   Grammar Checker
+                </SidebarMenuButton>
+              </Link>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <Link href="/student/guidelines" passHref>
+                <SidebarMenuButton tooltip="School Guidelines">
+                  <Info />
+                  School Guidelines
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>
