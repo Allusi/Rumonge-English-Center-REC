@@ -6,14 +6,14 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { LogIn } from "lucide-react";
-import { useEffect, useState }from "react";
+import { useEffect, useState } from "react";
 import { 
   createUserWithEmailAndPassword, 
   sendEmailVerification, 
   signInWithEmailAndPassword,
   updateProfile
 } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 
 
 import { Button } from "@/components/ui/button";
@@ -130,6 +130,7 @@ export function LoginForm() {
               name: 'Admin',
               email: user.email,
               role: 'admin',
+              createdAt: serverTimestamp(),
             };
             const userDocRef = doc(firestore, "users", user.uid);
             setDoc(userDocRef, userProfile).catch(async (serverError) => {
@@ -172,6 +173,7 @@ export function LoginForm() {
             name: values.fullName,
             email: user.email,
             role: 'student',
+            createdAt: serverTimestamp(),
         };
 
         const userDocRef = doc(firestore, "users", user.uid);

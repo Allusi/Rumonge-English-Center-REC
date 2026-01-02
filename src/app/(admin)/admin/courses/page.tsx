@@ -1,12 +1,10 @@
+
+'use client';
 import { Plus, MoreHorizontal, FilePenLine, Trash2 } from "lucide-react";
-import { courses } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import {
   Table,
@@ -24,8 +22,16 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useCollection, useFirestore } from "@/firebase";
+import { collection } from "firebase/firestore";
+import type { Course } from "@/lib/data";
 
 export default function CoursesPage() {
+  const firestore = useFirestore();
+  const { data: courses } = useCollection<Course>(
+    firestore ? collection(firestore, 'courses') : null
+  );
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
@@ -55,7 +61,7 @@ export default function CoursesPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {courses.map((course) => (
+              {courses?.map((course) => (
                 <TableRow key={course.id}>
                   <TableCell className="font-medium">{course.name}</TableCell>
                   <TableCell>{course.description}</TableCell>

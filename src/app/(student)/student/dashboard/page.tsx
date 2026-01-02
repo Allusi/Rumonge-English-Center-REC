@@ -1,7 +1,7 @@
 
 'use client';
 
-import { BookCopy, Home, FileText, BarChart2, Megaphone } from "lucide-react";
+import { Megaphone } from "lucide-react";
 import Link from 'next/link';
 import {
   Card,
@@ -20,25 +20,37 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { courses, enrollments, announcements } from "@/lib/data";
 import { Button } from "@/components/ui/button";
-import { useUser } from "@/firebase";
+import { useUser, useCollection, useFirestore } from "@/firebase";
+import { collection, query, where, orderBy } from "firebase/firestore";
+import type { Course, Enrollment, Announcement } from "@/lib/data";
 
 export default function StudentDashboard() {
   const { user } = useUser();
-  const studentId = "S001"; // This will eventually come from the logged in user
+  const firestore = useFirestore();
   const studentName = user?.displayName || "Student";
-  const studentEnrollments = enrollments.filter(
-    (e) => e.studentId === studentId
+  
+  const { data: studentEnrollments } = useCollection<Enrollment>(
+    firestore && user ? query(collection(firestore, 'enrollments'), where('studentId', '==', user.uid)) : null
   );
-  const enrolledCourses = studentEnrollments.map((enrollment) => {
-    const course = courses.find((c) => c.id === enrollment.courseId);
-    // Ensure course is found before spreading
-    if (!course) return null;
-    return { ...course, ...enrollment };
-  }).filter(course => course !== null) as (Course & Enrollment)[];
 
-  const latestAnnouncements = announcements.slice(0, 3);
+  const { data: allCourses } = useCollection<Course>(
+    firestore ? collection(firestore, 'courses') : null
+  );
+
+  const { data: announcements } = useCollection<Announcement>(
+    firestore
+      ? query(collection(firestore, 'announcements'), orderBy('date', 'desc'), where('date', '<=', new Date().toISOString().split('T')[0]))
+      : null
+  );
+
+  const enrolledCourses = studentEnrollments?.map((enrollment) => {
+    const course = allCourses?.find((c) => c.id === enrollment.courseId);
+    if (!course) return null;
+    return { ...course, ...enrollment, progress: 0, grade: 'Not Started' }; // Mock progress/grade for now
+  }).filter(course => course !== null) as (Course & Enrollment & { progress: number; grade: string; })[] | undefined;
+
+  const latestAnnouncements = announcements?.slice(0, 3);
 
   return (
     <div className="flex flex-col gap-8">
@@ -72,7 +84,7 @@ export default function StudentDashboard() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {enrolledCourses.length > 0 ? enrolledCourses.map((course) => (
+                  {enrolledCourses && enrolledCourses.length > 0 ? enrolledCourses.map((course) => (
                     <TableRow key={course.id}>
                       <TableCell className="font-medium">{course.name}</TableCell>
                       <TableCell>
@@ -111,7 +123,7 @@ export default function StudentDashboard() {
               <CardTitle>Recent Announcements</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              {latestAnnouncements.map(announcement => (
+              {latestAnnouncements?.map(announcement => (
                 <div key={announcement.id} className="flex items-start gap-4">
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent text-accent-foreground">
                     <Megaphone className="h-5 w-5" />
@@ -132,18 +144,3 @@ export default function StudentDashboard() {
     </div>
   );
 }
-
-// Helper types for combining course and enrollment data
-type Course = {
-    id: string;
-    name: string;
-    description: string;
-    level: string;
-};
-
-type Enrollment = {
-    studentId: string;
-    courseId: string;
-    progress: number;
-    grade: string;
-};

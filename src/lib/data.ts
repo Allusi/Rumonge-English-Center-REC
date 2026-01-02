@@ -1,4 +1,7 @@
 
+
+import type { Timestamp } from "firebase/firestore";
+
 export type Course = {
   id: string;
   name: string;
@@ -10,13 +13,17 @@ export type Student = {
   id: string;
   name: string;
   email: string;
+  role: 'student' | 'admin';
+  createdAt: Timestamp;
 };
 
 export type Enrollment = {
+  id: string;
   studentId: string;
+  studentName: string;
   courseId: string;
-  progress: number;
-  grade: string;
+  courseName: string;
+  enrolledAt: Timestamp;
 };
 
 export type Announcement = {
@@ -26,30 +33,13 @@ export type Announcement = {
   date: string;
 };
 
+// Data is now fetched from Firestore. This can be kept for fallback or removed.
 export const courses: Course[] = [
   { id: 'C001', name: 'Unit One: The Basics', description: 'Fundamentals of English language for beginners.', level: 'A1' },
   { id: 'C002', name: 'Intermediate Grammar', description: 'Deep dive into complex grammar rules.', level: 'B1' },
   { id: 'C003', name: 'Advanced Conversation', description: 'Practice conversational skills on various topics.', level: 'C1' },
   { id: 'C004', name: 'Business English', description: 'English for professional communication in a business context.', level: 'B2' },
   { id: 'C005', name: 'IELTS Preparation', description: 'Prepare for the International English Language Testing System exam.', level: 'B2-C1' },
-];
-
-export const students: Student[] = [
-  { id: 'S001', name: 'Aisha Ndayizeye', email: 'a.ndayizeye@example.com' },
-  { id: 'S002', name: 'Ben Irakoze', email: 'b.irakoze@example.com' },
-  { id: 'S003', name: 'Carine Keza', email: 'c.keza@example.com' },
-  { id: 'S004', name: 'David Mugisha', email: 'd.mugisha@example.com' },
-  { id: 'S005', name: 'Eliane Uwineza', email: 'e.uwineza@example.com' },
-];
-
-export const enrollments: Enrollment[] = [
-  { studentId: 'S001', courseId: 'C001', progress: 0, grade: 'Not Started' },
-  { studentId: 'S001', courseId: 'C002', progress: 0, grade: 'Not Started' },
-  { studentId: 'S002', courseId: 'C001', progress: 0, grade: 'Not Started' },
-  { studentId: 'S002', courseId: 'C003', progress: 0, grade: 'Not Started' },
-  { studentId: 'S003', courseId: 'C004', progress: 0, grade: 'Not Started' },
-  { studentId: 'S004', courseId: 'C005', progress: 0, grade: 'Not Started' },
-  { studentId: 'S005', courseId: 'C002', progress: 0, grade: 'Not Started' },
 ];
 
 export const announcements: Announcement[] = [

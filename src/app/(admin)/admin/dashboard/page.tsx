@@ -1,3 +1,4 @@
+
 'use client';
 import {
   Megaphone,
@@ -6,6 +7,7 @@ import {
   Activity,
   UserPlus,
   Plus,
+  BarChart,
 } from 'lucide-react';
 import Link from 'next/link';
 import {
@@ -18,23 +20,58 @@ import {
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { useCollection, useFirestore } from '@/firebase';
-import { collection } from 'firebase/firestore';
-import { announcements, courses, enrollments } from '@/lib/data';
-
-interface Student {
-  id: string;
-  name: string;
-  email: string;
-}
+import { collection, query, orderBy, limit } from 'firebase/firestore';
+import type { Course, Student, Announcement, Enrollment } from '@/lib/data';
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from '@/components/ui/chart';
+import {
+  BarChart as RechartsBarChart,
+  XAxis,
+  YAxis,
+  Bar,
+  ResponsiveContainer,
+} from 'recharts';
 
 export default function AdminDashboard() {
   const firestore = useFirestore();
   const { data: students } = useCollection<Student>(
     firestore ? collection(firestore, 'users') : null
   );
+  const { data: courses } = useCollection<Course>(
+    firestore ? collection(firestore, 'courses') : null
+  );
+  const { data: announcements } = useCollection<Announcement>(
+    firestore
+      ? query(collection(firestore, 'announcements'), orderBy('date', 'desc'))
+      : null
+  );
+  const { data: enrollments } = useCollection<Enrollment>(
+    firestore ? collection(firestore, 'enrollments') : null
+  );
 
-  const recentStudents = students?.slice(-5).reverse() || [];
-  const recentAnnouncements = announcements.slice(0, 3);
+  const recentStudents =
+    students
+      ?.filter((s) => s.role === 'student')
+      .slice(-5)
+      .reverse() || [];
+  const recentAnnouncements = announcements?.slice(0, 3) || [];
+
+  const enrollmentByCourse = courses?.map(course => {
+    const count = enrollments?.filter(e => e.courseId === course.id).length || 0;
+    return { name: course.name, count };
+  }) || [];
+  
+  const studentSignups = students?.filter(s => s.role === 'student' && s.createdAt).reduce((acc: { [key: string]: number }, student) => {
+    const date = new Date(student.createdAt.seconds * 1000).toISOString().split('T')[0];
+    acc[date] = (acc[date] || 0) + 1;
+    return acc;
+  }, {});
+
+  const studentSignupsChartData = studentSignups ? Object.entries(studentSignups).map(([date, count]) => ({ date, count })).sort((a,b) => new Date(a.date).getTime() - new Date(b.date).getTime()) : [];
+
 
   return (
     <div className="flex flex-col gap-8">
@@ -66,7 +103,9 @@ export default function AdminDashboard() {
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{students?.length || 0}</div>
+              <div className="text-2xl font-bold">
+                {students?.filter((s) => s.role === 'student').length || 0}
+              </div>
               <p className="text-xs text-muted-foreground">
                 Currently active students
               </p>
@@ -82,7 +121,7 @@ export default function AdminDashboard() {
               <BookCopy className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{courses.length}</div>
+              <div className="text-2xl font-bold">{courses?.length || 0}</div>
               <p className="text-xs text-muted-foreground">Available courses</p>
             </CardContent>
           </Card>
@@ -96,7 +135,9 @@ export default function AdminDashboard() {
               <Megaphone className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{announcements.length}</div>
+              <div className="text-2xl font-bold">
+                {announcements?.length || 0}
+              </div>
               <p className="text-xs text-muted-foreground">
                 Published announcements
               </p>
@@ -111,13 +152,55 @@ export default function AdminDashboard() {
             <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{enrollments.length}</div>
+            <div className="text-2xl font-bold">{enrollments?.length || 0}</div>
             <p className="text-xs text-muted-foreground">
               Student course enrollments
             </p>
           </CardContent>
         </Card>
       </div>
+
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+         <Card>
+          <CardHeader>
+            <CardTitle>Course Popularity</CardTitle>
+            <CardDescription>
+              Distribution of student enrollments across courses.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ChartContainer config={{}} className="min-h-64 w-full">
+               <ResponsiveContainer width="100%" height={300}>
+                  <RechartsBarChart data={enrollmentByCourse} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
+                     <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
+                     <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
+                    <ChartTooltip content={<ChartTooltipContent />} />
+                    <Bar dataKey="count" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                  </RechartsBarChart>
+                </ResponsiveContainer>
+            </ChartContainer>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Student Signups</CardTitle>
+            <CardDescription>Daily student registrations.</CardDescription>
+          </CardHeader>
+          <CardContent>
+             <ChartContainer config={{}} className="min-h-64 w-full">
+               <ResponsiveContainer width="100%" height={300}>
+                  <RechartsBarChart data={studentSignupsChartData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
+                     <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
+                     <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
+                    <ChartTooltip content={<ChartTooltipContent />} />
+                    <Bar dataKey="count" fill="hsl(var(--accent))" radius={[4, 4, 0, 0]} />
+                  </RechartsBarChart>
+                </ResponsiveContainer>
+            </ChartContainer>
+          </CardContent>
+        </Card>
+      </div>
+
       <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
         <div className="md:col-span-2">
           <Card>
@@ -143,7 +226,7 @@ export default function AdminDashboard() {
                         {announcement.content}
                       </p>
                       <time className="text-xs text-muted-foreground">
-                        {announcement.date}
+                        {new Date(announcement.date).toLocaleDateString()}
                       </time>
                     </div>
                   </div>

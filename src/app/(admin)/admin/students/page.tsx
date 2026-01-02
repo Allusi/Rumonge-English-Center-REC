@@ -8,7 +8,7 @@ import {
   KeyRound,
 } from 'lucide-react';
 import { useCollection, useFirestore } from '@/firebase';
-import { collection } from 'firebase/firestore';
+import { collection, query, where } from 'firebase/firestore';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -29,17 +29,13 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Student } from '@/lib/data';
 
-interface Student {
-  id: string;
-  name: string;
-  email: string;
-}
 
 export default function StudentsPage() {
   const firestore = useFirestore();
   const { data: students, loading } = useCollection<Student>(
-    firestore ? collection(firestore, 'users') : null
+    firestore ? query(collection(firestore, 'users'), where('role', '==', 'student')) : null
   );
 
   return (

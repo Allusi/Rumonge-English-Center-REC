@@ -22,6 +22,71 @@
         }
       },
       "required": ["name", "email", "role"]
+    },
+    "Course": {
+      "title": "Course",
+      "description": "Represents a course offered by the school.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the course."
+        },
+        "description": {
+          "type": "string",
+          "description": "A brief description of the course."
+        },
+        "level": {
+          "type": "string",
+          "description": "The difficulty level of the course (e.g., A1, B2)."
+        }
+      },
+      "required": ["name", "description", "level"]
+    },
+    "Announcement": {
+      "title": "Announcement",
+      "description": "Represents a school-wide announcement.",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "The title of the announcement."
+        },
+        "content": {
+          "type": "string",
+          "description": "The full content of the announcement."
+        },
+        "date": {
+          "type": "string",
+          "format": "date",
+          "description": "The date the announcement was published."
+        }
+      },
+      "required": ["title", "content", "date"]
+    },
+    "Enrollment": {
+        "title": "Enrollment",
+        "description": "Represents a student's enrollment in a course.",
+        "type": "object",
+        "properties": {
+            "studentId": {
+                "type": "string"
+            },
+            "studentName": {
+                "type": "string"
+            },
+            "courseId": {
+                "type": "string"
+            },
+            "courseName": {
+                "type": "string"
+            },
+            "enrolledAt": {
+                "type": "string",
+                "format": "date-time"
+            }
+        },
+        "required": ["studentId", "courseId", "enrolledAt"]
     }
   },
   "auth": {
@@ -33,6 +98,24 @@
         "$ref": "#/backend/entities/UserProfile"
       },
       "description": "Stores public profile information for each user, keyed by their UID."
+    },
+    "/courses/{courseId}": {
+        "schema": {
+            "$ref": "#/backend/entities/Course"
+        },
+        "description": "Stores information about all available courses."
+    },
+    "/announcements/{announcementId}": {
+        "schema": {
+            "$ref": "#/backend/entities/Announcement"
+        },
+        "description": "Stores all school announcements."
+    },
+    "/enrollments/{enrollmentId}": {
+        "schema": {
+            "$ref": "#/backend/entities/Enrollment"
+        },
+        "description": "Stores records of student enrollments in courses."
     }
   }
 }
