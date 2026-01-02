@@ -28,7 +28,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useCollection, useDoc, useFirestore } from '@/firebase';
 import { collection, query, where, doc, updateDoc } from 'firebase/firestore';
 import type { Course, Student } from '@/lib/data';
-import { ArrowLeft, Image as ImageIcon } from 'lucide-react';
+import { ArrowLeft, Image as ImageIcon, KeyRound } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter, useParams, notFound } from 'next/navigation';
@@ -38,7 +38,6 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 const formSchema = z.object({
   fullName: z.string().min(2, { message: 'Full name must be at least 2 characters.' }),
-  email: z.string().email({ message: 'Please enter a valid email address.' }),
   age: z.coerce.number().min(5, { message: 'Age must be at least 5.' }),
   address: z.string().min(5, { message: 'Address is required.' }),
   profilePhoto: z.any().optional(),
@@ -72,7 +71,6 @@ export default function EditStudentPage() {
         if (student) {
             form.reset({
                 fullName: student.name,
-                email: student.email,
                 age: student.age,
                 address: student.address,
                 enrolledCourseId: student.enrolledCourseId,
@@ -97,7 +95,6 @@ export default function EditStudentPage() {
             
             await updateDoc(studentRef, {
                 name: values.fullName,
-                email: values.email,
                 age: values.age,
                 address: values.address,
                 enrolledCourseId: values.enrolledCourseId,
@@ -182,20 +179,21 @@ export default function EditStudentPage() {
                                     </FormItem>
                                 )}
                             />
-                             <FormField
-                                control={form.control}
-                                name="email"
-                                render={({ field }) => (
-                                    <FormItem>
-                                    <FormLabel>Email Address (Registration Key)</FormLabel>
-                                    <FormControl>
-                                        <Input type="email" placeholder="student@example.com" {...field} />
-                                    </FormControl>
-                                    <FormDescription>This email is the student's unique key for logging in.</FormDescription>
-                                    <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
+                             <FormItem>
+                                <FormLabel>Registration Key</FormLabel>
+                                <FormControl>
+                                    <div className="relative">
+                                    <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                    <Input
+                                        value={student.loginKey}
+                                        readOnly
+                                        disabled
+                                        className="pl-9"
+                                    />
+                                    </div>
+                                </FormControl>
+                                <FormDescription>The registration key cannot be changed.</FormDescription>
+                            </FormItem>
                             <FormField
                                 control={form.control}
                                 name="age"

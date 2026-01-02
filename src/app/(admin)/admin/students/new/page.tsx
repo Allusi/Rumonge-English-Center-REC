@@ -107,7 +107,7 @@ export default function NewStudentPage() {
       const userDocRef = doc(firestore, "users", user.uid);
       batch.set(userDocRef, {
         name: values.fullName,
-        email: authEmail, // Store the auth email for reference
+        email: authEmail,
         loginKey: loginKey,
         role: 'student',
         age: values.age,
