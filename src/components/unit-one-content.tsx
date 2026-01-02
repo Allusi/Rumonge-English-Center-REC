@@ -1206,43 +1206,114 @@ export function UnitOneContent() {
                                     <li>Flatfish: ubwoko bwingege (dab)</li>
                                     <li>Smelt: umuneke</li>
                                     <li>Jackfish: amarenda (amasembe)</li>
+                                    <li>Pike: ingege</li>
+                                    <li>Haddock: isangaraka</li>
+                                    <li>Hake: ubwoko bwinonzi</li>
+                                    <li>Mackerel: ubwoko bwisaradine</li>
+                                    <li>Nailperch: isangaraka</li>
+                                    <li>Pilchard: amarumpu</li>
+                                    <li>Porpoise: ubwoko bwikimizi bumeze nkingurube</li>
+                                    <li>Burbot: injombo</li>
                                 </ul>
                              </CardContent>
                         </Card>
-                    </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="family">
-                    <AccordionTrigger>Family Members</AccordionTrigger>
-                    <AccordionContent>
-                        <ul className="list-disc pl-6 text-muted-foreground columns-2">
-                            <li>Mother / Father</li>
-                            <li>Brother / Sister</li>
-                            <li>Grandmother / Grandfather</li>
-                            <li>Aunt / Uncle / Cousin</li>
-                            <li>Son / Daughter</li>
-                        </ul>
-                    </AccordionContent>
-                </AccordionItem>
-                 <AccordionItem value="body">
-                    <AccordionTrigger>Parts of the Body</AccordionTrigger>
-                    <AccordionContent>
-                        <ul className="list-disc pl-6 text-muted-foreground columns-2">
-                            <li>Head, Hair, Eyes, Nose, Mouth</li>
-                            <li>Arm, Hand, Fingers</li>
-                            <li>Leg, Foot, Toes</li>
-                            <li>Stomach, Back, Chest</li>
-                        </ul>
-                    </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="home-things">
-                    <AccordionTrigger>Things at Home</AccordionTrigger>
-                    <AccordionContent>
-                        <ul className="list-disc pl-6 text-muted-foreground columns-2">
-                            <li>Table, Chair, Bed</li>
-                            <li>Plate, Cup, Spoon</li>
-                            <li>Door, Window</li>
-                            <li>Kitchen, Bathroom</li>
-                        </ul>
+                         <Card className="mt-4">
+                            <CardHeader><CardTitle>Things that we find in the sky</CardTitle></CardHeader>
+                            <CardContent>
+                                <ul className="list-disc pl-6 text-muted-foreground columns-2 md:columns-3 space-y-1 text-sm">
+                                    <li>Stars: inyenyeri</li>
+                                    <li>Moon: ukwezi</li>
+                                    <li>Sun: izuba</li>
+                                    <li>Clouds: ibicu</li>
+                                    <li>Heaven: ijuru</li>
+                                    <li>Air: umuyaga</li>
+                                    <li>Thunder: inkuba</li>
+                                    <li>Lightening: umuravyo</li>
+                                    <li>Rainbows: umunwamazi</li>
+                                    <li>Sky: ikirere</li>
+                                    <li>Birds: inyoni</li>
+                                    <li>Storm: igihuhusi</li>
+                                    <li>Hurricane: akavumbuzi</li>
+                                    <li>Foggy: igipfungu kiboneka</li>
+                                    <li>Mist: igipfungu kitaboneka</li>
+                                    <li>Airplane: indege</li>
+                                    <li>Sunlights: imishwarara yizuba</li>
+                                    <li>Dust: ivumbi</li>
+                                    <li>Above: hejuru</li>
+                                    <li>Planet: umubumbe</li>
+                                </ul>
+                            </CardContent>
+                        </Card>
+                         <Card className="mt-4">
+                            <CardHeader><CardTitle>Kind of Birds</CardTitle></CardHeader>
+                            <CardContent>
+                              <p className="text-sm text-muted-foreground mb-2">In the sky we find birds, so let us see some birds.</p>
+                                <ul className="list-disc pl-6 text-muted-foreground columns-2 md:columns-3 space-y-1 text-sm">
+                                    <li>Parrot: kasuku</li>
+                                    <li>Hummingbird: umununi</li>
+                                    <li>Sunbird: umununi</li>
+                                    <li>Swan: imbata yomumazi</li>
+                                    <li>Goose: inkukuma</li>
+                                    <li>Eagle owl: inziya</li>
+                                    <li>Weaverbird: iseke</li>
+                                    <li>Owl: igihuna</li>
+                                    <li>Laughingbird: igihugugu</li>
+                                    <li>Crowned crane: umusambi</li>
+                                    <li>Guineafowl: inkanga</li>
+                                    <li>Eagle: inkona /eaglet</li>
+                                    <li>Crown hawk: inkona</li>
+                                    <li>Sparrowhawk: ubujeje</li>
+                                    <li>Swallow: intamba</li>
+                                    <li>Lovebird: kasuku mapenzi</li>
+                                    <li>Little stint: inyamanza</li>
+                                    <li>Kingfisher: murovyi</li>
+                                    <li>Kite: agaca</li>
+                                    <li>Egret: inyange</li>
+                                    <li>Duck: imbata/duckling</li>
+                                </ul>
+                            </CardContent>
+                        </Card>
+                        <Card className="mt-4">
+                            <CardHeader><CardTitle>Kind of Trees</CardTitle></CardHeader>
+                            <CardContent>
+                                <ul className="list-disc pl-6 text-muted-foreground columns-2 md:columns-3 space-y-1 text-sm">
+                                    <li>Acacia albida: ikasiya</li>
+                                    <li>Syzygium cumini: umuzambarawu</li>
+                                    <li>Terminal catapa: umukurungu</li>
+                                    <li>Casuarina: akajwari</li>
+                                    <li>Eucalyptus: inkaratusi</li>
+                                    <li>Apple ring: amahebera</li>
+                                    <li>Winter thorn: umukome wamahwa</li>
+                                    <li>Australia black wood: umupingu</li>
+                                    <li>Umbrella thorn: umugunga</li>
+                                    <li>Israel babool: umusongati (umuturigwa)</li>
+                                    <li>Shingle tree: isederi</li>
+                                    <li>Siris tree: umuremera</li>
+                                    <li>Woman tongue: umuremera</li>
+                                    <li>Amaniensis: umushayishayi</li>
+                                    <li>Cashewnut: umunazi</li>
+                                    <li>Custard apple: umutobetobe</li>
+                                    <li>Annosquamosa: umukanda</li>
+                                    <li>Jak /jackfruit: umurwankore</li>
+                                    <li>Artocarpus heterophyllus: umuhongoro</li>
+                                    <li>Pawpaw (papaya): igipapayi</li>
+                                    <li>Iron wood(yellow cassia): umujohoro</li>
+                                    <li>Greek oak (river she oak): pinusi</li>
+                                    <li>Chrorophora excelsa: inganzamarumpu</li>
+                                    <li>Citrus: umucungwe</li>
+                                    <li>Seville orange: indimu</li>
+                                    <li>Pummelo: irimawu</li>
+                                    <li>Sycamore: umusokomora</li>
+                                    <li>Mimosa: umusebeyi</li>
+                                    <li>Aloe vera: ingagari</li>
+                                    <li>Ficus: umuhororo(umuvumuvumu)</li>
+                                    <li>Etamine: umweza</li>
+                                    <li>Datura: umunyare</li>
+                                    <li>Cactus: igihahe</li>
+                                    <li>Castol tree: ikibonobono</li>
+                                </ul>
+                            </CardContent>
+                        </Card>
                     </AccordionContent>
                 </AccordionItem>
              </Accordion>
@@ -1341,3 +1412,5 @@ export function UnitOneContent() {
     </div>
   );
 }
+
+  
