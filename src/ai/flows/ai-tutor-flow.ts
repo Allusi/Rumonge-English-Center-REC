@@ -33,10 +33,10 @@ const aiTutorPrompt = ai.definePrompt({
   
   Conversation History:
   {{#each history}}
-  {{#if (eq role 'user')}}
-  User: {{{content}}}
+  {{#if (this.role === 'user')}}
+  User: {{{this.content}}}
   {{else}}
-  R.E.C: {{{content}}}
+  R.E.C: {{{this.content}}}
   {{/if}}
   {{/each}}
   `,
