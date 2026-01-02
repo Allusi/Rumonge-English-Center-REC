@@ -22,25 +22,26 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { useUser, useCollection, useFirestore } from "@/firebase";
-import { collection, query, where, orderBy } from "firebase/firestore";
+import { collection, query, where, orderBy, limit } from "firebase/firestore";
 import type { Course, Enrollment, Announcement } from "@/lib/data";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function StudentDashboard() {
   const { user } = useUser();
   const firestore = useFirestore();
   const studentName = user?.displayName || "Student";
   
-  const { data: studentEnrollments } = useCollection<Enrollment>(
+  const { data: studentEnrollments, loading: enrollmentsLoading } = useCollection<Enrollment>(
     firestore && user ? query(collection(firestore, 'enrollments'), where('studentId', '==', user.uid)) : null
   );
 
-  const { data: allCourses } = useCollection<Course>(
+  const { data: allCourses, loading: coursesLoading } = useCollection<Course>(
     firestore ? query(collection(firestore, 'courses'), where('isEnabled', '==', true)) : null
   );
 
-  const { data: announcements } = useCollection<Announcement>(
+  const { data: announcements, loading: announcementsLoading } = useCollection<Announcement>(
     firestore
-      ? query(collection(firestore, 'announcements'), orderBy('date', 'desc'), where('date', '<=', new Date().toISOString().split('T')[0]))
+      ? query(collection(firestore, 'announcements'), orderBy('date', 'desc'), where('date', '<=', new Date().toISOString().split('T')[0]), limit(3))
       : null
   );
 
@@ -50,7 +51,7 @@ export default function StudentDashboard() {
     return { ...course, ...enrollment, progress: 0, grade: 'Not Started' }; // Mock progress/grade for now
   }).filter(course => course !== null) as (Course & Enrollment & { progress: number; grade: string; })[] | undefined;
 
-  const latestAnnouncements = announcements?.slice(0, 3);
+  const isLoading = enrollmentsLoading || coursesLoading || announcementsLoading;
 
   return (
     <div className="flex flex-col gap-8">
@@ -84,7 +85,16 @@ export default function StudentDashboard() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {enrolledCourses && enrolledCourses.length > 0 ? enrolledCourses.map((course) => (
+                  {isLoading && [...Array(2)].map((_, i) => (
+                    <TableRow key={i}>
+                      <TableCell><Skeleton className="h-5 w-32" /></TableCell>
+                      <TableCell><Skeleton className="h-6 w-16" /></TableCell>
+                      <TableCell><Skeleton className="h-5 w-full" /></TableCell>
+                      <TableCell><Skeleton className="h-6 w-20" /></TableCell>
+                      <TableCell><Skeleton className="h-8 w-24" /></TableCell>
+                    </TableRow>
+                  ))}
+                  {!isLoading && enrolledCourses && enrolledCourses.length > 0 ? enrolledCourses.map((course) => (
                     <TableRow key={course.id}>
                       <TableCell className="font-medium">{course.name}</TableCell>
                       <TableCell>
@@ -106,11 +116,13 @@ export default function StudentDashboard() {
                       </TableCell>
                     </TableRow>
                   )) : (
-                     <TableRow>
-                        <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
-                            You are not enrolled in any courses yet.
-                        </TableCell>
-                    </TableRow>
+                     !isLoading && (
+                        <TableRow>
+                            <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
+                                You are not enrolled in any courses yet.
+                            </TableCell>
+                        </TableRow>
+                     )
                   )}
                 </TableBody>
               </Table>
@@ -123,7 +135,16 @@ export default function StudentDashboard() {
               <CardTitle>Recent Announcements</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              {latestAnnouncements?.map(announcement => (
+              {isLoading && [...Array(3)].map((_, i) => (
+                  <div key={i} className="flex items-start gap-4">
+                    <Skeleton className="h-10 w-10 rounded-lg" />
+                    <div className="space-y-2 flex-1">
+                        <Skeleton className="h-4 w-3/4" />
+                        <Skeleton className="h-4 w-1/2" />
+                    </div>
+                  </div>
+              ))}
+              {!isLoading && announcements?.map(announcement => (
                 <div key={announcement.id} className="flex items-start gap-4">
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent text-accent-foreground">
                     <Megaphone className="h-5 w-5" />
@@ -136,7 +157,12 @@ export default function StudentDashboard() {
                   </div>
                 </div>
               ))}
-               <Button variant="outline" className="w-full mt-4">View all announcements</Button>
+              {!isLoading && announcements?.length === 0 && (
+                <p className="text-sm text-center text-muted-foreground py-4">No recent announcements.</p>
+              )}
+               <Link href="/student/announcements" passHref>
+                    <Button variant="outline" className="w-full mt-4">View all announcements</Button>
+               </Link>
             </CardContent>
           </Card>
         </div>
