@@ -31,7 +31,10 @@ import { ArrowLeft, Image } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
-import { getFunctions, httpsCallable } from 'firebase/functions';
+
+// This should be replaced with your actual Cloud Function URL
+const CREATE_USER_URL = 'https://us-central1-studio-438869302-e37ab.cloudfunctions.net/createUser';
+
 
 const formSchema = z.object({
   fullName: z.string().min(2, { message: 'Full name must be at least 2 characters.' }),
@@ -67,14 +70,7 @@ export default function NewStudentPage() {
 
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-     if (!firestore) {
-      toast({ variant: 'destructive', title: 'Error', description: 'Firebase not configured.' });
-      return;
-    }
     
-    const functions = getFunctions(firestore.app);
-    const createUser = httpsCallable(functions, 'createUser');
-
     try {
       const course = courses?.find(c => c.id === values.enrolledCourseId);
       
@@ -91,17 +87,25 @@ export default function NewStudentPage() {
         courseName: course?.name || 'Unknown Course'
       };
 
-      const result = await createUser(studentData) as { data: { success: boolean; loginKey?: string; error?: string } };
+      const response = await fetch(CREATE_USER_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(studentData),
+      });
+
+      const result = await response.json();
       
-      if (result.data.success) {
+      if (response.ok && result.success) {
          toast({
             title: "Student Registered Successfully!",
-            description: `${values.fullName} has been added. Their registration key is ${result.data.loginKey}.`,
+            description: `${values.fullName} has been added. Their registration key is ${result.loginKey}.`,
             duration: 9000
         });
         router.push('/admin/students');
       } else {
-        throw new Error(result.data.error || 'Failed to create user.');
+        throw new Error(result.error || 'Failed to create user.');
       }
 
     } catch (error: any) {
