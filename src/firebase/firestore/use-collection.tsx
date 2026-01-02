@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   onSnapshot,
   query,
@@ -10,6 +10,7 @@ import {
   type CollectionReference,
   type DocumentData,
   type Query,
+  queryEqual,
 } from 'firebase/firestore';
 import { useFirestore } from '@/firebase/provider';
 import { errorEmitter } from '@/firebase/error-emitter';
@@ -19,17 +20,19 @@ interface UseCollectionOptions<T> {
   initialData?: T[];
 }
 
-function getCollectionPath(ref: Query | CollectionReference): string {
-    if (ref instanceof CollectionReference) {
-        return ref.path;
+function useMemoizedQuery<T extends Query | CollectionReference | null>(query: T): T {
+    const previousQueryRef = useRef<T | null>(null);
+  
+    if (query) {
+      if (!previousQueryRef.current || !queryEqual(previousQueryRef.current as Query, query as Query)) {
+        previousQueryRef.current = query;
+      }
+    } else {
+        previousQueryRef.current = null;
     }
-    // For queries, we can get the path from the collection reference it's built on.
-    // This is a bit of a workaround as the public API doesn't directly expose the path on a Query.
-    // We can assume the query is on a collection and get its path.
-    // A more robust solution might inspect the internal _query object if needed, but this is safer.
-    const collectionRef = collection(ref.firestore, ref.path);
-    return collectionRef.path;
-}
+  
+    return previousQueryRef.current as T;
+  }
 
 export function useCollection<T extends DocumentData>(
   ref: Query | CollectionReference | null,
@@ -38,9 +41,11 @@ export function useCollection<T extends DocumentData>(
   const [data, setData] = useState<T[] | null>(options?.initialData || null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  
+  const memoizedRef = useMemoizedQuery(ref);
 
   useEffect(() => {
-    if (!ref) {
+    if (!memoizedRef) {
       setLoading(false);
       setData(null);
       return;
@@ -49,7 +54,7 @@ export function useCollection<T extends DocumentData>(
     setLoading(true);
 
     const unsubscribe = onSnapshot(
-      ref,
+      memoizedRef,
       (snapshot) => {
         const result: T[] = [];
         snapshot.forEach((doc) => {
@@ -61,19 +66,12 @@ export function useCollection<T extends DocumentData>(
       },
       (err) => {
         let path = 'unknown';
-        if (ref) {
-            // This is a simplified way. A query might not have a `path` property directly.
-            // For a collectionRef, it's straightforward.
-            if ('path' in ref) {
-                path = ref.path;
+         if (memoizedRef) {
+            if ('path' in memoizedRef) {
+                path = memoizedRef.path;
             } else {
-                 // For Query, the path isn't directly on the object. We can hack it, but it's fragile.
-                 // A better way is to look at the internal _query property, but that's not public API.
-                 // Let's assume the query is on a simple collection path for now.
-                 // This part might need to be more robust depending on query complexity.
-                 // For now, this will work for simple collection queries.
                  try {
-                     const tempColl = collection(ref.firestore, ref.converter ? ref._query.path.segments.join('/') : (ref as any)._query.path.segments.join('/'));
+                     const tempColl = collection(memoizedRef.firestore, (memoizedRef as any)._query.path.segments.join('/'));
                      path = tempColl.path;
                  } catch(e) {
                     console.error("Could not determine path from query", e);
@@ -91,7 +89,7 @@ export function useCollection<T extends DocumentData>(
     );
 
     return () => unsubscribe();
-  }, [ref]);
+  }, [memoizedRef]);
 
   return { data, loading, error };
 }
