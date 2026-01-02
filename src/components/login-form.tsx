@@ -19,26 +19,49 @@ import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
 
-const formSchema = z.discriminatedUnion("role", [
-  z.object({
-    role: z.literal("student"),
-    fullName: z.string().min(2, {
-      message: "Please enter your full name.",
+const formSchema = z
+  .object({
+    role: z.enum(["student", "admin"], {
+      required_error: "You need to select a role.",
     }),
-    key: z.string().min(6, {
-      message: "Key must be at least 6 characters.",
-    }),
-  }),
-  z.object({
-    role: z.literal("admin"),
-    email: z.string().email({
-      message: "Please enter a valid email address.",
-    }),
-    password: z.string().min(6, {
-      message: "Password must be at least 6 characters.",
-    }),
-  }),
-]);
+    fullName: z.string().optional(),
+    key: z.string().optional(),
+    email: z.string().optional(),
+    password: z.string().optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.role === "student") {
+      if (!data.fullName || data.fullName.length < 2) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["fullName"],
+          message: "Please enter your full name.",
+        });
+      }
+      if (!data.key || data.key.length < 6) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["key"],
+          message: "Key must be at least 6 characters.",
+        });
+      }
+    } else if (data.role === "admin") {
+      if (!data.email || !z.string().email().safeParse(data.email).success) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["email"],
+          message: "Please enter a valid email address.",
+        });
+      }
+      if (!data.password || data.password.length < 6) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["password"],
+          message: "Password must be at least 6 characters.",
+        });
+      }
+    }
+  });
 
 export function LoginForm() {
   const router = useRouter();
@@ -50,6 +73,8 @@ export function LoginForm() {
       role: "student",
       fullName: "",
       key: "",
+      email: "",
+      password: "",
     },
   });
 
@@ -73,7 +98,7 @@ export function LoginForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <FormField
+         <FormField
           control={form.control}
           name="role"
           render={({ field }) => (
@@ -81,17 +106,9 @@ export function LoginForm() {
               <FormLabel>Sign in as</FormLabel>
               <FormControl>
                 <RadioGroup
-                  onValueChange={(value) => {
-                    field.onChange(value);
-                    // Reset fields when role changes
-                    if (value === 'student') {
-                      form.reset({ role: 'student', fullName: '', key: '' });
-                    } else {
-                      form.reset({ role: 'admin', email: '', password: '' });
-                    }
-                  }}
+                  onValueChange={field.onChange}
                   defaultValue={field.value}
-                  className="flex flex-col space-y-1"
+                  className="flex space-x-4"
                 >
                   <FormItem className="flex items-center space-x-3 space-y-0">
                     <FormControl>
@@ -112,7 +129,7 @@ export function LoginForm() {
           )}
         />
 
-        {role === "student" && (
+        {role === 'student' ? (
           <>
             <FormField
               control={form.control}
@@ -141,10 +158,8 @@ export function LoginForm() {
               )}
             />
           </>
-        )}
-
-        {role === "admin" && (
-          <>
+        ) : (
+           <>
             <FormField
               control={form.control}
               name="email"
@@ -152,7 +167,7 @@ export function LoginForm() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter your email" {...field} />
+                    <Input placeholder="admin@example.com" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
