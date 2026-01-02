@@ -1,6 +1,6 @@
 
 'use client';
-import { Plus, MoreHorizontal, FilePenLine, Trash2, ArrowLeft } from "lucide-react";
+import { Plus, MoreHorizontal, FilePenLine, Trash2, ArrowLeft, Eye } from "lucide-react";
 import Link from "next/link";
 import {
   AlertDialog,
@@ -98,6 +98,7 @@ export default function AnnouncementsPage() {
                 <TableHead>Title</TableHead>
                 <TableHead>Content</TableHead>
                 <TableHead>Date</TableHead>
+                <TableHead>Read Count</TableHead>
                 <TableHead>
                   <span className="sr-only">Actions</span>
                 </TableHead>
@@ -110,6 +111,7 @@ export default function AnnouncementsPage() {
                       <TableCell><Skeleton className="h-5 w-32" /></TableCell>
                       <TableCell><Skeleton className="h-5 w-64" /></TableCell>
                       <TableCell><Skeleton className="h-5 w-24" /></TableCell>
+                      <TableCell><Skeleton className="h-5 w-12" /></TableCell>
                       <TableCell><Skeleton className="h-8 w-8 ml-auto" /></TableCell>
                     </TableRow>
                   ))
@@ -119,6 +121,12 @@ export default function AnnouncementsPage() {
                   <TableCell className="font-medium">{announcement.title}</TableCell>
                   <TableCell className="max-w-xs truncate">{announcement.content}</TableCell>
                   <TableCell>{new Date(announcement.date).toLocaleDateString()}</TableCell>
+                   <TableCell>
+                     <div className="flex items-center gap-2">
+                        <Eye className="h-4 w-4 text-muted-foreground" />
+                        {announcement.readCount || 0}
+                     </div>
+                   </TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -173,7 +181,7 @@ export default function AnnouncementsPage() {
               ))}
                {!loading && announcements?.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={4} className="h-24 text-center">
+                  <TableCell colSpan={5} className="h-24 text-center">
                     No announcements found.
                   </TableCell>
                 </TableRow>

@@ -103,6 +103,10 @@
           "type": "string",
           "format": "date",
           "description": "The date the announcement was published."
+        },
+        "readCount": {
+          "type": "number",
+          "description": "The number of students who have read the announcement."
         }
       },
       "required": ["title", "content", "date"]
@@ -130,6 +134,19 @@
             }
         },
         "required": ["studentId", "courseId", "enrolledAt"]
+    },
+    "ReadReceipt": {
+      "title": "Read Receipt",
+      "description": "Marks that a student has read an announcement.",
+      "type": "object",
+      "properties": {
+        "readAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp when the announcement was read."
+        }
+      },
+      "required": ["readAt"]
     }
   },
   "auth": {
@@ -153,6 +170,12 @@
             "$ref": "#/backend/entities/Announcement"
         },
         "description": "Stores all school announcements."
+    },
+    "/announcements/{announcementId}/readBy/{studentId}": {
+      "schema": {
+        "$ref": "#/backend/entities/ReadReceipt"
+      },
+      "description": "Tracks which student has read a specific announcement."
     },
     "/enrollments/{enrollmentId}": {
         "schema": {

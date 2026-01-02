@@ -64,6 +64,7 @@ export default function NewAnnouncementPage() {
         await addDoc(collection(firestore, 'announcements'), {
             ...values,
             date: values.date.toISOString().split('T')[0], // Store date as YYYY-MM-DD string
+            readCount: 0,
         });
         toast({ title: 'Success', description: 'Announcement created successfully.' });
         router.push('/admin/announcements');

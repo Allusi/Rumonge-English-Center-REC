@@ -25,10 +25,12 @@ import { useUser, useCollection, useFirestore } from "@/firebase";
 import { collection, query, where, orderBy, limit } from "firebase/firestore";
 import type { Course, Enrollment, Announcement } from "@/lib/data";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useRouter } from "next/navigation";
 
 export default function StudentDashboard() {
   const { user } = useUser();
   const firestore = useFirestore();
+  const router = useRouter();
   const studentName = user?.displayName || "Student";
   
   const { data: studentEnrollments, loading: enrollmentsLoading } = useCollection<Enrollment>(
@@ -145,17 +147,19 @@ export default function StudentDashboard() {
                   </div>
               ))}
               {!isLoading && announcements?.map(announcement => (
-                <div key={announcement.id} className="flex items-start gap-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent text-accent-foreground">
-                    <Megaphone className="h-5 w-5" />
+                 <Link key={announcement.id} href={`/student/announcements/${announcement.id}`} className="block hover:bg-muted/50 p-3 rounded-lg -m-3 transition-colors">
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent text-accent-foreground">
+                      <Megaphone className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-sm">{announcement.title}</h3>
+                      <p className="text-xs text-muted-foreground line-clamp-2">
+                        {announcement.content}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-sm">{announcement.title}</h3>
-                    <p className="text-xs text-muted-foreground line-clamp-2">
-                      {announcement.content}
-                    </p>
-                  </div>
-                </div>
+                </Link>
               ))}
               {!isLoading && announcements?.length === 0 && (
                 <p className="text-sm text-center text-muted-foreground py-4">No recent announcements.</p>

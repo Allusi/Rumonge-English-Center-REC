@@ -32,6 +32,7 @@ export type Announcement = {
   title: string;
   content: string;
   date: string;
+  readCount?: number;
 };
 
 // Data is now fetched from Firestore. This can be kept for fallback or removed.
