@@ -25,6 +25,7 @@ import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth, useFirestore } from "@/firebase";
+import { useEffect, useState } from "react";
 
 const formSchema = z
   .object({
@@ -67,6 +68,11 @@ export function LoginForm() {
   const { toast } = useToast();
   const auth = useAuth();
   const firestore = useFirestore();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -131,6 +137,10 @@ export function LoginForm() {
         description: description,
       });
     }
+  }
+  
+  if (!isClient) {
+    return null; // or a loading skeleton
   }
 
   return (
