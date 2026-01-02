@@ -167,20 +167,14 @@ export function AITutorChat() {
     setIsLoading(true);
     setError(null);
     
-    const studentName = "Student"; // In a real app, this would come from user data
-    let welcomeText = `Hi ${studentName}! I'm R.E.C, your personal English tutor. How can I help you practice today?`;
-    if (mode === 'video') {
-      welcomeText = `Hi ${studentName}, welcome to your video session! I'm R.E.C. Let's practice English. What's on your mind?`;
-    } else if (mode === 'audio') {
-      welcomeText = `Hi ${studentName}, welcome to your audio session! I'm R.E.C. Let's start talking. How are you today?`;
-    }
-
     try {
-      const ttsResult = await textToSpeech(welcomeText);
+      // Get the initial message from the AI tutor flow.
+      const initialTutorMessage = await aiTutor({ history: [] });
+      const ttsResult = await textToSpeech(initialTutorMessage);
 
       const firstResponse: Message = {
         role: "model",
-        content: welcomeText,
+        content: initialTutorMessage,
         audioUrl: ttsResult.media,
       };
 
@@ -191,7 +185,7 @@ export function AITutorChat() {
       }
 
     } catch (e) {
-      setError("An error occurred. Please try again.");
+      setError("An error occurred starting the conversation. Please try again.");
       console.error(e);
     } finally {
       setIsLoading(false);
