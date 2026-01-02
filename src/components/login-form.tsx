@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { LogIn } from "lucide-react";
-import { useEffect, useState } from "react";
 import { 
   signInWithEmailAndPassword,
 } from "firebase/auth";
@@ -68,11 +67,6 @@ export function LoginForm() {
   const { toast } = useToast();
   const auth = useAuth();
   const firestore = useFirestore();
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -108,9 +102,9 @@ export function LoginForm() {
         router.push("/admin/dashboard");
       } else {
         const loginKey = values.key!;
+        // This is the "fake" email address used for Firebase Auth.
         const authEmail = `${loginKey}@rec-online.app`;
         // This is a temporary, insecure password for the demo.
-        // A production app should have a proper password reset flow.
         const tempPassword = "password"; 
         
         await signInWithEmailAndPassword(auth, authEmail, tempPassword);
@@ -137,10 +131,6 @@ export function LoginForm() {
         description: description,
       });
     }
-  }
-
-  if (!isClient) {
-    return null;
   }
 
   return (
