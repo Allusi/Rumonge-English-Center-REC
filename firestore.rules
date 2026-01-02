@@ -3,61 +3,9 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    function isOwner(userId) {
-      return request.auth != null && request.auth.uid == userId;
-    }
-
-    function isAdmin() {
-      return request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
-    }
-
-    function isSignedIn() {
-      return request.auth != null;
-    }
-
-    // User profiles can be read by anyone, but only written by the owner or an admin.
-    match /users/{userId} {
-      allow read: if isSignedIn();
-      allow write: if isOwner(userId) || isAdmin();
-    }
-
-    // Courses can be read by any signed-in user, but only written by an admin.
-    match /courses/{courseId} {
-      allow read: if isSignedIn();
-      allow write: if isAdmin();
-    }
-    
-    // Announcements can be read by any signed-in user, but only written by an admin.
-    match /announcements/{announcementId} {
-      allow read: if isSignedIn();
-      allow write: if isAdmin();
-      
-      // Read receipts can be created by any signed-in user for themselves.
-      match /readBy/{studentId} {
-        allow read, create: if isOwner(studentId);
-        allow update, delete: if false;
-      }
-    }
-    
-    // Enrollments can be read by admins, or by the student who is enrolled.
-    // Only admins can create, update, or delete enrollments.
-    match /enrollments/{enrollmentId} {
-      allow read: if isAdmin() || (isSignedIn() && resource.data.studentId == request.auth.uid);
-      allow write: if isAdmin();
-    }
-
-    // ATTENDANCE: Admins can manage all records. Students can create/read their own.
-    match /attendance/{attendanceId} {
-      allow read: if isAdmin() || (isSignedIn() && resource.data.studentId == request.auth.uid);
-      allow create: if isSignedIn() && request.resource.data.studentId == request.auth.uid;
-      allow update, delete: if isAdmin();
-    }
-    
-    // Admins can read and write school settings. Students can only read.
-    match /settings/school {
-        allow read: if isSignedIn();
-        allow write: if isAdmin();
+    // Allow everything for all collections and documents
+    match /{document=**} {
+      allow read, write: if true;
     }
   }
 }
