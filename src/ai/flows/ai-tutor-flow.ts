@@ -26,7 +26,7 @@ const AITutorFlowInputSchema = z.object({
 export async function aiTutor(input: AITutorInput): Promise<AITutorOutput> {
   // If the history is empty, start the conversation.
   if (input.history.length === 0) {
-    return "Hello! I'm R.E.C, your friendly AI English tutor. How's your day going?";
+    return "Hello! I'm R.E.C, your friendly AI English tutor. How would you like to practice today?";
   }
 
   const historyWithUserFlag = input.history.map(m => ({ ...m, isUser: m.role === 'user' }));
