@@ -116,11 +116,9 @@ export function LoginForm() {
         const email = values.email!;
         const password = values.password!;
         try {
-          // Try to sign in first
           await signInWithEmailAndPassword(auth, email, password);
         } catch (error: any) {
-          // If the user does not exist, create a new account
-          if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+          if (error.code === 'auth/user-not-found') {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
             
@@ -148,7 +146,6 @@ export function LoginForm() {
               duration: 9000,
             });
           } else {
-            // Re-throw other errors (like wrong password)
             throw error;
           }
         }
@@ -158,7 +155,6 @@ export function LoginForm() {
         });
         router.push("/admin/dashboard");
       } else {
-        // Student registration logic
         const studentEmail = values.key!; 
         const studentPassword = Math.random().toString(36).slice(-8); 
 
@@ -211,10 +207,17 @@ export function LoginForm() {
       }
     } catch (error: any) {
       console.error("Firebase Auth Error:", error);
+      let description = "An unexpected error occurred.";
+      if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
+        description = "Incorrect password. Please try again."
+      } else if (error.code) {
+        description = error.message;
+      }
+      
       toast({
         variant: "destructive",
         title: "Authentication Failed",
-        description: error.message || "An unexpected error occurred.",
+        description: description,
       });
     }
   }
