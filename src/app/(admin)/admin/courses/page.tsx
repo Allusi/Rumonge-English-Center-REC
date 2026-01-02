@@ -23,15 +23,35 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useCollection, useFirestore } from "@/firebase";
-import { collection } from "firebase/firestore";
+import { collection, writeBatch, getDocs } from "firebase/firestore";
 import type { Course } from "@/lib/data";
+import { courses as hardcodedCourses } from "@/lib/data";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useEffect } from "react";
 
 export default function CoursesPage() {
   const firestore = useFirestore();
-  const { data: courses, loading } = useCollection<Course>(
-    firestore ? collection(firestore, 'courses') : null
-  );
+  const coursesCollection = firestore ? collection(firestore, 'courses') : null;
+
+  useEffect(() => {
+    const seedCourses = async () => {
+      if (firestore && coursesCollection) {
+        const snapshot = await getDocs(coursesCollection);
+        if (snapshot.empty) {
+          const batch = writeBatch(firestore);
+          hardcodedCourses.forEach((course) => {
+            const docRef = collection(firestore, "courses").doc(course.id);
+            batch.set(docRef, { name: course.name, description: course.description, level: course.level });
+          });
+          await batch.commit();
+          // This will trigger a re-render via the useCollection hook
+        }
+      }
+    };
+    seedCourses();
+  }, [firestore, coursesCollection]);
+
+  const { data: courses, loading } = useCollection<Course>(coursesCollection);
 
   return (
     <div className="flex flex-col gap-6">
