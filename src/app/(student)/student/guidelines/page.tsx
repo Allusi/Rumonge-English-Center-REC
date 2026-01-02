@@ -87,41 +87,6 @@ export default function GuidelinesPage() {
                   </div>
                 </AccordionContent>
               </AccordionItem>
-              <AccordionItem value="item-2">
-                <AccordionTrigger>For Teacher/Classroom</AccordionTrigger>
-                <AccordionContent>
-                  <div className="grid gap-4">
-                    <div>
-                      <h4 className="font-semibold">Essential Teaching Aids:</h4>
-                      <ul className="ml-6 list-disc [&>li]:mt-2">
-                        <li>Whiteboard or blackboard & markers or chalks</li>
-                        <li>Flashcards, printed visuals, posters</li>
-                      </ul>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold">Technology (if available):</h4>
-                      <ul className="ml-6 list-disc [&>li]:mt-2">
-                        <li>
-                          Projector/Smartboard: For videos, slideshows, and
-                          interactive lessons.
-                        </li>
-                        <li>
-                          Computer/Laptop: For lesson presentations, audio/video
-                          playback and system monitoring (recommended).
-                        </li>
-                        <li>
-                          Speaker or Sound System: Clear audio for listening
-                          exercises.
-                        </li>
-                        <li>
-                          Stable internet connection (for online resources, optional
-                          as downloaded lessons can be used).
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
             </Accordion>
           </CardContent>
         </Card>
