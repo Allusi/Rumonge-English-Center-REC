@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -50,6 +50,11 @@ export function GrammarCheckerForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [originalText, setOriginalText] = useState("");
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -129,6 +134,10 @@ export function GrammarCheckerForm() {
 
     return <p className="leading-relaxed">{parts}</p>;
   };
+  
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
