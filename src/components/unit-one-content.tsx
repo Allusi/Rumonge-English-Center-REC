@@ -143,7 +143,7 @@ export function UnitOneContent() {
              <div>
                 <h4 className="font-semibold text-lg mb-2">Expressions</h4>
                  <div className="p-4 border rounded-lg bg-muted/20 space-y-2 text-sm">
-                    <p><strong>1. To be as easy as ABC:</strong> to be very easy (simple).<br/><em>E.g: That song is as easy as ABC.</em></p>
+                    <p><strong>1. To be as easy as ABC:</strong> to be very easy ( simple ).<br/><em>E.g: That song is as easy as ABC.</em></p>
                     <p><strong>2. From A to B:</strong> from one place to another, from one's starting-point to one's destination.<br/><em>E.g: I used only 20 minutes to go from A to B.</em></p>
                     <p><strong>3. From A to Z:</strong> all details.<br/><em>E.g: I can tell you what you taught us from A to Z. / I know him from A to Z.</em></p>
                     <p><strong>4. To be all ears:</strong> to be attentive.<br/><em>E.g: I am all ears for what you are going to tell us.</em></p>
@@ -193,9 +193,101 @@ export function UnitOneContent() {
                       <li>In the evening time we greet someone by saying: <strong>Good evening!</strong> And the answer to that greeting is also the same as "Good evening".</li>
                       <li>In the night we say <strong>Goodnight</strong> as the way of wishing someone to have a goodnight. It means that this is not considered to be a special greeting.</li>
                     </ul>
+                     <div className="mt-2 p-4 border rounded-lg bg-muted/50 space-y-4 text-sm">
+                      <div>
+                        <p className="font-semibold">A. Anna and John Talking</p>
+                        <p><strong>Anna:</strong> Good morning Mr John!</p>
+                        <p><strong>John:</strong> Good morning Anna.</p>
+                        <p><strong>Anna:</strong> How are you?</p>
+                        <p><strong>John:</strong> I am fine thank you and you?</p>
+                        <p><strong>Anna:</strong> Fine too.</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold">B. Ezra and Esther Talking</p>
+                        <p><strong>Esther:</strong> Good afternoon, Ezra!</p>
+                        <p><strong>Ezra:</strong> Good afternoon, Esther!</p>
+                        <p><strong>Esther:</strong> How are you?</p>
+                        <p><strong>Ezra:</strong> I am very well and you?</p>
+                        <p><strong>Esther:</strong> I am very well too.</p>
+                        <p><strong>Ezra:</strong> Good bye.</p>
+                        <p><strong>Esther:</strong> Good bye</p>
+                      </div>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Secondary Greetings: Questions and Answers</CardTitle>
+                  <CardDescription>
+                    Here are different ways to ask "how are you?" and how to answer.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 className="font-semibold text-lg mb-2">A. Questions</h4>
+                    <ul className="list-disc pl-6 text-muted-foreground space-y-1">
+                      <li>How are you?</li>
+                      <li>How is it?</li>
+                      <li>How are you keeping?</li>
+                      <li>How does it keep?</li>
+                      <li>How are you getting on?</li>
+                      <li>How are you going on?</li>
+                      <li>How are you doing?</li>
+                      <li>How is it going?</li>
+                      <li>What's news?</li>
+                      <li>How do you get along?</li>
+                      <li>How spend with you?</li>
+                      <li>Longtime no see, no news?</li>
+                      <li>Longtime no see, what's news?</li>
+                      <li>How is home?</li>
+                      <li>How do you feel?</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-lg mb-2">B. Answers</h4>
+                    <ul className="list-disc pl-6 text-muted-foreground space-y-1">
+                      <li>I am fine, thank you.</li>
+                      <li>I am fine, thanks.</li>
+                      <li>I am okay.</li>
+                      <li>I am soso.</li>
+                      <li>I am just well.</li>
+                      <li>I am fine too.</li>
+                      <li>I am quite well.</li>
+                      <li>I am Great.</li>
+                      <li>So well.</li>
+                      <li>Little fine.</li>
+                      <li>Nothing complicated.</li>
+                      <li>Well.</li>
+                      <li>I can't complain.</li>
+                      <li>Alright.</li>
+                      <li>All are well.</li>
+                      <li>No probs/no problem.</li>
+                    </ul>
+                    <div className="mt-4">
+                      <h5 className="font-semibold mb-2">Answers for "How do you feel?"</h5>
+                       <ul className="list-disc pl-6 text-muted-foreground space-y-1">
+                          <li>I feel okay.</li>
+                          <li>I feel Ill.</li>
+                          <li>I am Ill.</li>
+                          <li>I feel hungry.</li>
+                          <li>I am hungry.</li>
+                          <li>I feel thirsty.</li>
+                          <li>I am thirsty.</li>
+                          <li>I feel cold.</li>
+                          <li>I am tired.</li>
+                          <li>I feel hot.</li>
+                          <li>I am worn out.</li>
+                          <li>I feel bad.</li>
+                          <li>I feel worn out.</li>
+                          <li>I feel tired.</li>
+                       </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
 
                <h4 className="font-semibold text-lg mb-2 mt-4">Introductions</h4>
                <p className="text-muted-foreground mb-2">You can introduce yourself by saying: "My name is [Your Name]".</p>
