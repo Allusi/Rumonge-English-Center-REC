@@ -26,6 +26,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth, useFirestore } from "@/firebase";
 import { useEffect, useState } from "react";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 const formSchema = z
   .object({
