@@ -1,3 +1,4 @@
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -102,6 +103,10 @@ export function LoginForm() {
     }
   }
 
+  if (!isClient) {
+    return null;
+  }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -136,7 +141,7 @@ export function LoginForm() {
           )}
         />
 
-        {isClient && role === 'student' && (
+        {role === 'student' && (
           <>
             <FormField
               control={form.control}
@@ -166,7 +171,7 @@ export function LoginForm() {
             />
           </>
         )}
-        {isClient && role === 'admin' && (
+        {role === 'admin' && (
            <>
             <FormField
               control={form.control}

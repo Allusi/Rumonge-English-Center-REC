@@ -22,6 +22,10 @@ export default function GuidelinesPage() {
   useEffect(() => {
     setIsClient(true);
   }, []);
+  
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -66,43 +70,41 @@ export default function GuidelinesPage() {
             <CardTitle>Materials & Technology Required</CardTitle>
           </CardHeader>
           <CardContent>
-            {isClient && (
-              <Accordion type="single" collapsible className="w-full">
-                <AccordionItem value="item-1">
-                  <AccordionTrigger>For Students</AccordionTrigger>
-                  <AccordionContent>
-                    <div className="grid gap-4">
-                      <div>
-                        <h4 className="font-semibold">Essential:</h4>
-                        <ul className="ml-6 list-disc [&>li]:mt-2">
-                          <li>Notebook & pen/pencil</li>
-                          <li>Textbook/workbook (if applicable)</li>
-                          <li>Folder for handouts</li>
-                        </ul>
-                      </div>
-                      <div>
-                        <h4 className="font-semibold">
-                          Technology (if applicable):
-                        </h4>
-                        <ul className="ml-6 list-disc [&>li]:mt-2">
-                          <li>
-                            Smartphone/Tablet: For language apps, quizzes, and
-                            audio exercises.
-                          </li>
-                          <li>
-                            Laptop/Computer: Required for online classes, typing
-                            practice, and research tasks.
-                          </li>
-                          <li>
-                            Headphones/earbuds (for listening activities).
-                          </li>
-                        </ul>
-                      </div>
+            <Accordion type="single" collapsible className="w-full">
+              <AccordionItem value="item-1">
+                <AccordionTrigger>For Students</AccordionTrigger>
+                <AccordionContent>
+                  <div className="grid gap-4">
+                    <div>
+                      <h4 className="font-semibold">Essential:</h4>
+                      <ul className="ml-6 list-disc [&>li]:mt-2">
+                        <li>Notebook & pen/pencil</li>
+                        <li>Textbook/workbook (if applicable)</li>
+                        <li>Folder for handouts</li>
+                      </ul>
                     </div>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            )}
+                    <div>
+                      <h4 className="font-semibold">
+                        Technology (if applicable):
+                      </h4>
+                      <ul className="ml-6 list-disc [&>li]:mt-2">
+                        <li>
+                          Smartphone/Tablet: For language apps, quizzes, and
+                          audio exercises.
+                        </li>
+                        <li>
+                          Laptop/Computer: Required for online classes, typing
+                          practice, and research tasks.
+                        </li>
+                        <li>
+                          Headphones/earbuds (for listening activities).
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </CardContent>
         </Card>
 

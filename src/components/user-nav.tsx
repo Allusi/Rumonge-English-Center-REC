@@ -1,9 +1,11 @@
+
 "use client";
 
 import { CreditCard, LogOut, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -20,12 +22,22 @@ import {
 
 export function UserNav() {
   const router = useRouter();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const avatar = PlaceHolderImages.find((img) => img.id === "user-avatar");
 
   const handleLogout = () => {
     // In a real app, you would clear auth tokens here
     router.push("/");
   };
+
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <DropdownMenu>
