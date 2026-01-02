@@ -26,6 +26,11 @@ import { textToSpeech } from "@/ai/flows/tts-flow";
 export function UnitOneContent() {
   const [playingLetter, setPlayingLetter] = useState<string | null>(null);
   const [loadingLetter, setLoadingLetter] = useState<string | null>(null);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const playLetter = async (letter: string) => {
     if (loadingLetter) return;
@@ -46,6 +51,10 @@ export function UnitOneContent() {
   const alphabet = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z".split(',');
   const vowels = ["A", "E", "I", "O", "U"];
   const consonants = "B, C, D, F, G, H, J, K, L, M, N, P, Q, R, S, T, V, W, X, Y, Z".split(', ');
+
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <div className="space-y-6">
@@ -368,12 +377,11 @@ export function UnitOneContent() {
                 <h4 className="font-semibold text-xl mb-2 mt-4">B. Introductions</h4>
                 <p className="text-muted-foreground">In this part we are going to see three kinds of introductions.</p>
                 <p className="text-muted-foreground">These are: 1) SELF INTRODUCTION, 2) INTRODUCTION BY QUESTIONS, 3) INTRODUCING OTHERS</p>
-                <h5 className="font-semibold text-lg pt-2">1. Self Introduction</h5>
-                <p className="text-muted-foreground">This introduction is done only by one person when s/he is introducing her/himself in front of others. See the following example:</p>
               </div>
               <Card>
                   <CardHeader>
-                      <CardTitle>Self Introduction Example</CardTitle>
+                      <CardTitle>1. Self Introduction</CardTitle>
+                      <CardDescription>This introduction is done only by one person when s/he is introducing her/himself in front of others. See the following example:</CardDescription>
                   </CardHeader>
                   <CardContent>
                       <ul className="list-disc pl-6 text-muted-foreground space-y-1 text-sm columns-2">
@@ -657,6 +665,24 @@ export function UnitOneContent() {
           <AccordionContent className="p-4 pt-0">
             <p className="text-muted-foreground mb-4">This section covers common vocabulary.</p>
              <Accordion type="multiple" className="w-full space-y-2">
+                 <AccordionItem value="places">
+                    <AccordionTrigger>A. Places</AccordionTrigger>
+                    <AccordionContent>
+                        <p className="text-muted-foreground mb-2">What is a place? A place is everywhere we can find people or animals.</p>
+                        <ul className="list-disc pl-6 text-muted-foreground columns-2">
+                            <li>Town: agasagara</li>
+                            <li>Bank: ibanki</li>
+                            <li>Forest: ishamba</li>
+                            <li>At the station: kugituro</li>
+                            <li>Village: ikigwati</li>
+                            <li>In the court: aho bacira imanza</li>
+                            <li>Zoo: aho batungira ibikoko mwipori</li>
+                            <li>At the airport: kukibuga cindege</li>
+                            <li>City: igisagara</li>
+                            <li>Market: akaguriro</li>
+                        </ul>
+                    </AccordionContent>
+                </AccordionItem>
                 <AccordionItem value="family">
                     <AccordionTrigger>Family Members</AccordionTrigger>
                     <AccordionContent>
@@ -688,20 +714,6 @@ export function UnitOneContent() {
                             <li>Plate, Cup, Spoon</li>
                             <li>Door, Window</li>
                             <li>Kitchen, Bathroom</li>
-                        </ul>
-                    </AccordionContent>
-                </AccordionItem>
-                 <AccordionItem value="places">
-                    <AccordionTrigger>Places</AccordionTrigger>
-                    <AccordionContent>
-                        <ul className="list-disc pl-6 text-muted-foreground columns-2">
-                            <li>Town: agasagara</li>
-                            <li>Bank: ibanki</li>
-                            <li>Forest: ishamba</li>
-                            <li>Village: ikigwati</li>
-                            <li>School: ishure</li>
-                            <li>Hospital: ibitaro</li>
-                            <li>Market: isoko</li>
                         </ul>
                     </AccordionContent>
                 </AccordionItem>
