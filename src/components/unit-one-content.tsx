@@ -125,18 +125,18 @@ export function UnitOneContent() {
                 <p><strong>Juma:</strong> it means that there are thirteen vowels and thirteen consonants?</p>
                 <p><strong>Anna:</strong> no, there are five vowels and twenty-one consonants.</p>
                 <p><strong>Juma:</strong> can you please teach me those letters?</p>
-                <p><strong>Anna:</strong> yes,let me teach you how to sing them.</p>
+                <p><strong>Anna:</strong> yes, let me teach you how to sing them.</p>
                 <p><strong>Juma:</strong> I shall be thankful to you.</p>
                 <p><strong>Anna:</strong> let me sing alone after we will sing together.</p>
                 <p><strong>Juma:</strong> no matter what.</p>
                 <p><strong>Anna:</strong> [ A,B,C,D........Z]</p>
                 <p><strong>Juma:</strong> it is a difficult song.</p>
-                <p><strong>Anna:</strong> no,you are going to find it easy.</p>
+                <p><strong>Anna:</strong> no, you are going to find it easy.</p>
                 <p><strong>Juma:</strong> let me wait ,I shall see.</p>
                 <p><strong>Anna:</strong> so , be all ears and repeat after me [A,B,C....]</p>
                 <p><strong>Juma:</strong> okay ,thank you very much for teaching me how to sing English alphabet ,tomorrow I shall go to join unit one at I.E.T.S.</p>
                 <p><strong>Anna:</strong> it is your choice because English is very important nowadays.</p>
-                <p><strong>Juma:</strong> Yeah,see you next week.</p>
+                <p><strong>Juma:</strong> Yeah, see you next week.</p>
                 <p><strong>Anna:</strong> we shall meet if God wishes.</p>
               </div>
             </div>
@@ -542,16 +542,16 @@ export function UnitOneContent() {
                   <p><strong>MINANI:</strong> Only one.</p>
                   <p><strong>JOSEPH:</strong> Is he a boy?</p>
                   <p><strong>MINANI:</strong> No, she is a girl.</p>
-                  <p><strong>JOSEPH:</strong>What is her tribe?</p>
-                  <p><strong>MINANI:</strong>Her tribe is Hutu.</p>
-                  <p><strong>JOSEPH:</strong>What is yours?</p>
-                  <p><strong>MINANI:</strong>My tribe is Tutsi</p>
-                  <p><strong>JOSEPH :</strong>That is okay,Thank you very much MINANI.</p>
-                  <p><strong>MINANI:</strong>Not at all.</p>
-                  <p><strong>JOSEPH:</strong>I am happy to meet you Mrs MINANI.</p>
-                  <p><strong>ANNA:</strong>I am happy to meet you too,Joseph</p>
-                  <p><strong>JOSEPH:</strong>See you soon.</p>
-                  <p><strong>ANNA:</strong>Okay ,See you soon if God wishes.</p>
+                  <p><strong>JOSEPH:</strong> What is her tribe?</p>
+                  <p><strong>MINANI:</strong> Her tribe is Hutu.</p>
+                  <p><strong>JOSEPH:</strong> What is yours?</p>
+                  <p><strong>MINANI:</strong> My tribe is Tutsi</p>
+                  <p><strong>JOSEPH :</strong> That is okay, Thank you very much MINANI.</p>
+                  <p><strong>MINANI:</strong> Not at all.</p>
+                  <p><strong>JOSEPH:</strong> I am happy to meet you Mrs MINANI.</p>
+                  <p><strong>ANNA:</strong> I am happy to meet you too, Joseph</p>
+                  <p><strong>JOSEPH:</strong> See you soon.</p>
+                  <p><strong>ANNA:</strong> Okay, See you soon if God wishes.</p>
                 </CardContent>
               </Card>
 
@@ -614,6 +614,36 @@ export function UnitOneContent() {
                     <p><strong>John:</strong> they are okay,what news?</p>
                     <p><strong>James:</strong> news is that, my brother-in-law Julius is very sick.</p>
                     <p><strong>John:</strong> I feel sorry!</p>
+                    <p><strong>James:</strong> can you please help me to get a stretcher? we want to take him to hospital.</p>
+                    <p><strong>John:</strong> yes, I can, in our zone we have two stretchers.</p>
+                    <p><strong>James:</strong> can we go now to take it?</p>
+                    <p><strong>John:</strong> yes, we can.</p>
+                    <p><strong>James:</strong> hello guy! Come here!</p>
+                    <p><strong>Johnson:</strong> yes, here I am.</p>
+                    <p><strong>James:</strong> how are you?</p>
+                    <p><strong>Johnson:</strong> fine!</p>
+                    <p><strong>James:</strong> by the way, my name is James Nkurunziza, I live in zone ten, I am 23 years old, I am a Burundian. So as you see us here, this is my friend, his name is John he lives in zone eight. Hello, John, this is my friend his name is Johnson, he lives in zone nine.</p>
+                    <p><strong>Johnson:</strong> I am happy to meet you, John.</p>
+                    <p><strong>John:</strong> I am happy to meet you too, Johnson.</p>
+                    <p><strong>James:</strong> Johnson, may we have your help?</p>
+                    <p><strong>Johnson:</strong> what can I do for you?</p>
+                    <p><strong>James:</strong> to take my brother-in-law to hospital, he is very sick.</p>
+                    <p><strong>Johnson:</strong> I am sorry, I may not. Because I am attending the wedding ceremony this evening.</p>
+                    <p><strong>James:</strong> no problem, see you around!</p>
+                    <p><strong>Johnson:</strong> see you around, and say sorry to him, and don't forget to send my best wishes to your family.</p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                    <CardTitle>Expressions</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2 text-sm">
+                    <p><strong>1. How do you do?</strong> {'->'} this is a greeting, its answer is how do you do?</p>
+                    <p><strong>2. What's up?</strong> {'->'} even this is a greeting, we can answer by saying it is okay or nothing goes on (ntakigenda).</p>
+                    <p><strong>3. That will do</strong> {'->'} to mean that: that is enough. E.g: Don't add much salt, one spoon will do.</p>
+                    <p><strong>4. No thanks to</strong> {'->'} means not because of.</p>
+                    <p><strong>5. Say hello to....:</strong> Greet someone for me. E.g : say hello to your whole family.</p>
                 </CardContent>
               </Card>
 
