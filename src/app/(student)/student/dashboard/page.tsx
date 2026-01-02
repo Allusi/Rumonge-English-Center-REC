@@ -1,4 +1,5 @@
-import { BookCopy, Home, FileText, BarChart2 } from "lucide-react";
+
+import { BookCopy, Home, FileText, BarChart2, Megaphone } from "lucide-react";
 import Link from 'next/link';
 import {
   Card,
@@ -17,11 +18,12 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { courses, enrollments } from "@/lib/data";
+import { courses, enrollments, announcements } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 
 export default function StudentDashboard() {
   const studentId = "S001"; // Mock student ID
+  const studentName = "Aisha"; // Mock student name
   const studentEnrollments = enrollments.filter(
     (e) => e.studentId === studentId
   );
@@ -30,107 +32,97 @@ export default function StudentDashboard() {
     return { ...course, ...enrollment };
   });
 
+  const latestAnnouncements = announcements.slice(0, 3);
+
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-8">
       <div>
         <h1 className="font-headline text-3xl font-bold tracking-tight">
-          Welcome, Student!
+          Welcome back, {studentName}!
         </h1>
         <p className="text-muted-foreground">
-          Here's an overview of your courses and progress.
+          Here's an overview of your learning journey.
         </p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Enrolled Courses
-            </CardTitle>
-            <BookCopy className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{enrolledCourses.length}</div>
-            <p className="text-xs text-muted-foreground">
-              Courses you are currently taking.
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Assignments Due
-            </CardTitle>
-            <FileText className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">3</div>
-            <p className="text-xs text-muted-foreground">
-              In the next 7 days.
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Overall Progress
-            </CardTitle>
-            <BarChart2 className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">72%</div>
-            <p className="text-xs text-muted-foreground">
-              Average across all courses.
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>My Courses</CardTitle>
-          <CardDescription>
-            Your enrolled courses and current progress.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Course</TableHead>
-                <TableHead>Level</TableHead>
-                <TableHead className="w-[30%]">Progress</TableHead>
-                <TableHead>Grade</TableHead>
-                <TableHead>Action</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {enrolledCourses.map((course) => (
-                <TableRow key={course.id}>
-                  <TableCell className="font-medium">{course.name}</TableCell>
-                  <TableCell>
-                    <Badge variant="outline">{course.level}</Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                       <Progress value={course.progress} className="h-2" />
-                       <span>{course.progress}%</span>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge>{course.grade}</Badge>
-                  </TableCell>
-                  <TableCell>
-                     <Link href={`/student/courses/${course.id}`} passHref>
-                        <Button variant="outline" size="sm">View Course</Button>
-                     </Link>
-                  </TableCell>
-                </TableRow>
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+        <div className="md:col-span-2">
+           <Card>
+            <CardHeader>
+              <CardTitle>My Courses</CardTitle>
+              <CardDescription>
+                Your enrolled courses and current progress.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Course</TableHead>
+                    <TableHead>Level</TableHead>
+                    <TableHead className="w-[30%]">Progress</TableHead>
+                    <TableHead>Grade</TableHead>
+                    <TableHead>Action</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {enrolledCourses.length > 0 ? enrolledCourses.map((course) => (
+                    <TableRow key={course.id}>
+                      <TableCell className="font-medium">{course.name}</TableCell>
+                      <TableCell>
+                        <Badge variant="outline">{course.level}</Badge>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <Progress value={course.progress} className="h-2" />
+                          <span>{course.progress}%</span>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge>{course.grade}</Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Link href={`/student/courses/${course.id}`} passHref>
+                            <Button variant="outline" size="sm">View Course</Button>
+                        </Link>
+                      </TableCell>
+                    </TableRow>
+                  )) : (
+                     <TableRow>
+                        <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
+                            You are not enrolled in any courses yet.
+                        </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </div>
+        <div className="md:col-span-1">
+          <Card>
+            <CardHeader>
+              <CardTitle>Recent Announcements</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {latestAnnouncements.map(announcement => (
+                <div key={announcement.id} className="flex items-start gap-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent text-accent-foreground">
+                    <Megaphone className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-sm">{announcement.title}</h3>
+                    <p className="text-xs text-muted-foreground line-clamp-2">
+                      {announcement.content}
+                    </p>
+                  </div>
+                </div>
               ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+               <Button variant="outline" className="w-full mt-4">View all announcements</Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 }
