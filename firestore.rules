@@ -4,6 +4,7 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     // Allow everything for all collections and documents
+    // This rule is intentionally open for development purposes.
     match /{document=**} {
       allow read, write: if true;
     }
