@@ -58,20 +58,22 @@ export default function StudentAnnouncementsPage() {
         )}
 
         {!loading && announcements?.map((announcement) => (
-          <Card key={announcement.id}>
-            <CardHeader className="flex flex-row items-start gap-4">
-                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                    <Megaphone className="h-6 w-6" />
-                </div>
-                <div className="flex-1">
-                    <CardTitle>{announcement.title}</CardTitle>
-                    <CardDescription>{new Date(announcement.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</CardDescription>
-                </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground whitespace-pre-wrap">{announcement.content}</p>
-            </CardContent>
-          </Card>
+           <Link key={announcement.id} href={`/student/announcements/${announcement.id}`} className="block">
+            <Card className="hover:bg-muted/50 transition-colors">
+                <CardHeader className="flex flex-row items-start gap-4">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                        <Megaphone className="h-6 w-6" />
+                    </div>
+                    <div className="flex-1">
+                        <CardTitle>{announcement.title}</CardTitle>
+                        <CardDescription>{new Date(announcement.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</CardDescription>
+                    </div>
+                </CardHeader>
+                <CardContent>
+                <p className="text-muted-foreground line-clamp-3">{announcement.content}</p>
+                </CardContent>
+            </Card>
+          </Link>
         ))}
 
         {!loading && announcements?.length === 0 && (
