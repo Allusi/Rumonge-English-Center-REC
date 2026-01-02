@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -142,7 +143,7 @@ export function GrammarCheckerForm() {
                 <FormControl>
                   <Textarea
                     placeholder="Enter the text you want to check here..."
-                    className="min-h-[300px] resize-y"
+                    className="min-h-[200px] resize-y"
                     {...field}
                   />
                 </FormControl>
