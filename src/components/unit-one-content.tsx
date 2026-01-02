@@ -893,7 +893,106 @@ export function UnitOneContent() {
                                     <li>iron-press: ipasi</li>
                                     <li>grill: igikarango</li>
                                     <li>harcoals: amakara</li>
+                                    <li>electrical stove: iziko ryubumeme</li>
+                                    <li>fork: ifurusheti</li>
+                                    <li>Improved stove: igishiga</li>
+                                    <li>hoe: isuka</li>
+                                    <li>plate: isahani</li>
+                                    <li>plastic sheet: ihema</li>
+                                    <li>pot: inkono</li>
+                                    <li>carpet: itapi</li>
+                                    <li>cup: igikombe</li>
+                                    <li>crochet hook: ikoroshi</li>
+                                    <li>spoon: ikiyiko</li>
+                                    <li>millstone: urusyo</li>
+                                    <li>woodenspoon: umudahara</li>
+                                    <li>box: ikarato</li>
+                                    <li>chair: chaise</li>
+                                    <li>tray: isiniya</li>
+                                    <li>radio: iradiyo</li>
+                                    <li>Chamberpot: Icombo basobamwo</li>
+                                    <li>pan: isafuriya</li>
+                                    <li>baby potty: Ipo yumwana</li>
+                                    <li>steamer: isafuriya igumya ubushuhe</li>
+                                    <li>mousetrap: akamashu</li>
+                                    <li>bed: igitanda</li>
+                                    <li>fryingpan: agasafuriya bakarangamwo</li>
+                                    <li>toilet paper: impapuro zokwiwese</li>
+                                    <li>suitcase: ivarise</li>
+                                    <li>rucksack: akabagi kokurutugu</li>
+                                    <li>rubbish bin: inyabarega</li>
+                                    <li>plastic chair: iyeboyebo</li>
+                                    <li>Bingo mug: igikombe</li>
+                                    <li>machete: igipanga</li>
+                                    <li>dishtowel: akoguhanagura ivyombo</li>
+                                    <li>dish cloth: ikiwavu civyombo</li>
+                                    <li>string: imirya</li>
+                                    <li>shelf: akagege</li>
+                                    <li>stake: imambo , ikirembezo canke urwego</li>
                                 </ul>
+                                <div className="mt-4 space-y-2 text-sm">
+                                    <h5 className="font-semibold">Examples in a Sentence</h5>
+                                    <p>1. Where is the spoon?</p>
+                                    <p>2. Look under the table in the box.</p>
+                                    <p>3. Lend me your broom! please, here it is take it.</p>
+                                    <p>4. Bring me a cup of water!</p>
+                                    <p>5. I am listening to the radio.</p>
+                                </div>
+                            </CardContent>
+                        </Card>
+                        <Card className="mt-4">
+                            <CardHeader>
+                                <CardTitle>Things We Find at School</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <ul className="list-disc pl-6 text-muted-foreground columns-2 md:columns-3 space-y-1 text-sm">
+                                    <li>Blackboard: Ikibaho</li>
+                                    <li>Chalkboard: ikibaho</li>
+                                    <li>Bench: intebe ndende</li>
+                                    <li>Chalk: ingwa</li>
+                                    <li>Duster: igifutisho</li>
+                                    <li>Table: imeza</li>
+                                    <li>Books: ibitabo</li>
+                                    <li>Padbook: agakaye gatoya</li>
+                                    <li>Cutter paper: agakata impapuro</li>
+                                    <li>Pen: ikaramu</li>
+                                    <li>Pencil: ikaramu ryigiti</li>
+                                    <li>Ruler: agacamurongo</li>
+                                    <li>Exercise book: ikaye yimyimenyerezo</li>
+                                    <li>Chair: inyegamo</li>
+                                    <li>Desk: ipipitre</li>
+                                    <li>School bag: agashakoshi kokwishure</li>
+                                    <li>Notebook: agakaye gatoya</li>
+                                    <li>Pencil sharpener: agasongozo</li>
+                                    <li>Compass: ikompa</li>
+                                    <li>Computer: inyabwonko</li>
+                                    <li>Rubber: igome</li>
+                                    <li>Map: ikarata</li>
+                                    <li>Worldmap: ikarata yisi</li>
+                                    <li>Country map: ikarata yigihugu</li>
+                                    <li>Markerpen: imarikere</li>
+                                    <li>Counter book: igikaye kinini</li>
+                                    <li>Stamp or seal: ikidodo</li>
+                                    <li>Redpen: ikaramu ritukura</li>
+                                    <li>Bluepen: ikaramu ryubururu</li>
+                                    <li>Blackpen: ikaramu ryirabura</li>
+                                    <li>Files: amadokima</li>
+                                    <li>Folders: ububiko bwamadokima</li>
+                                    <li>Office supplies: ibikoresho vyomubiro</li>
+                                    <li>Stapler: agrafeze</li>
+                                    <li>Pins: utwumwa</li>
+                                    <li>Inkpad: ako bashiramwo irangi ryikidodo</li>
+                                    <li>Fluid ink: irangi ryikidodo</li>
+                                    <li>Staples: utwuma</li>
+                                </ul>
+                            </CardContent>
+                        </Card>
+                         <Card className="mt-4">
+                            <CardHeader>
+                                <CardTitle>The Earth and The Sky</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <p className="text-muted-foreground">In the sky,there are: stars,moon,clouds and the sun.The sun shines during the day.The moon and the stars shine at the night.the sky is above the mountains and hills.I can see the river flowing into the lake. In the lake there are two men in the boat.They are fishing.I can also see some trees,grasses a nd animals, together are called the bush.</p>
                             </CardContent>
                         </Card>
                     </AccordionContent>
@@ -1028,5 +1127,6 @@ export function UnitOneContent() {
     </div>
   );
 }
+
 
 
