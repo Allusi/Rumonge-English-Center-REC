@@ -1,3 +1,4 @@
+
 export type Course = {
   id: string;
   name: string;
@@ -42,13 +43,13 @@ export const students: Student[] = [
 ];
 
 export const enrollments: Enrollment[] = [
-  { studentId: 'S001', courseId: 'C001', progress: 85, grade: 'A-' },
-  { studentId: 'S001', courseId: 'C002', progress: 60, grade: 'B' },
-  { studentId: 'S002', courseId: 'C001', progress: 100, grade: 'A+' },
-  { studentId: 'S002', courseId: 'C003', progress: 45, grade: 'C+' },
-  { studentId: 'S003', courseId: 'C004', progress: 75, grade: 'B+' },
-  { studentId: 'S004', courseId: 'C005', progress: 90, grade: 'A' },
-  { studentId: 'S005', courseId: 'C002', progress: 55, grade: 'B-' },
+  { studentId: 'S001', courseId: 'C001', progress: 0, grade: 'Not Started' },
+  { studentId: 'S001', courseId: 'C002', progress: 0, grade: 'Not Started' },
+  { studentId: 'S002', courseId: 'C001', progress: 0, grade: 'Not Started' },
+  { studentId: 'S002', courseId: 'C003', progress: 0, grade: 'Not Started' },
+  { studentId: 'S003', courseId: 'C004', progress: 0, grade: 'Not Started' },
+  { studentId: 'S004', courseId: 'C005', progress: 0, grade: 'Not Started' },
+  { studentId: 'S005', courseId: 'C002', progress: 0, grade: 'Not Started' },
 ];
 
 export const announcements: Announcement[] = [
