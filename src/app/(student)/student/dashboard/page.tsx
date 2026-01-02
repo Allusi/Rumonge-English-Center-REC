@@ -1,4 +1,6 @@
 
+'use client';
+
 import { BookCopy, Home, FileText, BarChart2, Megaphone } from "lucide-react";
 import Link from 'next/link';
 import {
@@ -20,10 +22,12 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { courses, enrollments, announcements } from "@/lib/data";
 import { Button } from "@/components/ui/button";
+import { useUser } from "@/firebase";
 
 export default function StudentDashboard() {
-  const studentId = "S001"; // Mock student ID
-  const studentName = "Aisha"; // Mock student name
+  const { user } = useUser();
+  const studentId = "S001"; // This will eventually come from the logged in user
+  const studentName = user?.displayName || "Student";
   const studentEnrollments = enrollments.filter(
     (e) => e.studentId === studentId
   );

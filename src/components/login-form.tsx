@@ -6,7 +6,15 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { LogIn } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState }from "react";
+import { 
+  createUserWithEmailAndPassword, 
+  sendEmailVerification, 
+  signInWithEmailAndPassword,
+  updateProfile
+} from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+
 
 import { Button } from "@/components/ui/button";
 import {
@@ -20,6 +28,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth, useFirestore } from "@/firebase";
+import { errorEmitter } from "@/firebase/error-emitter";
+import { FirestorePermissionError } from "@/firebase/errors";
 
 const formSchema = z
   .object({
@@ -40,11 +51,11 @@ const formSchema = z
           message: "Please enter your full name.",
         });
       }
-      if (!data.key || data.key.length < 6) {
+       if (!data.key || !z.string().email().safeParse(data.key).success) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: ["key"],
-          message: "Key must be at least 6 characters.",
+          message: "Please enter a valid email address to register.",
         });
       }
     } else if (data.role === "admin") {
@@ -68,12 +79,13 @@ const formSchema = z
 export function LoginForm() {
   const router = useRouter();
   const { toast } = useToast();
+  const auth = useAuth();
+  const firestore = useFirestore();
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
-
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -81,25 +93,77 @@ export function LoginForm() {
       role: "student",
       fullName: "",
       key: "",
-      email: "",
-      password: "",
+      email: "irambonasimeon78@gmail.com",
+      password: "Irambona100@",
     },
   });
-
+  
   const role = form.watch("role");
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // In a real app, you'd handle authentication here.
-    // For this demo, we'll just show a toast and redirect.
-    toast({
-      title: "Login Successful",
-      description: `Welcome! Redirecting to ${values.role} dashboard...`,
-    });
-    
-    if (values.role === "admin") {
-      router.push("/admin/dashboard");
-    } else {
-      router.push("/student/dashboard");
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (!auth || !firestore) {
+      toast({
+        variant: "destructive",
+        title: "Authentication Error",
+        description: "Firebase is not configured. Please try again later.",
+      });
+      return;
+    }
+
+    try {
+      if (values.role === "admin") {
+        await signInWithEmailAndPassword(auth, values.email!, values.password!);
+        toast({
+          title: "Login Successful",
+          description: "Welcome, Admin! Redirecting to your dashboard...",
+        });
+        router.push("/admin/dashboard");
+      } else {
+        // We'll treat the student 'key' field as their email for registration
+        const studentEmail = values.key!; 
+        const studentPassword = Math.random().toString(36).slice(-8); // Generate a random password
+
+        const userCredential = await createUserWithEmailAndPassword(auth, studentEmail, studentPassword);
+        const user = userCredential.user;
+        
+        await updateProfile(user, {
+          displayName: values.fullName,
+        });
+
+        const userProfile = {
+            name: values.fullName,
+            email: user.email,
+            role: 'student',
+        };
+
+        const userDocRef = doc(firestore, "users", user.uid);
+        
+        setDoc(userDocRef, userProfile).catch(async (serverError) => {
+            const permissionError = new FirestorePermissionError({
+              path: userDocRef.path,
+              operation: 'create',
+              requestResourceData: userProfile,
+            });
+            errorEmitter.emit('permission-error', permissionError);
+        });
+
+
+        await sendEmailVerification(user);
+        
+        toast({
+          title: "Registration Successful!",
+          description: `Welcome, ${values.fullName}! A verification email has been sent to ${studentEmail}. Your temporary password is: ${studentPassword}`,
+          duration: 9000,
+        });
+        router.push("/student/dashboard");
+      }
+    } catch (error: any) {
+      console.error("Firebase Auth Error:", error);
+      toast({
+        variant: "destructive",
+        title: "Authentication Failed",
+        description: error.message || "An unexpected error occurred.",
+      });
     }
   }
 
@@ -126,7 +190,7 @@ export function LoginForm() {
                     <FormControl>
                       <RadioGroupItem value="student" />
                     </FormControl>
-                    <FormLabel className="font-normal">Student</FormLabel>
+                    <FormLabel className="font-normal">Student (Register)</FormLabel>
                   </FormItem>
                   <FormItem className="flex items-center space-x-3 space-y-0">
                     <FormControl>
@@ -161,10 +225,13 @@ export function LoginForm() {
               name="key"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Key</FormLabel>
-                  <FormControl>
-                    <Input type="password" placeholder="••••••••" {...field} />
+                  <FormLabel>Your Email</FormLabel>
+                   <FormControl>
+                    <Input placeholder="Enter your email to register" {...field} />
                   </FormControl>
+                   <FormDescription>
+                    A temporary password will be created for you.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -203,7 +270,7 @@ export function LoginForm() {
         )}
 
         <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting ? "Signing In..." : <>Sign In <LogIn /></>}
+          {form.formState.isSubmitting ? "Please wait..." : <>Sign In / Register <LogIn /></>}
         </Button>
       </form>
     </Form>
