@@ -156,39 +156,47 @@ export function UnitOneContent() {
           <AccordionTrigger className="p-4 text-lg font-semibold">
             Section 2: Greetings, Introduction and Request
           </AccordionTrigger>
-          <AccordionContent className="p-4 pt-0">
-            <h4 className="font-semibold text-lg mb-2">Greetings</h4>
-             <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Type</TableHead>
-                    <TableHead>Expression</TableHead>
-                    <TableHead>Response</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow>
-                    <TableCell className="font-medium">Friendly</TableCell>
-                    <TableCell>Hi! / Hello!</TableCell>
-                    <TableCell>Hi! / Hello!</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">Respectable</TableCell>
-                    <TableCell>Good morning!</TableCell>
-                    <TableCell>Good morning!</TableCell>
-                  </TableRow>
-                   <TableRow>
-                    <TableCell className="font-medium">Respectable</TableCell>
-                    <TableCell>Good afternoon!</TableCell>
-                    <TableCell>Good afternoon!</TableCell>
-                  </TableRow>
-                   <TableRow>
-                    <TableCell className="font-medium">Respectable</TableCell>
-                    <TableCell>Good evening!</TableCell>
-                    <TableCell>Good evening!</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
+          <AccordionContent className="p-4 pt-0 space-y-4">
+              <p className="text-muted-foreground">In English language, we have many greetings. Many learners to whom English is not their native language (mother tongue) find it difficult to greet people especially those ones who s/he wants to greet has a certain title or other official positions. The way which people are addressed obviously differs from one culture to another. It is important that we keep these differences separately and that we do not confuse them. We are going to learn two kinds of greetings: Greetings used when greeting respectable people and greetings used when greeting friends.</p>
+            
+              <Card>
+                <CardHeader>
+                  <CardTitle>Primary Greetings</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <h4 className="font-semibold text-lg mb-2">1. Friendly Greetings Expressions</h4>
+                    <ul className="list-disc pl-6 text-muted-foreground">
+                      <li>Hi!</li>
+                      <li>Hello!, Hallo!</li>
+                      <li>How do you do?</li>
+                      <li>How are things?</li>
+                      <li>How are you doing?</li>
+                      <li>How is it going? Etc..</li>
+                    </ul>
+                    <div className="mt-2 p-4 border rounded-lg bg-muted/50 space-y-1 text-sm">
+                      <p className="font-semibold">Practice: John and Paul meet at the railway station.</p>
+                      <p><strong>John:</strong> Hi, Paul! <span className="text-muted-foreground">/ How do you do? / Hello, Paul!</span></p>
+                      <p><strong>Paul:</strong> Hi, John! <span className="text-muted-foreground">/ How do you do? / Hello, John!</span></p>
+                      <p><strong>John:</strong> How are things, Paul? <span className="text-muted-foreground">/ How are you doing, Paul?</span></p>
+                      <p><strong>Paul:</strong> Quite well and you? <span className="text-muted-foreground">/ Pretty fine and you?</span></p>
+                      <p><strong>John:</strong> Fine. <span className="text-muted-foreground">/ Very well, thank you.</span></p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 className="font-semibold text-lg mb-2">2. Respectable Greetings</h4>
+                    <p className="text-muted-foreground mb-2">The respectable greetings are also called the main greetings in English.</p>
+                    <ul className="list-disc pl-6 text-muted-foreground space-y-1">
+                      <li>In the morning time we greet someone by saying: <strong>Good morning!</strong> And the answer to that greeting is the same as "Good morning".</li>
+                      <li>In the afternoon time we greet someone by saying: <strong>Good afternoon!</strong> And the answer to that greeting is the same as "Good afternoon".</li>
+                      <li>In the evening time we greet someone by saying: <strong>Good evening!</strong> And the answer to that greeting is also the same as "Good evening".</li>
+                      <li>In the night we say <strong>Goodnight</strong> as the way of wishing someone to have a goodnight. It means that this is not considered to be a special greeting.</li>
+                    </ul>
+                  </div>
+                </CardContent>
+              </Card>
+
                <h4 className="font-semibold text-lg mb-2 mt-4">Introductions</h4>
                <p className="text-muted-foreground mb-2">You can introduce yourself by saying: "My name is [Your Name]".</p>
                <p className="text-muted-foreground">To ask someone's name, you can say: "What is your name?".</p>
@@ -346,5 +354,7 @@ export function UnitOneContent() {
     </div>
   );
 }
+
+    
 
     
