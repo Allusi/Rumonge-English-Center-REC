@@ -12,6 +12,7 @@ import {
   Briefcase,
   HelpCircle,
   ArrowLeft,
+  FilePenLine,
 } from 'lucide-react';
 import {
   Card,
@@ -22,7 +23,7 @@ import {
 } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useDoc, useFirestore } from '@/firebase';
-import { doc, collection } from 'firebase/firestore';
+import { doc } from 'firebase/firestore';
 import type { Student, Course } from '@/lib/data';
 import { notFound, useParams } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -56,12 +57,15 @@ export default function StudentProfilePage() {
   if (studentLoading || courseLoading) {
     return (
         <div className="space-y-6">
-            <div className="flex items-center gap-4">
-                <Skeleton className="h-24 w-24 rounded-full" />
-                <div className="space-y-2">
-                    <Skeleton className="h-8 w-48" />
-                    <Skeleton className="h-6 w-64" />
+             <div className="flex justify-between items-start">
+                <div className="flex items-center gap-4">
+                    <Skeleton className="h-24 w-24 rounded-full" />
+                    <div className="space-y-2">
+                        <Skeleton className="h-8 w-48" />
+                        <Skeleton className="h-6 w-64" />
+                    </div>
                 </div>
+                 <Skeleton className="h-10 w-28" />
             </div>
             <Card>
                 <CardHeader>
@@ -96,24 +100,31 @@ export default function StudentProfilePage() {
 
   return (
     <div className="flex flex-col gap-8">
-       <div className="flex items-center gap-4">
-        <Link href="/admin/students" passHref>
-          <Button variant="outline" size="icon">
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-        </Link>
-        <div className="flex items-center gap-4">
-            <Avatar className="h-24 w-24">
-                {student.photoURL && <AvatarImage src={student.photoURL} alt={student.name} />}
-                <AvatarFallback className="text-3xl">{student.name?.charAt(0) || 'S'}</AvatarFallback>
-            </Avatar>
-            <div>
-                <h1 className="font-headline text-4xl font-bold tracking-tight">{student.name}</h1>
-                <p className="text-xl text-muted-foreground flex items-center gap-2">
-                    <AtSign className="h-5 w-5" /> {student.email}
-                </p>
+       <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+                <Link href="/admin/students" passHref>
+                <Button variant="outline" size="icon">
+                    <ArrowLeft className="h-4 w-4" />
+                </Button>
+                </Link>
+                <div className="flex items-center gap-4">
+                    <Avatar className="h-24 w-24">
+                        {student.photoURL && <AvatarImage src={student.photoURL} alt={student.name} />}
+                        <AvatarFallback className="text-3xl">{student.name?.charAt(0) || 'S'}</AvatarFallback>
+                    </Avatar>
+                    <div>
+                        <h1 className="font-headline text-4xl font-bold tracking-tight">{student.name}</h1>
+                        <p className="text-xl text-muted-foreground flex items-center gap-2">
+                            <AtSign className="h-5 w-5" /> {student.email}
+                        </p>
+                    </div>
+                </div>
             </div>
-        </div>
+            <Link href={`/admin/students/${studentId}/edit`} passHref>
+                <Button>
+                    <FilePenLine className="mr-2 h-4 w-4" /> Edit Profile
+                </Button>
+            </Link>
       </div>
 
 
