@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { useCollection, useFirestore } from '@/firebase';
 import { collection, query, where } from 'firebase/firestore';
+import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -49,9 +50,11 @@ export default function StudentsPage() {
             View and manage all registered students.
           </p>
         </div>
-        <Button>
-          <Plus className="mr-2 h-4 w-4" /> Add New Student
-        </Button>
+        <Link href="/admin/students/new" passHref>
+            <Button>
+                <Plus className="mr-2 h-4 w-4" /> Add New Student
+            </Button>
+        </Link>
       </div>
       <Card>
         <CardContent>

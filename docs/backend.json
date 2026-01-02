@@ -19,9 +19,48 @@
           "type": "string",
           "enum": ["student", "admin"],
           "description": "The role of the user."
+        },
+        "age": {
+            "type": "number",
+            "description": "The student's age."
+        },
+        "address": {
+            "type": "string",
+            "description": "The student's physical address."
+        },
+        "photoURL": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL of the student's profile photo."
+        },
+        "enrolledCourseId": {
+            "type": "string",
+            "description": "The ID of the course the student is enrolled in."
+        },
+        "englishLevel": {
+            "type": "string",
+            "description": "The student's current English proficiency level."
+        },
+        "phoneNumber": {
+            "type": "string",
+            "description": "The student's phone number (optional)."
+        },
+        "maritalStatus": {
+            "type": "string",
+            "enum": ["single", "married"],
+            "description": "The student's marital status."
+        },
+        "educationalStatus": {
+            "type": "string",
+            "enum": ["government_student", "dropout", "graduated", "never_went_to_school"],
+            "description": "The student's educational background."
+        },
+        "learningReason": {
+            "type": "string",
+            "description": "The student's reason for wanting to learn English."
         }
       },
-      "required": ["name", "email", "role"]
+      "required": ["name", "email", "role", "age", "address", "enrolledCourseId", "englishLevel", "maritalStatus", "educationalStatus", "learningReason"]
     },
     "Course": {
       "title": "Course",
