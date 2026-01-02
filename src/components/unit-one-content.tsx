@@ -288,10 +288,89 @@ export function UnitOneContent() {
                 </CardContent>
               </Card>
 
+              <Card>
+                <CardHeader>
+                  <CardTitle>Spoken Expressions After Greetings</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="list-disc pl-6 text-muted-foreground">
+                    <li>Nice to meet you.</li>
+                    <li>Good to meet you.</li>
+                    <li>It is a pleasure to meet you.</li>
+                    <li>I am pleased to meet you.</li>
+                    <li>I am happy to meet you.</li>
+                    <li>I am happy to see you again.</li>
+                    <li>I miss you.</li>
+                    <li>I am lucky to meet you.</li>
+                    <li>I am glad to see you again.</li>
+                  </ul>
+                </CardContent>
+              </Card>
 
-               <h4 className="font-semibold text-lg mb-2 mt-4">Introductions</h4>
-               <p className="text-muted-foreground mb-2">You can introduce yourself by saying: "My name is [Your Name]".</p>
-               <p className="text-muted-foreground">To ask someone's name, you can say: "What is your name?".</p>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Expressions for Saying "Good Bye"</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="list-disc pl-6 text-muted-foreground columns-2 md:columns-3">
+                    <li>Bye.</li>
+                    <li>so long.</li>
+                    <li>see you the following day.</li>
+                    <li>ciao</li>
+                    <li>Bye bye.</li>
+                    <li>cheerio.</li>
+                    <li>see you after time.</li>
+                    <li>tata</li>
+                    <li>Soon.</li>
+                    <li>see you around.</li>
+                    <li>we shall see tomorrow.</li>
+                    <li>tatty bye</li>
+                    <li>later.</li>
+                    <li>being seen around</li>
+                    <li>we shall meet tomorrow</li>
+                    <li>see you</li>
+                    <li>see you soon.</li>
+                    <li>be seeing around.</li>
+                    <li>see you next day.</li>
+                    <li>catch you later</li>
+                    <li>see you later</li>
+                    <li>see you tomorrow.</li>
+                    <li>see you Monday.</li>
+                    <li>peace out</li>
+                    <li>buh-bye.</li>
+                    <li>good day.</li>
+                    <li>hasta la vista.</li>
+                    <li>cheery-bye</li>
+                  </ul>
+                  <p className="text-sm text-muted-foreground mt-4"><strong>NB:</strong> We can add the words "If God wishes" to each one of the above expressions. E.g: see you later if God wishes.</p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Dialogue Practice: A Neighbour</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-1 text-sm">
+                  <p><strong>A:</strong> Hi, there. nice to meet you.</p>
+                  <p><strong>B:</strong> Hi, nice to meet you too. I am Stany</p>
+                  <p><strong>A:</strong> I'm Godelive, how long have you been living here?</p>
+                  <p><strong>B:</strong> seven years.</p>
+                  <p><strong>A:</strong> do you know many people around here?</p>
+                  <p><strong>B:</strong> yes, I know almost everyone in the neighbourhood.</p>
+                  <p><strong>A:</strong> then do you know where Angeline lives?</p>
+                  <p><strong>B:</strong> Angeline? Oh yes. She lives at number 7.</p>
+                  <p><strong>A:</strong> is this the house with the red door?</p>
+                  <p><strong>B:</strong> that's it.</p>
+                </CardContent>
+              </Card>
+
+               <div className="space-y-2 pt-4">
+                  <h4 className="font-semibold text-xl mb-2 mt-4">B. Introductions</h4>
+                  <p className="text-muted-foreground">In this part we are going to see three kinds of introductions.</p>
+                  <p className="text-muted-foreground">These are: 1) SELF INTRODUCTION, 2) INTRODUCTION BY QUESTIONS, 3) INTRODUCING OTHERS</p>
+                  <h5 className="font-semibold text-lg pt-2">1. Self Introduction</h5>
+                  <p className="text-muted-foreground">This introduction is done only by one person when s/he is introducing her/himself in front of others. See the following example:</p>
+                </div>
           </AccordionContent>
         </AccordionItem>
 
@@ -450,3 +529,4 @@ export function UnitOneContent() {
     
 
     
+
