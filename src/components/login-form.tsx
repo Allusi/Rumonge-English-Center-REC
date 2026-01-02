@@ -115,40 +115,7 @@ export function LoginForm() {
       if (values.role === "admin") {
         const email = values.email!;
         const password = values.password!;
-        try {
-          await signInWithEmailAndPassword(auth, email, password);
-        } catch (error: any) {
-          if (error.code === 'auth/user-not-found') {
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            const user = userCredential.user;
-            
-            await updateProfile(user, { displayName: 'Admin' });
-
-            const userProfile = {
-              name: 'Admin',
-              email: user.email,
-              role: 'admin',
-              createdAt: serverTimestamp(),
-            };
-            const userDocRef = doc(firestore, "users", user.uid);
-            setDoc(userDocRef, userProfile).catch(async (serverError) => {
-                const permissionError = new FirestorePermissionError({
-                  path: userDocRef.path,
-                  operation: 'create',
-                  requestResourceData: userProfile,
-                });
-                errorEmitter.emit('permission-error', permissionError);
-            });
-            await sendEmailVerification(user);
-            toast({
-              title: "Admin Account Created",
-              description: `A verification email has been sent to ${email}.`,
-              duration: 9000,
-            });
-          } else {
-            throw error;
-          }
-        }
+        await signInWithEmailAndPassword(auth, email, password);
         toast({
           title: "Login Successful",
           description: "Welcome, Admin! Redirecting to your dashboard...",
@@ -208,8 +175,8 @@ export function LoginForm() {
     } catch (error: any) {
       console.error("Firebase Auth Error:", error);
       let description = "An unexpected error occurred.";
-      if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
-        description = "Incorrect password. Please try again."
+      if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
+        description = "Incorrect email or password. Please try again."
       } else if (error.code) {
         description = error.message;
       }
@@ -331,5 +298,3 @@ export function LoginForm() {
     </Form>
   );
 }
-
-    
