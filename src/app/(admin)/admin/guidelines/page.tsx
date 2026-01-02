@@ -1,3 +1,7 @@
+
+"use client";
+
+import { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -11,9 +15,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Badge } from "@/components/ui/badge";
 
 export default function GuidelinesPage() {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   return (
     <div className="flex flex-col gap-6">
       <div>
@@ -57,72 +66,85 @@ export default function GuidelinesPage() {
             <CardTitle>Materials & Technology Required</CardTitle>
           </CardHeader>
           <CardContent>
-            <Accordion type="single" collapsible className="w-full">
-              <AccordionItem value="item-1">
-                <AccordionTrigger>For Students</AccordionTrigger>
-                <AccordionContent>
-                  <div className="grid gap-4">
-                    <div>
-                      <h4 className="font-semibold">Essential:</h4>
-                      <ul className="ml-6 list-disc [&>li]:mt-2">
-                        <li>Notebook & pen/pencil</li>
-                        <li>Textbook/workbook (if applicable)</li>
-                        <li>Folder for handouts</li>
-                      </ul>
+            {isClient && (
+              <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="item-1">
+                  <AccordionTrigger>For Students</AccordionTrigger>
+                  <AccordionContent>
+                    <div className="grid gap-4">
+                      <div>
+                        <h4 className="font-semibold">Essential:</h4>
+                        <ul className="ml-6 list-disc [&>li]:mt-2">
+                          <li>Notebook & pen/pencil</li>
+                          <li>Textbook/workbook (if applicable)</li>
+                          <li>Folder for handouts</li>
+                        </ul>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold">
+                          Technology (if applicable):
+                        </h4>
+                        <ul className="ml-6 list-disc [&>li]:mt-2">
+                          <li>
+                            Smartphone/Tablet: For language apps, quizzes, and
+                            audio exercises.
+                          </li>
+                          <li>
+                            Laptop/Computer: Required for online classes, typing
+                            practice, and research tasks.
+                          </li>
+                          <li>
+                            Headphones/earbuds (for listening activities).
+                          </li>
+                        </ul>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-semibold">Technology (if applicable):</h4>
-                      <ul className="ml-6 list-disc [&>li]:mt-2">
-                        <li>
-                          Smartphone/Tablet: For language apps, quizzes, and
-                          audio exercises.
-                        </li>
-                        <li>
-                          Laptop/Computer: Required for online classes, typing
-                          practice, and research tasks.
-                        </li>
-                        <li>Headphones/earbuds (for listening activities).</li>
-                      </ul>
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="item-2">
+                  <AccordionTrigger>For Teacher/Classroom</AccordionTrigger>
+                  <AccordionContent>
+                    <div className="grid gap-4">
+                      <div>
+                        <h4 className="font-semibold">
+                          Essential Teaching Aids:
+                        </h4>
+                        <ul className="ml-6 list-disc [&>li]:mt-2">
+                          <li>
+                            Whiteboard or blackboard & markers or chalks
+                          </li>
+                          <li>Flashcards, printed visuals, posters</li>
+                        </ul>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold">
+                          Technology (if available):
+                        </h4>
+                        <ul className="ml-6 list-disc [&>li]:mt-2">
+                          <li>
+                            Projector/Smartboard: For videos, slideshows, and
+                            interactive lessons.
+                          </li>
+                          <li>
+                            Computer/Laptop: For lesson presentations,
+                            audio/video playback and system monitoring
+                            (recommended).
+                          </li>
+                          <li>
+                            Speaker or Sound System: Clear audio for listening
+                            exercises.
+                          </li>
+                          <li>
+                            Stable internet connection (for online resources,
+                            optional as downloaded lessons can be used).
+                          </li>
+                        </ul>
+                      </div>
                     </div>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="item-2">
-                <AccordionTrigger>For Teacher/Classroom</AccordionTrigger>
-                <AccordionContent>
-                  <div className="grid gap-4">
-                    <div>
-                      <h4 className="font-semibold">Essential Teaching Aids:</h4>
-                      <ul className="ml-6 list-disc [&>li]:mt-2">
-                        <li>Whiteboard or blackboard & markers or chalks</li>
-                        <li>Flashcards, printed visuals, posters</li>
-                      </ul>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold">Technology (if available):</h4>
-                      <ul className="ml-6 list-disc [&>li]:mt-2">
-                        <li>
-                          Projector/Smartboard: For videos, slideshows, and
-                          interactive lessons.
-                        </li>
-                        <li>
-                          Computer/Laptop: For lesson presentations, audio/video
-                          playback and system monitoring (recommended).
-                        </li>
-                        <li>
-                          Speaker or Sound System: Clear audio for listening
-                          exercises.
-                        </li>
-                        <li>
-                          Stable internet connection (for online resources, optional
-                          as downloaded lessons can be used).
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            )}
           </CardContent>
         </Card>
 
@@ -142,7 +164,10 @@ export default function GuidelinesPage() {
                 Use smartphones/computers only for class activities unless
                 permitted.
               </li>
-              <li>Participate actively in all activities (both tech and non-tech).</li>
+              <li>
+                Participate actively in all activities (both tech and
+                non-tech).
+              </li>
             </ol>
           </CardContent>
         </Card>
@@ -161,8 +186,8 @@ export default function GuidelinesPage() {
               <li>Read and understand short sentences.</li>
               <li>Write simple sentences and short paragraphs.</li>
               <li>
-                Use basic digital tools (like word processors, learning apps) in
-                English.
+                Use basic digital tools (like word processors, learning apps)
+                in English.
               </li>
             </ul>
             <p className="mt-4 text-sm text-muted-foreground">
@@ -177,11 +202,17 @@ export default function GuidelinesPage() {
           </CardHeader>
           <CardContent>
             <ul className="ml-6 list-disc space-y-2 text-sm text-muted-foreground">
-              <li>Regular in-class activities, quizzes (both paper-based and digital).</li>
-              <li>Homework (1–2 assignments per week – may include online tasks).</li>
               <li>
-                Participation in tech-assisted activities (e.g., interactive polls,
-                app-based exercises).
+                Regular in-class activities, quizzes (both paper-based and
+                digital).
+              </li>
+              <li>
+                Homework (1–2 assignments per week – may include online
+                tasks).
+              </li>
+              <li>
+                Participation in tech-assisted activities (e.g., interactive
+                polls, app-based exercises).
               </li>
               <li>
                 Final test/project at end of term (could include a digital
@@ -201,13 +232,16 @@ export default function GuidelinesPage() {
                 Devices should be used responsibly and only for learning during
                 class.
               </li>
-              <li>Make sure your device is charged before class if needed.</li>
               <li>
-                Download required apps/software in advance (teacher will inform).
+                Make sure your device is charged before class if needed.
               </li>
               <li>
-                Inform teacher if you do not have access to required technology –
-                alternatives can be arranged.
+                Download required apps/software in advance (teacher will
+                inform).
+              </li>
+              <li>
+                Inform teacher if you do not have access to required technology
+                – alternatives can be arranged.
               </li>
             </ul>
           </CardContent>
@@ -243,9 +277,15 @@ export default function GuidelinesPage() {
           </CardHeader>
           <CardContent>
             <ul className="ml-6 list-disc space-y-2 text-sm text-muted-foreground">
-                <li>Please inform teacher in advance about absences.</li>
-                <li>Let teacher know if you have special learning needs or lack access to technology.</li>
-                <li>Bring a positive attitude and willingness to learn, both with and without tech!</li>
+              <li>Please inform teacher in advance about absences.</li>
+              <li>
+                Let teacher know if you have special learning needs or lack
+                access to technology.
+              </li>
+              <li>
+                Bring a positive attitude and willingness to learn, both with
+                and without tech!
+              </li>
             </ul>
             <div className="mt-4 border-t pt-4">
               <p className="text-sm">
@@ -254,7 +294,7 @@ export default function GuidelinesPage() {
               <p className="text-sm text-muted-foreground">
                 allusimeon12@gmail.com | (RES) Rumonge English School
               </p>
-               <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 WhatsApp: +25766332709
               </p>
             </div>
