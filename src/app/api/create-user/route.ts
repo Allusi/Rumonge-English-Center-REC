@@ -1,15 +1,24 @@
-
-import { onRequest } from 'firebase-functions/v1/https';
+import { NextResponse } from 'next/server';
 import * as admin from 'firebase-admin';
-import * as logger from 'firebase-functions/logger';
-import { setGlobalOptions } from 'firebase-functions/v2';
+import { firebaseConfig } from '@/firebase/config';
 
 // Initialize Firebase Admin SDK if not already initialized
 if (admin.apps.length === 0) {
-  admin.initializeApp();
+  try {
+    admin.initializeApp({
+      credential: admin.credential.cert({
+        projectId: process.env.FIREBASE_PROJECT_ID,
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+        privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+      }),
+      databaseURL: firebaseConfig.databaseURL,
+    });
+  } catch (error: any) {
+    console.error('Firebase admin initialization error', error.stack);
+  }
 }
 
-setGlobalOptions({ region: 'us-central1' });
+
 const db = admin.firestore();
 
 const generateRandomKey = (length: number) => {
@@ -22,17 +31,12 @@ const generateRandomKey = (length: number) => {
   return result;
 };
 
-export const createUser = onRequest(
-  { cors: true, },
-  async (req, res) => {
+export async function POST(req: Request) {
     if (req.method !== 'POST') {
-      res.status(405).send('Method Not Allowed');
-      return;
+      return NextResponse.json({ success: false, error: 'Method Not Allowed' }, { status: 405 });
     }
 
-    const data = req.body;
-    logger.info('Received user creation request with data:', data);
-
+    const data = await req.json();
     const loginKey = generateRandomKey(8);
     const email = `${loginKey}@rec-online.app`;
     const password = 'password'; // Temporary static password
@@ -47,7 +51,6 @@ export const createUser = onRequest(
         displayName: data.name,
       });
       uid = userRecord.uid;
-      logger.info(`Successfully created auth user with UID: ${uid}`);
 
       const batch = db.batch();
 
@@ -55,7 +58,7 @@ export const createUser = onRequest(
       const userDocRef = db.collection('users').doc(uid);
       batch.set(userDocRef, {
         name: data.name,
-        email: email, // Save the generated email
+        email: email,
         loginKey: loginKey,
         role: 'student',
         status: 'active',
@@ -69,7 +72,6 @@ export const createUser = onRequest(
         learningReason: data.learningReason,
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
       });
-      logger.info('Prepared user document for batch write.');
 
       // 3. Create enrollment record
       const enrollmentDocRef = db.collection('enrollments').doc();
@@ -80,27 +82,21 @@ export const createUser = onRequest(
         courseName: data.courseName,
         enrolledAt: admin.firestore.FieldValue.serverTimestamp(),
       });
-      logger.info('Prepared enrollment document for batch write.');
 
       await batch.commit();
-      logger.info('Successfully committed Firestore batch write.');
 
-      res.status(200).send({ success: true, loginKey: loginKey });
+      return NextResponse.json({ success: true, loginKey: loginKey }, { status: 200 });
+
     } catch (error: any) {
-      logger.error('Error creating user:', error);
+      console.error('Error creating user:', error);
       // If a UID was created before the DB write failed, delete the auth user.
       if (uid) {
         try {
           await admin.auth().deleteUser(uid);
-          logger.warn(`Cleaned up partially created auth user with UID: ${uid}`);
         } catch (cleanupError) {
-          logger.error(`Failed to clean up auth user ${uid}:`, cleanupError);
+          console.error(`Failed to clean up auth user ${uid}:`, cleanupError);
         }
       }
-      res.status(500).send({
-        success: false,
-        error: error.message || 'An unknown error occurred.',
-      });
+       return NextResponse.json({ success: false, error: error.message || 'An unknown error occurred.' }, { status: 500 });
     }
-  }
-);
+}

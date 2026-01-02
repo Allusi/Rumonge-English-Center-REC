@@ -32,8 +32,7 @@ import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 
-// This should be replaced with your actual Cloud Function URL
-const CREATE_USER_URL = 'https://us-central1-studio-438869302-e37ab.cloudfunctions.net/createUser';
+const CREATE_USER_URL = '/api/create-user';
 
 
 const formSchema = z.object({
