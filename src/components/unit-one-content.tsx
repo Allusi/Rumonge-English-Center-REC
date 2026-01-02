@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -30,7 +31,7 @@ export function UnitOneContent() {
     if (loadingLetter) return;
     setLoadingLetter(letter);
     try {
-      const { media } = await textToSpeech(letter);
+      const { media } = await textToSpeech(`The letter ${letter}`);
       const audio = new Audio(media);
       setPlayingLetter(letter);
       audio.play();
@@ -316,3 +317,5 @@ export function UnitOneContent() {
     </div>
   );
 }
+
+    
