@@ -3,65 +3,9 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    
-    function isOwner(userId) {
-      return request.auth != null && request.auth.uid == userId;
-    }
-
-    function isAdmin() {
-      // Check if the user document exists and the role is 'admin'
-      return request.auth != null && exists(/databases/$(database)/documents/users/$(request.auth.uid)) && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
-    }
-
-    function isSignedIn() {
-      return request.auth != null;
-    }
-
-    // Default deny
+    // Allow everything for all collections and documents
     match /{document=**} {
-      allow read, write: if false;
-    }
-
-    // USERS
-    match /users/{userId} {
-      // Users can read and update their own profile
-      allow read, update, delete: if isOwner(userId);
-      // Anyone can create a user profile (for registration)
-      allow create: if isSignedIn();
-    }
-    match /users/{userId} {
-      // Admins can list all users
-      allow list: if isAdmin();
-    }
-
-
-    // COURSES
-    match /courses/{courseId} {
-      // Any signed-in user can view courses
-      allow read: if isSignedIn();
-      // Only admins can create, update, or delete courses
-      allow write: if isAdmin();
-    }
-    
-    // ANNOUNCEMENTS
-    match /announcements/{announcementId} {
-       // Any signed-in user can view announcements
-      allow read: if isSignedIn();
-       // Only admins can create, update, or delete announcements
-      allow write: if isAdmin();
-    }
-
-    // ENROLLMENTS
-    match /enrollments/{enrollmentId} {
-      // Students can view their own enrollments, admins can view all
-      allow read: if isAdmin() || (isSignedIn() && resource.data.studentId == request.auth.uid);
-      // Students can enroll themselves, admins can enroll anyone
-      allow create: if isSignedIn();
-      // Only admins can modify or delete enrollment records
-      allow update, delete: if isAdmin();
-    }
-     match /enrollments/{enrollmentId} {
-        allow list: if isAdmin();
+      allow read, write: if true;
     }
   }
 }
