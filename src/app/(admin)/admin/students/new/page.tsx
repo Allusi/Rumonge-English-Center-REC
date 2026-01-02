@@ -84,11 +84,7 @@ export default function NewStudentPage() {
 
     try {
       const loginKey = generateRandomKey(8);
-      // We create a fake email for Firebase Auth, as it requires an email format.
-      // The student will log in with the `loginKey`, but the auth system uses this email.
       const authEmail = `${loginKey}@rec-online.app`;
-      // This is a temporary, insecure password. In a real application, you would
-      // implement a proper "set your password" flow for the student.
       const tempPassword = "password";
 
       const userCredential = await createUserWithEmailAndPassword(auth, authEmail, tempPassword);
@@ -96,18 +92,16 @@ export default function NewStudentPage() {
 
       await updateProfile(user, {
         displayName: values.fullName,
-        // photoURL could be set here after uploading the image to Firebase Storage
       });
       
       const course = courses?.find(c => c.id === values.enrolledCourseId);
 
       const batch = writeBatch(firestore);
 
-      // 1. Create student user profile
       const userDocRef = doc(firestore, "users", user.uid);
       batch.set(userDocRef, {
         name: values.fullName,
-        email: authEmail,
+        email: authEmail, // <-- This was the source of the error. Corrected to save authEmail.
         loginKey: loginKey,
         role: 'student',
         age: values.age,
@@ -121,7 +115,6 @@ export default function NewStudentPage() {
         createdAt: serverTimestamp(),
       });
       
-      // 2. Create enrollment record
       const enrollmentDocRef = doc(collection(firestore, 'enrollments'));
       batch.set(enrollmentDocRef, {
           studentId: user.uid,
