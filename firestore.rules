@@ -26,6 +26,10 @@ service cloud.firestore {
       allow read, update, delete: if isOwner(userId);
       allow create: if isSignedIn();
     }
+    
+    match /users/{userId} {
+      allow list: if isAdmin();
+    }
 
     match /courses/{courseId} {
       allow read: if isSignedIn();
