@@ -33,12 +33,13 @@ import { Badge } from '@/components/ui/badge';
 import { useFirestore, useCollection, useDoc } from '@/firebase';
 import { doc, setDoc, collection, query, where, orderBy } from 'firebase/firestore';
 import type { SchoolSettings, Attendance } from '@/lib/data';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Calendar } from '@/components/ui/calendar';
 import { Skeleton } from '@/components/ui/skeleton';
-import { CheckCircle2, XCircle } from 'lucide-react';
+import { CheckCircle2, XCircle, ArrowLeft } from 'lucide-react';
 import { format } from 'date-fns';
+import Link from 'next/link';
 
 const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'] as const;
 
@@ -85,13 +86,20 @@ export default function AdminAttendancePage() {
 
   return (
     <div className="flex flex-col gap-8">
-      <div>
-        <h1 className="font-headline text-3xl font-bold tracking-tight">
-          Attendance Management
-        </h1>
-        <p className="text-muted-foreground">
-          Set active school days and monitor daily student attendance.
-        </p>
+      <div className="flex items-center gap-4">
+        <Link href="/admin/dashboard" passHref>
+          <Button variant="outline" size="icon" className="h-9 w-9">
+            <ArrowLeft className="h-4 w-4" />
+          </Button>
+        </Link>
+        <div>
+            <h1 className="font-headline text-3xl font-bold tracking-tight">
+            Attendance Management
+            </h1>
+            <p className="text-muted-foreground">
+            Set active school days and monitor daily student attendance.
+            </p>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
