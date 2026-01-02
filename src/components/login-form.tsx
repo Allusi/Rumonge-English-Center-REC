@@ -8,12 +8,8 @@ import { useRouter } from "next/navigation";
 import { LogIn } from "lucide-react";
 import { useEffect, useState } from "react";
 import { 
-  createUserWithEmailAndPassword, 
-  sendEmailVerification, 
   signInWithEmailAndPassword,
-  updateProfile
 } from "firebase/auth";
-import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 
 
 import { Button } from "@/components/ui/button";
@@ -30,28 +26,18 @@ import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth, useFirestore } from "@/firebase";
-import { errorEmitter } from "@/firebase/error-emitter";
-import { FirestorePermissionError } from "@/firebase/errors";
 
 const formSchema = z
   .object({
     role: z.enum(["student", "admin"], {
       required_error: "You need to select a role.",
     }),
-    fullName: z.string().optional(),
     key: z.string().optional(),
     email: z.string().optional(),
     password: z.string().optional(),
   })
   .superRefine((data, ctx) => {
     if (data.role === "student") {
-      if (!data.fullName || data.fullName.length < 2) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ["fullName"],
-          message: "Please enter your full name.",
-        });
-      }
        if (!data.key || data.key.length < 8) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -92,7 +78,6 @@ export function LoginForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       role: "student",
-      fullName: "",
       key: "",
       email: "",
       password: "",
@@ -123,33 +108,18 @@ export function LoginForm() {
         router.push("/admin/dashboard");
       } else {
         const loginKey = values.key!;
-        const authEmail = `${loginKey}@rec-online.app`;
-        const studentPassword = Math.random().toString(36).slice(-8); // This password is not used for login, just for creation
-
-        try {
-          await signInWithEmailAndPassword(auth, authEmail, "any-dummy-password-will-fail"); // Try to sign in first, expecting failure
-        } catch (error: any) {
-          if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
-              // This path is for a student who is already registered
-              // We can't know their password, so we can't sign them in here.
-              // We'll prompt them that they are already registered and should ask an admin.
-              // In a real app, you'd have a "Forgot Password" flow.
-              
-              // For this application's logic, we will assume login should succeed if the key is valid.
-              // Since we cannot verify the password, and we cannot create a new user (because they exist),
-              // we will simulate a successful login for the demo by simply navigating.
-              // This is a simplification. A real app would need a proper password-based sign-in.
-              toast({
-                  title: "Key Found!",
-                  description: `Welcome back! Attempting to log you in...`,
-              });
-          } else {
-            // For other auth errors on sign-in, we just re-throw
-            throw error;
-          }
-        }
+        // The student account was created with a fake email and temporary password.
+        // We can't know the password on the client-side.
+        // For this demo, we'll show a toast and redirect. A real app would
+        // need a more secure login flow (e.g., custom tokens or a proper password).
+        toast({
+            title: "Login Attempt",
+            description: `Attempting to log in with key: ${loginKey}. Redirecting...`,
+        });
         // This is a simplification. We are not actually signing the user in here.
         // We're just redirecting. The layout's auth guard will handle if they are truly logged in.
+        // A proper implementation would involve a server-side check of the key
+        // and returning a custom token to sign the user in.
         router.push("/student/dashboard");
       }
     } catch (error: any) {
@@ -211,19 +181,6 @@ export function LoginForm() {
           <>
             <FormField
               control={form.control}
-              name="fullName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Full Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter your full name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
               name="key"
               render={({ field }) => (
                 <FormItem>
@@ -278,3 +235,5 @@ export function LoginForm() {
     </Form>
   );
 }
+
+    
