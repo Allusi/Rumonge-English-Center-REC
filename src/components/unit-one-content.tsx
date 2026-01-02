@@ -648,7 +648,7 @@ export function UnitOneContent() {
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm">
                     <p><strong>1. How do you do?</strong> {'->'} this is a greeting, its answer is how do you do?</p>
-                    <p><strong>2. What's up?</strong> {'->'} even this is a greeting, we can answer by saying it is okay or nothing goes on (ntakigenda).</p>
+                    <p><strong>2. What's up?</strong> {'->'} even this is a greeting, we can answer by saying it is okay or nothing goes on ( ntakigenda).</p>
                     <p><strong>3. That will do</strong> {'->'} to mean that: that is enough. E.g: Don't add much salt, one spoon will do.</p>
                     <p><strong>4. No thanks to</strong> {'->'} means not because of.</p>
                     <p><strong>5. Say hello to....:</strong> Greet someone for me. E.g : say hello to your whole family.</p>
@@ -995,6 +995,122 @@ export function UnitOneContent() {
                                 <p className="text-muted-foreground">In the sky,there are: stars,moon,clouds and the sun.The sun shines during the day.The moon and the stars shine at the night.the sky is above the mountains and hills.I can see the river flowing into the lake. In the lake there are two men in the boat.They are fishing.I can also see some trees,grasses a nd animals, together are called the bush.</p>
                             </CardContent>
                         </Card>
+                        <Card className="mt-4">
+                            <CardHeader>
+                                <CardTitle>Things that we find on the Earth</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <ul className="list-disc pl-6 text-muted-foreground columns-2 md:columns-3 space-y-1 text-sm">
+                                  <li>Grass: ivyatsi</li>
+                                  <li>Grasses: ubwoko bwivyatsi</li>
+                                  <li>Trees: ibiti</li>
+                                  <li>Animals: ibikoko</li>
+                                  <li>House: inzu</li>
+                                  <li>Plants: ibiterwa</li>
+                                  <li>Rivers: inzuzi</li>
+                                  <li>Hills: udusozi</li>
+                                  <li>Hillocks: udusozi duto duto</li>
+                                  <li>Lakes: ibiyaga</li>
+                                  <li>Oceans: inyanja</li>
+                                  <li>Great lakes: ibiyaga bigari</li>
+                                  <li>Mount: umusozi</li>
+                                  <li>Seas: ikiyaga</li>
+                                  <li>Mountains: imisozi myishi</li>
+                                  <li>Stones: amabuye</li>
+                                  <li>Sand: umucanga</li>
+                                  <li>Rocks: ibitandara vyamabuye</li>
+                                  <li>Bush: ishamba</li>
+                                  <li>Forest: ikibira</li>
+                                  <li>Seedlings: ingemwe</li>
+                                  <li>Gardens: utwibare</li>
+                                  <li>Farms: imirima</li>
+                                </ul>
+                            </CardContent>
+                        </Card>
+                        <Card className="mt-4">
+                            <CardHeader>
+                                <CardTitle>Wild Animals</CardTitle>
+                                <CardDescription>In the forest we find animals we call them "wild animals"</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <ul className="list-disc pl-6 text-muted-foreground columns-2 md:columns-3 space-y-1 text-sm">
+                                    <li>Buffalo: imbogo</li>
+                                    <li>Elephants: inzovu</li>
+                                    <li>Lion: intambwe</li>
+                                    <li>Zebra: imparage</li>
+                                    <li>Monkey: inkende</li>
+                                    <li>Leopard: ingwe</li>
+                                    <li>Snake: inzoka</li>
+                                    <li>Giraffe: umusumbarembo</li>
+                                    <li>Bear: idubu</li>
+                                    <li>Wildpig: ingurube yipori</li>
+                                    <li>Hippopotamus: imvubu</li>
+                                    <li>Rhinoceros: ingiri</li>
+                                    <li>Cobra: ikobogo</li>
+                                    <li>Chimpanzee: imamfu</li>
+                                    <li>Gazelle: ingeregere</li>
+                                    <li>Cheetah: guepard</li>
+                                    <li>Panther: a large leopard</li>
+                                    <li>Kangaroo: agakoko gafise agasah</li>
+                                    <li>Wildcat: akagomba</li>
+                                    <li>Gorilla: inkoto</li>
+                                    <li>Fish: ifi</li>
+                                    <li>Crabs: inkara</li>
+                                    <li>Birds: inyoni</li>
+                                    <li>Fox: imbwebwe</li>
+                                    <li>Wolf: ibingira</li>
+                                    <li>Lioness: intambwekazi</li>
+                                    <li>Lioncub/ cub: icanacintambwe</li>
+                                    <li>Rabbit: agakwavu</li>
+                                    <li>Ape: inguge</li>
+                                    <li>Antelope: impongo</li>
+                                    <li>Deer: gifis amahembe nkamasham</li>
+                                    <li>Ostrich: ikinyoni kinini cane</li>
+                                    <li>Crocodile: ingona</li>
+                                    <li>Chameleon: uruvuruvu</li>
+                                    <li>Bat: agahungarema</li>
+                                    <li>Grassskin: incarwatsi</li>
+                                    <li>Birdie: icana cinyoni</li>
+                                    <li>Squirrel: agaherere</li>
+                                    <li>Beaver: agakara komumazi</li>
+                                    <li>Otter: akazivyi</li>
+                                    <li>Ibex: inzobe</li>
+                                    <li>Hedgehog: ikinyogoto</li>
+                                    <li>Jackal: ikinyamwoma</li>
+                                    <li>Iguana: ikivumbura</li>
+                                    <li>Lemur: agasimbiriki</li>
+                                    <li>Skunk: umusakanyika( polecat )</li>
+                                    <li>Salamander: imburu</li>
+                                    <li>Toad: igikere camiravyo</li>
+                                    <li>Raccoon: umurindima kiba amerika</li>
+                                    <li>Warthog: wildpig</li>
+                                    <li>Turtle: ikinyamasyo</li>
+                                    <li>Tortoise: ikinyamasyo</li>
+                                    <li>Bold locust: inzige</li>
+                                    <li>Monitor lizard: imburu</li>
+                                    <li>Gecko: icugu</li>
+                                    <li>Rabbit : hare : agakwavu</li>
+                                    <li>Mole: ifuku</li>
+                                </ul>
+                            </CardContent>
+                        </Card>
+                        <Card className="mt-4">
+                            <CardHeader>
+                                <CardTitle>Kind of Snakes</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <ul className="list-disc pl-6 text-muted-foreground columns-2 space-y-1 text-sm">
+                                    <li>Python: isato</li>
+                                    <li>Grass snake: incagwatsi</li>
+                                    <li>Snake: inzoka</li>
+                                    <li>Anaconda: ubwoko bwisato</li>
+                                    <li>Viper: incira</li>
+                                    <li>Mamba: imamba</li>
+                                    <li>Cobra: inkoma</li>
+                                    <li>Boa: ibowa (ikiyoka kiba amerika)</li>
+                                </ul>
+                            </CardContent>
+                        </Card>
                     </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="family">
@@ -1127,6 +1243,7 @@ export function UnitOneContent() {
     </div>
   );
 }
+
 
 
 
