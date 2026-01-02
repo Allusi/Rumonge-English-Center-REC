@@ -9,11 +9,7 @@ import { ai } from '@/ai/genkit';
 import { googleAI } from '@genkit-ai/google-genai';
 import { z } from 'genkit';
 import wav from 'wav';
-
-export const audioResponseSchema = z.object({
-  media: z.string().describe("Base64-encoded WAV audio data URI."),
-});
-export type AudioResponse = z.infer<typeof audioResponseSchema>;
+import { audioResponseSchema, type AudioResponse } from '@/ai/flows/ai-tutor-types';
 
 async function toWav(
   pcmData: Buffer,
@@ -42,9 +38,9 @@ async function toWav(
   });
 }
 
-export const textToSpeech = ai.defineFlow(
+const textToSpeechFlow = ai.defineFlow(
   {
-    name: 'textToSpeech',
+    name: 'textToSpeechFlow',
     inputSchema: z.string(),
     outputSchema: audioResponseSchema,
   },
@@ -78,3 +74,8 @@ export const textToSpeech = ai.defineFlow(
     };
   }
 );
+
+
+export async function textToSpeech(text: string): Promise<AudioResponse> {
+  return textToSpeechFlow(text);
+}

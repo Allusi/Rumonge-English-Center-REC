@@ -12,3 +12,8 @@ export type AITutorInput = z.infer<typeof AITutorInputSchema>;
 
 export const AITutorOutputSchema = z.string();
 export type AITutorOutput = z.infer<typeof AITutorOutputSchema>;
+
+export const audioResponseSchema = z.object({
+  media: z.string().describe("Base64-encoded WAV audio data URI."),
+});
+export type AudioResponse = z.infer<typeof audioResponseSchema>;
