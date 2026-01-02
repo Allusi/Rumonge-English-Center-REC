@@ -1,6 +1,11 @@
+
+"use client";
+
 import type { Metadata } from "next";
 import Link from "next/link";
-import { LayoutDashboard, LogOut, SpellCheck, Info, MessageCircle } from "lucide-react";
+import { LayoutDashboard, LogOut, SpellCheck, Info, MessageCircle, Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 import {
   Sidebar,
@@ -16,17 +21,36 @@ import {
 } from "@/components/ui/sidebar";
 import { UserNav } from "@/components/user-nav";
 import { Logo } from "@/components/logo";
+import { useUser } from "@/firebase";
 
-export const metadata: Metadata = {
-  title: "Student Dashboard - REC Online",
-  description: "Student dashboard for REC Online.",
-};
+// This is a client component, so we can't use Metadata directly.
+// We can set the title dynamically in the effect below.
 
 export default function StudentLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { user, loading } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push("/");
+    }
+     if (user) {
+        document.title = "Student Dashboard - REC Online";
+    }
+  }, [user, loading, router]);
+
+  if (loading || !user) {
+    return (
+      <div className="flex min-h-screen w-full items-center justify-center">
+        <Loader2 className="h-10 w-10 animate-spin" />
+      </div>
+    );
+  }
+
   return (
     <SidebarProvider>
       <Sidebar>

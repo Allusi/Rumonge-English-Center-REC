@@ -1,6 +1,11 @@
+
+"use client";
+
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BookCopy, LayoutDashboard, LogOut, Megaphone, Users, Info } from "lucide-react";
+import { BookCopy, LayoutDashboard, LogOut, Megaphone, Users, Info, Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 import {
   Sidebar,
@@ -9,9 +14,6 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarMenuSub,
-  SidebarMenuSubItem,
-  SidebarMenuSubButton,
   SidebarFooter,
   SidebarInset,
   SidebarProvider,
@@ -19,17 +21,36 @@ import {
 } from "@/components/ui/sidebar";
 import { UserNav } from "@/components/user-nav";
 import { Logo } from "@/components/logo";
+import { useUser } from "@/firebase";
 
-export const metadata: Metadata = {
-  title: "Admin Dashboard - REC Online",
-  description: "Administrator dashboard for REC Online.",
-};
+// This is a client component, so we can't use Metadata directly.
+// We can set the title dynamically in the effect below.
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { user, loading } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push("/");
+    }
+    if (user) {
+        document.title = "Admin Dashboard - REC Online";
+    }
+  }, [user, loading, router]);
+
+  if (loading || !user) {
+    return (
+      <div className="flex min-h-screen w-full items-center justify-center">
+        <Loader2 className="h-10 w-10 animate-spin" />
+      </div>
+    );
+  }
+
   return (
     <SidebarProvider>
       <Sidebar>
