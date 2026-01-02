@@ -67,6 +67,18 @@ export default function EditStudentPage() {
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
+        defaultValues: {
+            fullName: '',
+            age: 0,
+            address: '',
+            status: 'inactive',
+            enrolledCourseId: '',
+            englishLevel: '',
+            phoneNumber: '',
+            maritalStatus: 'single',
+            educationalStatus: 'government_student',
+            learningReason: '',
+        },
     });
 
     useEffect(() => {
