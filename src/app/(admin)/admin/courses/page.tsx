@@ -28,9 +28,11 @@ import type { Course } from "@/lib/data";
 import { courses as hardcodedCourses } from "@/lib/data";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect } from "react";
+import { useRouter } from 'next/navigation';
 
 export default function CoursesPage() {
   const firestore = useFirestore();
+  const router = useRouter();
   const coursesCollection = firestore ? collection(firestore, 'courses') : null;
 
   useEffect(() => {
@@ -44,7 +46,6 @@ export default function CoursesPage() {
             batch.set(docRef, { name: course.name, description: course.description, level: course.level });
           });
           await batch.commit();
-          // This will trigger a re-render via the useCollection hook
         }
       }
     };
@@ -52,6 +53,10 @@ export default function CoursesPage() {
   }, [firestore, coursesCollection]);
 
   const { data: courses, loading } = useCollection<Course>(coursesCollection);
+  
+  const handleRowClick = (courseId: string) => {
+    router.push(`/admin/courses/${courseId}`);
+  };
 
   return (
     <div className="flex flex-col gap-6">
@@ -95,7 +100,7 @@ export default function CoursesPage() {
                 </>
               )}
               {!loading && courses?.map((course) => (
-                <TableRow key={course.id}>
+                <TableRow key={course.id} onClick={() => handleRowClick(course.id)} className="cursor-pointer">
                   <TableCell className="font-medium">{course.name}</TableCell>
                   <TableCell>{course.description}</TableCell>
                   <TableCell>
@@ -108,6 +113,7 @@ export default function CoursesPage() {
                           aria-haspopup="true"
                           size="icon"
                           variant="ghost"
+                           onClick={(e) => e.stopPropagation()}
                         >
                           <MoreHorizontal className="h-4 w-4" />
                           <span className="sr-only">Toggle menu</span>
