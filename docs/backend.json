@@ -24,6 +24,11 @@
           "enum": ["student", "admin"],
           "description": "The role of the user."
         },
+        "status": {
+            "type": "string",
+            "enum": ["active", "inactive"],
+            "description": "The current status of the student."
+        },
         "age": {
             "type": "number",
             "description": "The student's age."
@@ -64,7 +69,7 @@
             "description": "The student's reason for wanting to learn English."
         }
       },
-      "required": ["name", "email", "role", "age", "address", "enrolledCourseId", "englishLevel", "maritalStatus", "educationalStatus", "learningReason", "loginKey"]
+      "required": ["name", "email", "role", "age", "address", "enrolledCourseId", "englishLevel", "maritalStatus", "educationalStatus", "learningReason", "loginKey", "status"]
     },
     "Course": {
       "title": "Course",

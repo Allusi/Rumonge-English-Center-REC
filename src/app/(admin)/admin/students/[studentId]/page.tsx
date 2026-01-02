@@ -15,6 +15,8 @@ import {
   ArrowLeft,
   FilePenLine,
   KeyRound,
+  ShieldCheck,
+  ShieldX,
 } from 'lucide-react';
 import {
   Card,
@@ -32,6 +34,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 const DetailItem = ({ icon, label, value }: { icon: React.ReactNode; label: string; value?: React.ReactNode }) => (
     <div className="flex items-start gap-4">
@@ -115,8 +118,14 @@ export default function StudentProfilePage() {
                         <AvatarFallback className="text-3xl">{student.name?.charAt(0) || 'S'}</AvatarFallback>
                     </Avatar>
                     <div>
-                        <h1 className="font-headline text-4xl font-bold tracking-tight">{student.name}</h1>
-                        <p className="text-l text-muted-foreground flex items-center gap-2">
+                        <div className='flex items-center gap-4'>
+                             <h1 className="font-headline text-4xl font-bold tracking-tight">{student.name}</h1>
+                             <Badge variant={student.status === 'active' ? 'secondary' : 'destructive'} className="capitalize text-base">
+                                {student.status === 'active' ? <ShieldCheck className="mr-2 h-4 w-4"/> : <ShieldX className="mr-2 h-4 w-4"/>}
+                                {student.status}
+                             </Badge>
+                        </div>
+                        <p className="text-l text-muted-foreground flex items-center gap-2 mt-1">
                             <KeyRound className="h-5 w-5" /> {student.loginKey}
                         </p>
                     </div>

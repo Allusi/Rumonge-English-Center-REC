@@ -15,6 +15,7 @@ export type Student = {
   email: string;
   loginKey: string;
   role: 'student' | 'admin';
+  status: 'active' | 'inactive';
   age: number;
   address: string;
   photoURL?: string;

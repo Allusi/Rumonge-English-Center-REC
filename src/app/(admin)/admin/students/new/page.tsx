@@ -101,9 +101,10 @@ export default function NewStudentPage() {
       const userDocRef = doc(firestore, "users", user.uid);
       batch.set(userDocRef, {
         name: values.fullName,
-        email: authEmail, // <-- This was the source of the error. Corrected to save authEmail.
+        email: authEmail,
         loginKey: loginKey,
         role: 'student',
+        status: 'active',
         age: values.age,
         address: values.address,
         enrolledCourseId: values.enrolledCourseId,
@@ -380,5 +381,3 @@ export default function NewStudentPage() {
     </div>
   );
 }
-
-    

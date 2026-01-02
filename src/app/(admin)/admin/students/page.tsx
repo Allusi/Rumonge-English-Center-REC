@@ -4,10 +4,14 @@ import {
   Plus,
   ArrowLeft,
   Search,
-  RefreshCw
+  RefreshCw,
+  MoreVertical,
+  Trash2,
+  UserCheck,
+  UserX,
 } from 'lucide-react';
 import { useCollection, useFirestore } from '@/firebase';
-import { collection, query, where, doc, updateDoc } from 'firebase/firestore';
+import { collection, query, where, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState, useMemo } from 'react';
@@ -22,6 +26,14 @@ import {
   TableRow,
   TableHead
 } from '@/components/ui/table';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Input } from '@/components/ui/input';
@@ -38,6 +50,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Badge } from '@/components/ui/badge';
 
 
 export default function StudentsPage() {
@@ -74,7 +87,7 @@ export default function StudentsPage() {
     try {
         await updateDoc(studentRef, { 
             loginKey: newKey,
-            email: newEmail, // Also update the email used for auth
+            email: newEmail,
         });
         toast({
             title: "New Key Generated!",
@@ -89,6 +102,48 @@ export default function StudentsPage() {
         });
     }
   };
+
+  const handleDeleteStudent = async (studentId: string) => {
+    if (!firestore) return;
+    try {
+      // Note: This only deletes the Firestore record.
+      // For a complete solution, you would also need to delete the user from Firebase Authentication,
+      // which typically requires a backend function (e.g., Cloud Function).
+      await deleteDoc(doc(firestore, "users", studentId));
+      toast({
+        title: "Student Deleted",
+        description: "The student's record has been removed.",
+      });
+    } catch (error) {
+      console.error("Error deleting student:", error);
+      toast({
+        variant: "destructive",
+        title: "Deletion Failed",
+        description: "Could not delete the student record. Please try again.",
+      });
+    }
+  };
+  
+  const handleToggleStatus = async (student: Student) => {
+    if (!firestore) return;
+    const newStatus = student.status === 'active' ? 'inactive' : 'active';
+    const studentRef = doc(firestore, "users", student.id);
+    try {
+        await updateDoc(studentRef, { status: newStatus });
+        toast({
+            title: "Status Updated",
+            description: `${student.name}'s status has been set to ${newStatus}.`
+        });
+    } catch(error) {
+        console.error("Error updating status:", error);
+        toast({
+            variant: "destructive",
+            title: "Error",
+            description: "Could not update student status. Please try again."
+        });
+    }
+  };
+
 
   const handleRowClick = (studentId: string) => {
     router.push(`/admin/students/${studentId}`);
@@ -136,6 +191,7 @@ export default function StudentsPage() {
             <TableHeader>
               <TableRow>
                 <TableHead>Student</TableHead>
+                <TableHead>Status</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -150,8 +206,9 @@ export default function StudentsPage() {
                                 <Skeleton className="h-6 w-40" />
                             </div>
                         </TableCell>
+                        <TableCell><Skeleton className="h-6 w-20" /></TableCell>
                         <TableCell className="text-right">
-                           <Skeleton className="h-8 w-32 ml-auto" />
+                           <Skeleton className="h-8 w-8 ml-auto" />
                         </TableCell>
                     </TableRow>
                   ))}
@@ -171,45 +228,94 @@ export default function StudentsPage() {
                         <span className="font-semibold">{student.name}</span>
                       </div>
                     </TableCell>
+                    <TableCell>
+                        <Badge variant={student.status === 'active' ? 'secondary' : 'outline'}>
+                            {student.status === 'active' ? 'Active' : 'Inactive'}
+                        </Badge>
+                    </TableCell>
                     <TableCell className="text-right">
-                         <AlertDialog>
-                            <AlertDialogTrigger asChild>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
                                 <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={(e) => e.stopPropagation()}
+                                variant="ghost"
+                                size="icon"
+                                onClick={(e) => e.stopPropagation()}
                                 >
-                                   <RefreshCw className="mr-2 h-4 w-4" />
-                                    Generate Key
+                                <MoreVertical className="h-4 w-4" />
                                 </Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                                <AlertDialogHeader>
-                                <AlertDialogTitle>Generate New Login Key?</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                    This will generate a new login key for {student.name} and invalidate their old key. The student will need to be given the new key to log in. Are you sure?
-                                </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                <AlertDialogCancel onClick={(e) => e.stopPropagation()}>Cancel</AlertDialogCancel>
-                                <AlertDialogAction
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleGenerateKey(student);
-                                    }}
-                                >
-                                    Yes, Generate New Key
-                                </AlertDialogAction>
-                                </AlertDialogFooter>
-                            </AlertDialogContent>
-                        </AlertDialog>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem onClick={(e) => { e.stopPropagation(); handleToggleStatus(student); }}>
+                                    {student.status === 'active' ? <UserX className="mr-2" /> : <UserCheck className="mr-2" />}
+                                    Set {student.status === 'active' ? 'Inactive' : 'Active'}
+                                </DropdownMenuItem>
+                                <AlertDialog>
+                                    <AlertDialogTrigger asChild>
+                                        <DropdownMenuItem onSelect={(e) => e.stopPropagation()}>
+                                            <RefreshCw className="mr-2" />
+                                            Generate New Key
+                                        </DropdownMenuItem>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                        <AlertDialogTitle>Generate New Login Key?</AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                            This will generate a new login key for {student.name} and invalidate their old one. Are you sure?
+                                        </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                        <AlertDialogCancel onClick={(e) => e.stopPropagation()}>Cancel</AlertDialogCancel>
+                                        <AlertDialogAction
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleGenerateKey(student);
+                                            }}
+                                        >
+                                            Yes, Generate
+                                        </AlertDialogAction>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
+                                <DropdownMenuSeparator />
+                                <AlertDialog>
+                                    <AlertDialogTrigger asChild>
+                                        <DropdownMenuItem className="text-destructive" onSelect={(e) => e.stopPropagation()}>
+                                            <Trash2 className="mr-2" />
+                                            Delete Student
+                                        </DropdownMenuItem>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                            This action cannot be undone. This will permanently delete {student.name}'s record. Their authentication account will NOT be deleted automatically.
+                                        </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                        <AlertDialogCancel onClick={(e) => e.stopPropagation()}>Cancel</AlertDialogCancel>
+                                        <AlertDialogAction
+                                            className="bg-destructive hover:bg-destructive/90"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleDeleteStudent(student.id);
+                                            }}
+                                        >
+                                            Delete
+                                        </AlertDialogAction>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </TableCell>
                   </TableRow>
                 ))
               ) : (
                 !loading && (
                     <TableRow>
-                        <TableCell colSpan={2} className="h-24 text-center">
+                        <TableCell colSpan={3} className="h-24 text-center">
                             {students && students.length > 0 ? 'No students match your search.' : 'No students found.'}
                         </TableCell>
                     </TableRow>

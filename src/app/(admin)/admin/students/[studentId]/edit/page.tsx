@@ -28,18 +28,20 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useCollection, useDoc, useFirestore } from '@/firebase';
 import { collection, query, where, doc, updateDoc } from 'firebase/firestore';
 import type { Course, Student } from '@/lib/data';
-import { ArrowLeft, Image as ImageIcon, KeyRound } from 'lucide-react';
+import { ArrowLeft, Image as ImageIcon, KeyRound, UserCheck, UserX } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter, useParams, notFound } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { Switch } from '@/components/ui/switch';
 
 const formSchema = z.object({
   fullName: z.string().min(2, { message: 'Full name must be at least 2 characters.' }),
   age: z.coerce.number().min(5, { message: 'Age must be at least 5.' }),
   address: z.string().min(5, { message: 'Address is required.' }),
+  status: z.enum(['active', 'inactive']),
   profilePhoto: z.any().optional(),
   enrolledCourseId: z.string({ required_error: 'Please select a course.' }),
   englishLevel: z.string({ required_error: 'Please select an English level.' }),
@@ -73,6 +75,7 @@ export default function EditStudentPage() {
                 fullName: student.name,
                 age: student.age,
                 address: student.address,
+                status: student.status,
                 enrolledCourseId: student.enrolledCourseId,
                 englishLevel: student.englishLevel,
                 phoneNumber: student.phoneNumber,
@@ -90,20 +93,17 @@ export default function EditStudentPage() {
         if (!studentRef) return;
         
         try {
-            // TODO: Implement image upload to Firebase Storage
-            // For now, we only update the text fields
-            
             await updateDoc(studentRef, {
                 name: values.fullName,
                 age: values.age,
                 address: values.address,
+                status: values.status,
                 enrolledCourseId: values.enrolledCourseId,
                 englishLevel: values.englishLevel,
                 phoneNumber: values.phoneNumber,
                 maritalStatus: values.maritalStatus,
                 educationalStatus: values.educationalStatus,
                 learningReason: values.learningReason,
-                // photoURL will be updated here once storage is implemented
             });
             
             toast({
@@ -192,8 +192,34 @@ export default function EditStudentPage() {
                                     />
                                     </div>
                                 </FormControl>
-                                <FormDescription>The registration key cannot be changed.</FormDescription>
+                                <FormDescription>The registration key cannot be changed here. Use the "Generate New Key" on the students list page.</FormDescription>
                             </FormItem>
+                             <FormField
+                                control={form.control}
+                                name="status"
+                                render={({ field }) => (
+                                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                                    <div className="space-y-0.5">
+                                    <FormLabel className="text-base">
+                                        Student Status
+                                    </FormLabel>
+                                    <FormDescription>
+                                        Set student to active or inactive. Inactive students may have restricted access.
+                                    </FormDescription>
+                                    </div>
+                                    <FormControl>
+                                        <div className="flex items-center gap-2">
+                                            <UserX className={`h-5 w-5 transition-colors ${field.value === 'inactive' ? 'text-destructive' : 'text-muted-foreground'}`} />
+                                            <Switch
+                                                checked={field.value === 'active'}
+                                                onCheckedChange={(checked) => field.onChange(checked ? 'active' : 'inactive')}
+                                            />
+                                            <UserCheck className={`h-5 w-5 transition-colors ${field.value === 'active' ? 'text-green-600' : 'text-muted-foreground'}`} />
+                                        </div>
+                                    </FormControl>
+                                </FormItem>
+                                )}
+                            />
                             <FormField
                                 control={form.control}
                                 name="age"
