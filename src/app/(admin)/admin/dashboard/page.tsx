@@ -19,7 +19,7 @@ import {
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { useCollection, useFirestore, useUser } from '@/firebase';
-import { collection, query, orderBy, limit } from 'firebase/firestore';
+import { collection, query, orderBy, limit, where } from 'firebase/firestore';
 import type { Course, Student, Announcement, Enrollment } from '@/lib/data';
 import {
   ChartContainer,
@@ -117,7 +117,7 @@ export default function AdminDashboard() {
           </Card>
         </Link>
         <Link href="/admin/courses">
-          <Card className="hover:bg-muted/50 transition-colors">
+          <Card className="hover-bg-muted/50 transition-colors">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
                 Total Courses
