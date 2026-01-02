@@ -4,8 +4,9 @@ import { useState, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Loader2, Send, Sparkles, User, Bot, CameraOff, Video, Mic, MessageSquare } from "lucide-react";
+import { Loader2, Send, Sparkles, User, Bot, CameraOff, Video, Mic, MessageSquare, MicOff, Play } from "lucide-react";
 import { aiTutor } from "@/ai/flows/ai-tutor-flow";
+import { textToSpeech } from "@/ai/flows/tts-flow";
 import { type AITutorInput } from "@/ai/flows/ai-tutor-types";
 import { Button } from "@/components/ui/button";
 import {
@@ -38,6 +39,8 @@ const formSchema = z.object({
 type Message = {
   role: "user" | "model";
   content: string;
+  audioUrl?: string;
+  isPlaying?: boolean;
 };
 
 type InteractionMode = "video" | "audio" | "text" | null;
@@ -51,6 +54,7 @@ export function AITutorChat() {
   const [interactionMode, setInteractionMode] = useState<InteractionMode>(null);
   const { toast } = useToast();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -94,13 +98,58 @@ export function AITutorChat() {
     }
   }, [messages]);
 
+  const playAudio = (audioUrl: string, messageIndex: number) => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = "";
+    }
+  
+    const newAudio = new Audio(audioUrl);
+    audioRef.current = newAudio;
+  
+    newAudio.onplay = () => {
+      setMessages(prev => prev.map((msg, idx) => ({ ...msg, isPlaying: idx === messageIndex })));
+    };
+  
+    newAudio.onended = () => {
+      setMessages(prev => prev.map((msg, idx) => (idx === messageIndex ? { ...msg, isPlaying: false } : msg)));
+      audioRef.current = null;
+    };
+  
+    newAudio.onerror = (e) => {
+      console.error("Audio playback error:", e);
+      setError("Could not play audio.");
+      setMessages(prev => prev.map((msg, idx) => (idx === messageIndex ? { ...msg, isPlaying: false } : msg)));
+      audioRef.current = null;
+    };
+  
+    newAudio.play().catch(e => {
+        console.error("Audio play promise rejected:", e);
+        setError("Audio playback failed. Please try again.");
+    });
+  };
+
   const startConversation = async () => {
     setIsLoading(true);
     setError(null);
     try {
-      const welcomeMessage = `Hello Student, welcome to R.E.C! I'm your AI English tutor. I'm here to help you on your journey of learning English at REC Online. Let's get started!`;
       const result = await aiTutor({ history: [] });
-      setMessages([{ role: "model", content: welcomeMessage }, { role: "model", content: result }]);
+      
+      const ttsResult = await textToSpeech(result);
+
+      const welcomeMessage: Message = {
+        role: "model",
+        content: `Hello! I'm R.E.C, your personal English tutor. I'm here to assist you on your journey of learning English at REC Online. How would you like to practice today?`,
+      };
+      const firstResponse: Message = {
+        role: "model",
+        content: result,
+        audioUrl: ttsResult.media,
+      };
+
+      setMessages([firstResponse]);
+      playAudio(ttsResult.media, 0);
+
     } catch (e) {
       setError("An error occurred. Please try again.");
       console.error(e);
@@ -126,7 +175,16 @@ export function AITutorChat() {
 
     try {
       const result = await aiTutor({ history: newMessages } as AITutorInput);
-      setMessages([...newMessages, { role: "model", content: result }]);
+      const ttsResult = await textToSpeech(result);
+      
+      const modelResponse: Message = { role: "model", content: result, audioUrl: ttsResult.media };
+      
+      const finalMessages = [...newMessages, modelResponse];
+      setMessages(finalMessages);
+
+      if (interactionMode !== 'text') {
+        playAudio(ttsResult.media, finalMessages.length - 1);
+      }
     } catch (e) {
       setError("An error occurred while fetching the response. Please try again.");
       console.error(e);
@@ -222,13 +280,28 @@ export function AITutorChat() {
                       </Avatar>
                     )}
                     <div
-                      className={`rounded-lg p-3 max-w-sm ${
+                      className={`rounded-lg p-3 max-w-sm flex items-center gap-2 ${
                         message.role === "user"
                           ? "bg-primary text-primary-foreground"
                           : "bg-muted"
                       }`}
                     >
                       <p className="text-sm">{message.content}</p>
+                      {message.role === 'model' && message.audioUrl && (
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          onClick={() => playAudio(message.audioUrl!, index)}
+                          disabled={message.isPlaying}
+                          className="h-6 w-6 shrink-0"
+                        >
+                          {message.isPlaying ? (
+                             <MicOff className="h-4 w-4 animate-pulse" />
+                          ) : (
+                             <Play className="h-4 w-4" />
+                          )}
+                        </Button>
+                      )}
                     </div>
                     {message.role === "user" && (
                       <Avatar>
@@ -246,6 +319,9 @@ export function AITutorChat() {
                       <Loader2 className="animate-spin h-5 w-5 text-muted-foreground" />
                     </div>
                   </div>
+                )}
+                 {error && (
+                  <div className="text-destructive text-sm text-center p-4">{error}</div>
                 )}
               </div>
             </ScrollArea>

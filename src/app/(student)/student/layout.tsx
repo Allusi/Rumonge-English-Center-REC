@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/sidebar";
 import { UserNav } from "@/components/user-nav";
 import { Logo } from "@/components/logo";
+import { SheetTitle, SheetDescription } from "@/components/ui/sheet";
+
 
 export const metadata: Metadata = {
   title: "Student Dashboard - REC Online",
@@ -31,6 +33,8 @@ export default function StudentLayout({
     <SidebarProvider>
       <Sidebar>
         <SidebarHeader>
+          <SheetTitle className="hidden">Navigation Menu</SheetTitle>
+          <SheetDescription className="hidden">Main navigation for the application.</SheetDescription>
           <div className="flex items-center gap-2">
             <Logo className="h-10 w-10 rounded-lg" />
             <span className="text-lg font-semibold text-sidebar-foreground">REC Online</span>
