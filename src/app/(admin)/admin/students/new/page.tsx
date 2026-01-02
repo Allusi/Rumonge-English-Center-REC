@@ -101,7 +101,7 @@ export default function NewStudentPage() {
       const userDocRef = doc(firestore, "users", user.uid);
       batch.set(userDocRef, {
         name: values.fullName,
-        email: authEmail,
+        email: authEmail, // This is the critical fix
         loginKey: loginKey,
         role: 'student',
         status: 'active',
@@ -381,5 +381,3 @@ export default function NewStudentPage() {
     </div>
   );
 }
-
-    
