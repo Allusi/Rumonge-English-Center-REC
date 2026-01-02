@@ -1,96 +1,129 @@
-import { Megaphone, Users, BookCopy, Activity } from "lucide-react";
+import { BookCopy, Home, FileText, BarChart2 } from "lucide-react";
 
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
+  CardDescription,
 } from "@/components/ui/card";
-import { announcements, courses, students } from "@/lib/data";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { courses, enrollments } from "@/lib/data";
 
 export default function StudentDashboard() {
+  const studentId = "S001"; // Mock student ID
+  const studentEnrollments = enrollments.filter(
+    (e) => e.studentId === studentId
+  );
+  const enrolledCourses = studentEnrollments.map((enrollment) => {
+    const course = courses.find((c) => c.id === enrollment.courseId);
+    return { ...course, ...enrollment };
+  });
+
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="font-headline text-3xl font-bold tracking-tight">
-        Dashboard
-      </h1>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div>
+        <h1 className="font-headline text-3xl font-bold tracking-tight">
+          Welcome, Student!
+        </h1>
+        <p className="text-muted-foreground">
+          Here's an overview of your courses and progress.
+        </p>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Students</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{students.length}</div>
-            <p className="text-xs text-muted-foreground">
-              Currently active students
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Courses</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Enrolled Courses
+            </CardTitle>
             <BookCopy className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{courses.length}</div>
+            <div className="text-2xl font-bold">{enrolledCourses.length}</div>
             <p className="text-xs text-muted-foreground">
-              Available courses
+              Courses you are currently taking.
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Announcements
+              Assignments Due
             </CardTitle>
-            <Megaphone className="h-4 w-4 text-muted-foreground" />
+            <FileText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{announcements.length}</div>
+            <div className="text-2xl font-bold">3</div>
             <p className="text-xs text-muted-foreground">
-              Published announcements
+              In the next 7 days.
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">System Status</CardTitle>
-            <Activity className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">
+              Overall Progress
+            </CardTitle>
+            <BarChart2 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">Online</div>
+            <div className="text-2xl font-bold">72%</div>
             <p className="text-xs text-muted-foreground">
-              All systems operational
+              Average across all courses.
             </p>
           </CardContent>
         </Card>
       </div>
-      <div>
-        <h2 className="mb-4 font-headline text-2xl font-semibold">
-          Recent Announcements
-        </h2>
-        <Card>
-          <CardContent className="p-0">
-            <div className="space-y-4 p-6">
-              {announcements.slice(0, 3).map((announcement) => (
-                <div key={announcement.id} className="flex items-start gap-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent/50 text-accent">
-                    <Megaphone />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold">{announcement.title}</h3>
-                    <p className="text-sm text-muted-foreground">
-                      {announcement.content}
-                    </p>
-                    <time className="text-xs text-muted-foreground">{announcement.date}</time>
-                  </div>
-                </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>My Courses</CardTitle>
+          <CardDescription>
+            Your enrolled courses and current progress.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Course</TableHead>
+                <TableHead>Level</TableHead>
+                <TableHead className="w-[30%]">Progress</TableHead>
+                <TableHead>Grade</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {enrolledCourses.map((course) => (
+                <TableRow key={course.id}>
+                  <TableCell className="font-medium">{course.name}</TableCell>
+                  <TableCell>
+                    <Badge variant="outline">{course.level}</Badge>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                       <Progress value={course.progress} className="h-2" />
+                       <span>{course.progress}%</span>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <Badge>{course.grade}</Badge>
+                  </TableCell>
+                </TableRow>
               ))}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </div>
   );
 }
