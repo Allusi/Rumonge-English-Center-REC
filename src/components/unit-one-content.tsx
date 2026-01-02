@@ -1311,32 +1311,32 @@ export function UnitOneContent() {
                                     <li>Datura: umunyare</li>
                                     <li>Cactus: igihahe</li>
                                     <li>Castol tree: ikibonobono</li>
-                                    <li>Whistling pines: umurinzi</li>
-                                    <li>Gmelina arborea: umukambati</li>
-                                    <li>Jacaranda acutifolia: umurama</li>
-                                    <li>Ledger’s quinine: umubirizi</li>
-                                    <li>Yellow bark quinine: umu arubayine</li>
-                                    <li>Eloquant: umushindwi</li>
-                                    <li>Capensis: umuvyiru</li>
-                                    <li>Hawthorn: umurarangwe</li>
-                                    <li>Rust weed: urubobi</li>
-                                    <li>Grevillea robusta: igereveriyo</li>
-                                    <li>Magroove: umunyegenyege</li>
-                                    <li>Cedar: isederi</li>
-                                    <li>Jambolan: umuzambarawu</li>
-                                    <li>Pepper tree: igiti cipiripiri</li>
-                                    <li>Avocado pear: ivoka</li>
-                                    <li>Thron bush: umugenge</li>
+                                    <li>Whistling pines : umurinzi</li>
+                                    <li>Gmelina arborea : umukambati</li>
+                                    <li>Jacaranda acutifolia : umurama</li>
+                                    <li>Ledger’s quinine : umubirizi</li>
+                                    <li>Yellow bark quinine : umu arubayine</li>
+                                    <li>Eloquant : umushindwi</li>
+                                    <li>Capensis : umuvyiru</li>
+                                    <li>Hawthorn : umurarangwe</li>
+                                    <li>Rust weed : urubobi</li>
+                                    <li>Grevillea robusta : igereveriyo</li>
+                                    <li>Magroove : umunyegenyege</li>
+                                    <li>Cedar : isederi</li>
+                                    <li>Jambolan : umuzambarawu</li>
+                                    <li>Pepper tree : igiti cipiripiri</li>
+                                    <li>Avocado pear : ivoka</li>
+                                    <li>Thron bush : umugenge</li>
                                     <li>Mangifora indica (mango tree): umwembe</li>
-                                    <li>Maesopsis emini: umuninga</li>
-                                    <li>Leucaena leucocephala: umusange</li>
-                                    <li>Silky oak/silver oak: igereveriyo</li>
-                                    <li>Carol tree: umukoyoyo</li>
-                                    <li>Lucky bean tree: umufumbere</li>
+                                    <li>Maesopsis emini : umuninga</li>
+                                    <li>Leucaena leucocephala : umusange</li>
+                                    <li>Silky oak/silver oak : igereveriyo</li>
+                                    <li>Carol tree : umukoyoyo</li>
+                                    <li>Lucky bean tree : umufumbere</li>
                                     <li>Eriobotry japonica (the Roquat): umurembera</li>
                                     <li>Coconut /cocos nucifera: igiti cinazi</li>
-                                    <li>Tangerine: itangawizi</li>
-                                    <li>Grape tree: igiti cumuzabibu</li>
+                                    <li>Tangerine : itangawizi</li>
+                                    <li>Grape tree : igiti cumuzabibu</li>
                                     <li>Guave tree: ipera</li>
                                 </ul>
                             </CardContent>
@@ -1391,6 +1391,81 @@ export function UnitOneContent() {
                                     <li>Split peas: ubushaza bukoboye</li>
                                     <li>Paw cassava / cassava flour: ifu yimyumbati</li>
                                     <li>Paw maize / maize flour: ifu yibigori</li>
+                                    <li>Sweet potato: ikijumbu</li>
+                                    <li>Meat: inyama</li>
+                                    <li>Roasted meat: inyama zokeje</li>
+                                    <li>Ugali: ubugali</li>
+                                    <li>Passion fruit: amabungo</li>
+                                    <li>Maize bread: ubugari bwibigori</li>
+                                    <li>Cassava bread: ubugari bwimyumbati</li>
+                                    <li>Mushrooms: ubwoba</li>
+                                    <li>Small mushrooms: ubumegeri</li>
+                                    <li>Snuff: ubugoro</li>
+                                    <li>Germinated millet: ubumera</li>
+                                </ul>
+                                <div className="mt-4">
+                                  <h5 className="font-semibold text-md mb-2">Kinds of Banana</h5>
+                                  <ol className="list-decimal pl-6 text-muted-foreground text-sm space-y-1">
+                                    <li>Gold finger banana: akamaramasenge</li>
+                                    <li>Cavendish banana: igisahira</li>
+                                    <li>Latundan banana: ikigomozi</li>
+                                    <li>Pisang awak banana: ikinyota</li>
+                                    <li>Blue java banana: gwintama</li>
+                                    <li>Dwarf Cavendish banana: ikingurube</li>
+                                    <li>Red banana: igisukari</li>
+                                  </ol>
+                                </div>
+                                <div className="mt-4">
+                                  <h5 className="font-semibold text-md mb-2">Fruits in Detail</h5>
+                                  <ul className="list-disc pl-6 text-muted-foreground columns-2 text-sm space-y-1">
+                                    <li>Strawberry: inkere</li>
+                                    <li>Apple: pomme</li>
+                                    <li>Ripe/ yellow banana: umuhwi</li>
+                                    <li>Orange: umucungwe</li>
+                                    <li>Mango: umwembe</li>
+                                    <li>Young/ unripe mango: igiturumbwe</li>
+                                    <li>Ripe mango: umwembe uhiye</li>
+                                    <li>Pineapple: inanasi</li>
+                                    <li>Avocado: ivoka</li>
+                                    <li>Bilberry: umuzabibu</li>
+                                    <li>Coconut: inazi</li>
+                                    <li>Lemon: indimu nini</li>
+                                    <li>Tomato: itomate</li>
+                                    <li>Watermelon: tikitimaji</li>
+                                    <li>Pawpaw/ papaya: ipapaye</li>
+                                    <li>Lime: indimu ntoya</li>
+                                    <li>Mandarins: amacenca</li>
+                                    <li>Guave: ipera</li>
+                                  </ul>
+                                </div>
+                                <div className="mt-4">
+                                  <h5 className="font-semibold text-md mb-2">Drinks</h5>
+                                  <p className="text-sm mb-2 text-muted-foreground">We drink:</p>
+                                   <ul className="list-disc pl-6 text-muted-foreground columns-2 text-sm space-y-1">
+                                      <li>milk: amata.</li>
+                                      <li>water : amazi</li>
+                                      <li>Coffee: akahawa.</li>
+                                      <li>soda: isoda</li>
+                                      <li>Tea: icayi.</li>
+                                      <li>beer: ibiya.</li>
+                                      <li>Juice: ijuwisi.</li>
+                                      <li>orange juice: ijuwisi yumucungwa</li>
+                                      <li>Wine: umuvinyu.</li>
+                                      <li>pineapple juice: ijuwisi yinanasi.</li>
+                                      <li>Local alcohol: ugwagwa</li>
+                                      <li>Banana wine: umutobe</li>
+                                      <li>Millet wine: ugwagwa.</li>
+                                      <li>maize wine: umugorigori</li>
+                                      <li>Pure alcohol: Padbook</li>
+                                   </ul>
+                                </div>
+                                <h4 className="font-semibold text-lg mb-2 mt-6">B. Clothings</h4>
+                                <p className="text-sm mb-2 text-muted-foreground">What does the girl wear? What does the boy wear? In this part we are going to try to answer to the above questions.</p>
+                                <p className="text-sm mb-2 font-semibold">WE WEAR:</p>
+                                <ul className="list-disc pl-6 text-muted-foreground text-sm">
+                                  <li>Rompers: isarubeti</li>
+                                  <li>Shirt: ishati</li>
+                                  <li>Trousers: ipantalo</li>
                                 </ul>
                             </CardContent>
                         </Card>
