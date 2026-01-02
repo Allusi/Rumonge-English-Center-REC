@@ -113,16 +113,53 @@ export function LoginForm() {
 
     try {
       if (values.role === "admin") {
-        await signInWithEmailAndPassword(auth, values.email!, values.password!);
+        const email = values.email!;
+        const password = values.password!;
+        try {
+          // Try to sign in first
+          await signInWithEmailAndPassword(auth, email, password);
+        } catch (error: any) {
+          // If the user does not exist, create a new account
+          if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+            
+            await updateProfile(user, { displayName: 'Admin' });
+
+            const userProfile = {
+              name: 'Admin',
+              email: user.email,
+              role: 'admin',
+            };
+            const userDocRef = doc(firestore, "users", user.uid);
+            setDoc(userDocRef, userProfile).catch(async (serverError) => {
+                const permissionError = new FirestorePermissionError({
+                  path: userDocRef.path,
+                  operation: 'create',
+                  requestResourceData: userProfile,
+                });
+                errorEmitter.emit('permission-error', permissionError);
+            });
+            await sendEmailVerification(user);
+            toast({
+              title: "Admin Account Created",
+              description: `A verification email has been sent to ${email}.`,
+              duration: 9000,
+            });
+          } else {
+            // Re-throw other errors (like wrong password)
+            throw error;
+          }
+        }
         toast({
           title: "Login Successful",
           description: "Welcome, Admin! Redirecting to your dashboard...",
         });
         router.push("/admin/dashboard");
       } else {
-        // We'll treat the student 'key' field as their email for registration
+        // Student registration logic
         const studentEmail = values.key!; 
-        const studentPassword = Math.random().toString(36).slice(-8); // Generate a random password
+        const studentPassword = Math.random().toString(36).slice(-8); 
 
         const userCredential = await createUserWithEmailAndPassword(auth, studentEmail, studentPassword);
         const user = userCredential.user;
@@ -277,3 +314,5 @@ export function LoginForm() {
     </Form>
   );
 }
+
+    
