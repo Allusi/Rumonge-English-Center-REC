@@ -32,7 +32,7 @@ import { ArrowLeft, Image } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 const formSchema = z.object({
   fullName: z.string().min(2, { message: 'Full name must be at least 2 characters.' }),
@@ -89,10 +89,6 @@ export default function NewStudentPage() {
 
       const userCredential = await createUserWithEmailAndPassword(auth, authEmail, tempPassword);
       const user = userCredential.user;
-
-      await updateProfile(user, {
-        displayName: values.fullName,
-      });
       
       const course = courses?.find(c => c.id === values.enrolledCourseId);
 
@@ -101,7 +97,7 @@ export default function NewStudentPage() {
       const userDocRef = doc(firestore, "users", user.uid);
       batch.set(userDocRef, {
         name: values.fullName,
-        email: authEmail, // This is the critical fix
+        email: authEmail,
         loginKey: loginKey,
         role: 'student',
         status: 'active',
