@@ -1,12 +1,9 @@
-import { Plus, MoreHorizontal, UserPlus, Trash2 } from "lucide-react";
+import { Plus, MoreHorizontal, UserPlus, Trash2, KeyRound } from "lucide-react";
 import { students } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import {
   Table,
@@ -81,6 +78,10 @@ export default function StudentsPage() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                         <DropdownMenuItem>
+                          <KeyRound className="mr-2 h-4 w-4" />
+                          Generate Key
+                        </DropdownMenuItem>
                         <DropdownMenuItem>
                           <UserPlus className="mr-2 h-4 w-4" />
                           Enroll in Course

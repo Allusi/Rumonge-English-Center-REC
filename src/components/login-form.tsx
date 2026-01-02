@@ -20,11 +20,11 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
-  email: z.string().email({
-    message: "Please enter a valid email address.",
+  fullName: z.string().min(2, {
+    message: "Please enter your full name.",
   }),
-  password: z.string().min(6, {
-    message: "Password must be at least 6 characters.",
+  key: z.string().min(6, {
+    message: "Key must be at least 6 characters.",
   }),
   role: z.enum(["student", "admin"], {
     required_error: "You need to select a role.",
@@ -38,8 +38,8 @@ export function LoginForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      fullName: "",
+      key: "",
       role: "student",
     },
   });
@@ -64,12 +64,12 @@ export function LoginForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}
-          name="email"
+          name="fullName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>Full Name</FormLabel>
               <FormControl>
-                <Input placeholder="name@example.com" {...field} />
+                <Input placeholder="Enter your full name" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -77,10 +77,10 @@ export function LoginForm() {
         />
         <FormField
           control={form.control}
-          name="password"
+          name="key"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>Key</FormLabel>
               <FormControl>
                 <Input type="password" placeholder="••••••••" {...field} />
               </FormControl>
@@ -119,8 +119,7 @@ export function LoginForm() {
           )}
         />
         <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting ? "Signing In..." : "Sign In"}
-          <LogIn />
+          {form.formState.isSubmitting ? "Signing In..." : <>Sign In <LogIn /></>}
         </Button>
       </form>
     </Form>
