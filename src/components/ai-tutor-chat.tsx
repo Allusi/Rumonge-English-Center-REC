@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -45,6 +45,8 @@ type Message = {
 };
 
 type InteractionMode = "video" | "audio" | "text" | null;
+
+const audioCache = new Map<string, string>();
 
 export function AITutorChat() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -132,7 +134,7 @@ export function AITutorChat() {
     }
   }, [messages]);
 
-  const playAudio = (audioUrl: string, messageIndex: number) => {
+  const playAudio = useCallback((audioUrl: string, messageIndex: number) => {
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.src = "";
@@ -161,7 +163,16 @@ export function AITutorChat() {
         console.error("Audio play promise rejected:", e);
         setError("Audio playback failed. Please try again.");
     });
-  };
+  }, []);
+
+  const getAudioForText = useCallback(async (text: string): Promise<string> => {
+    if (audioCache.has(text)) {
+      return audioCache.get(text)!;
+    }
+    const { media } = await textToSpeech(text);
+    audioCache.set(text, media);
+    return media;
+  }, []);
 
   const startConversation = async (mode: InteractionMode) => {
     setIsLoading(true);
@@ -170,18 +181,18 @@ export function AITutorChat() {
     try {
       // Get the initial message from the AI tutor flow.
       const initialTutorMessage = await aiTutor({ history: [] });
-      const ttsResult = await textToSpeech(initialTutorMessage);
+      const audioUrl = await getAudioForText(initialTutorMessage);
 
       const firstResponse: Message = {
         role: "model",
         content: initialTutorMessage,
-        audioUrl: ttsResult.media,
+        audioUrl: audioUrl,
       };
 
       setMessages([firstResponse]);
 
       if (mode !== 'text') {
-         playAudio(ttsResult.media, 0);
+         playAudio(audioUrl, 0);
       }
 
     } catch (e) {
@@ -228,15 +239,15 @@ export function AITutorChat() {
 
     try {
       const result = await aiTutor({ history: newMessages } as AITutorInput);
-      const ttsResult = await textToSpeech(result);
+      const audioUrl = await getAudioForText(result);
       
-      const modelResponse: Message = { role: "model", content: result, audioUrl: ttsResult.media };
+      const modelResponse: Message = { role: "model", content: result, audioUrl: audioUrl };
       
       const finalMessages = [...newMessages, modelResponse];
       setMessages(finalMessages);
 
       if (interactionMode !== 'text') {
-        playAudio(ttsResult.media, finalMessages.length - 1);
+        playAudio(audioUrl, finalMessages.length - 1);
       }
     } catch (e) {
       setError("An error occurred while fetching the response. Please try again.");
@@ -422,5 +433,3 @@ export function AITutorChat() {
     </div>
   );
 }
-
-    
