@@ -6,7 +6,7 @@ import {
   Trash2,
   KeyRound,
 } from 'lucide-react';
-import { useCollection } from '@/firebase';
+import { useCollection, useFirestore } from '@/firebase';
 import { collection } from 'firebase/firestore';
 
 import { Button } from '@/components/ui/button';
@@ -27,7 +27,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useFirestore } from '@/firebase';
 import { Skeleton } from '@/components/ui/skeleton';
 
 interface Student {

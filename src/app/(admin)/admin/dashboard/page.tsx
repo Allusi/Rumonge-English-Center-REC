@@ -17,9 +17,8 @@ import {
 } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { useCollection } from '@/firebase';
+import { useCollection, useFirestore } from '@/firebase';
 import { collection } from 'firebase/firestore';
-import { useFirestore } from '@/firebase';
 import { announcements, courses, enrollments } from '@/lib/data';
 
 interface Student {
