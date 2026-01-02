@@ -30,6 +30,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { getAudioForText } from "@/lib/audio-cache";
 
 const formSchema = z.object({
   message: z.string().min(1, {
@@ -45,8 +46,6 @@ type Message = {
 };
 
 type InteractionMode = "video" | "audio" | "text" | null;
-
-const audioCache = new Map<string, string>();
 
 export function AITutorChat() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -165,22 +164,27 @@ export function AITutorChat() {
     });
   }, []);
 
-  const getAudioForText = useCallback(async (text: string): Promise<string> => {
-    if (audioCache.has(text)) {
-      return audioCache.get(text)!;
-    }
-    const { media } = await textToSpeech(text);
-    audioCache.set(text, media);
-    return media;
-  }, []);
-
   const startConversation = async (mode: InteractionMode) => {
     setIsLoading(true);
     setError(null);
     
     try {
-      // Get the initial message from the AI tutor flow.
-      const initialTutorMessage = await aiTutor({ history: [] });
+      let initialTutorMessage: string;
+      const studentName = "Student";
+
+      switch (mode) {
+        case 'video':
+          initialTutorMessage = `Hi ${studentName}, welcome to your video session! How would you like to practice your English today?`;
+          break;
+        case 'audio':
+          initialTutorMessage = `Hi ${studentName}, welcome to your audio session! Let's start talking.`;
+          break;
+        case 'text':
+        default:
+          initialTutorMessage = `Hello ${studentName}, welcome! How can I help you improve your English today?`;
+          break;
+      }
+      
       const audioUrl = await getAudioForText(initialTutorMessage);
 
       const firstResponse: Message = {

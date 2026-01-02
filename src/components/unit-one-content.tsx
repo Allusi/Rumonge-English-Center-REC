@@ -20,10 +20,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./ui/card";
 import { Button } from "./ui/button";
 import { Loader2, Volume2 } from "lucide-react";
-import { textToSpeech } from "@/ai/flows/tts-flow";
-
-// Simple in-memory cache for audio
-const audioCache = new Map<string, string>();
+import { getAudioForText } from "@/lib/audio-cache";
 
 export function UnitOneContent() {
   const [playingLetter, setPlayingLetter] = useState<string | null>(null);
@@ -50,20 +47,13 @@ export function UnitOneContent() {
     if (loadingLetter) return;
 
     const textToSay = `The letter ${letter}`;
-
-    // Check cache first
-    if (audioCache.has(textToSay)) {
-      playAudio(audioCache.get(textToSay)!, letter);
-      return;
-    }
-
     setLoadingLetter(letter);
+
     try {
-      const { media } = await textToSpeech(textToSay);
-      audioCache.set(textToSay, media); // Cache the new audio
-      playAudio(media, letter);
+      const audioUrl = await getAudioForText(textToSay);
+      playAudio(audioUrl, letter);
     } catch (error) {
-      console.error("Error playing audio:", error);
+      console.error("Error getting audio for letter:", error);
     } finally {
       setLoadingLetter(null);
     }
