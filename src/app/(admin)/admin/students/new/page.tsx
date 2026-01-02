@@ -26,7 +26,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useCollection, useFirestore } from '@/firebase';
-import { collection } from 'firebase/firestore';
+import { collection, query, where } from 'firebase/firestore';
 import type { Course } from '@/lib/data';
 import { ArrowLeft, Image } from 'lucide-react';
 import Link from 'next/link';
@@ -46,9 +46,8 @@ const formSchema = z.object({
 
 export default function NewStudentPage() {
     const firestore = useFirestore();
-    const { data: courses, loading: coursesLoading } = useCollection<Course>(
-        firestore ? collection(firestore, 'courses') : null
-    );
+    const coursesQuery = firestore ? query(collection(firestore, 'courses'), where('isEnabled', '==', true)) : null;
+    const { data: courses, loading: coursesLoading } = useCollection<Course>(coursesQuery);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -112,7 +111,7 @@ export default function NewStudentPage() {
                             <FormItem>
                             <FormLabel>Age</FormLabel>
                             <FormControl>
-                                <Input type="number" placeholder="Enter student's age" {...field} onChange={event => field.onChange(+event.target.value)} />
+                                <Input type="number" placeholder="Enter student's age" {...field} value={field.value ?? ''} onChange={event => field.onChange(+event.target.value)} />
                             </FormControl>
                             <FormMessage />
                             </FormItem>
@@ -184,6 +183,9 @@ export default function NewStudentPage() {
                                     {courses?.map((course) => (
                                         <SelectItem key={course.id} value={course.id}>{course.name}</SelectItem>
                                     ))}
+                                    {!coursesLoading && courses?.length === 0 && (
+                                        <div className="p-4 text-sm text-muted-foreground">No enabled courses available.</div>
+                                    )}
                                 </SelectContent>
                             </Select>
                             <FormMessage />

@@ -35,7 +35,7 @@ export default function StudentDashboard() {
   );
 
   const { data: allCourses } = useCollection<Course>(
-    firestore ? collection(firestore, 'courses') : null
+    firestore ? query(collection(firestore, 'courses'), where('isEnabled', '==', true)) : null
   );
 
   const { data: announcements } = useCollection<Announcement>(

@@ -78,9 +78,13 @@
         "level": {
           "type": "string",
           "description": "The difficulty level of the course (e.g., A1, B2)."
+        },
+        "isEnabled": {
+            "type": "boolean",
+            "description": "Whether the course is visible and available to students."
         }
       },
-      "required": ["name", "description", "level"]
+      "required": ["name", "description", "level", "isEnabled"]
     },
     "Announcement": {
       "title": "Announcement",
