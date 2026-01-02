@@ -3,7 +3,6 @@
 import {
   Plus,
   ArrowLeft,
-  Copy,
   Search,
   RefreshCw
 } from 'lucide-react';
