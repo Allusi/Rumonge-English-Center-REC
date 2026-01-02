@@ -714,7 +714,7 @@ export function UnitOneContent() {
                                     <ul className="list-disc pl-6 text-muted-foreground">
                                         <li>Nyabigina is my home village.</li>
                                         <li>We use lanterns in our village because there is no electricity.</li>
-                                    </ul>
+                                     </ul>
                                </div>
                                <div>
                                     <p><strong>Things we find at the church:</strong> drums, pews, Bibles, altar, rosary, etc..</p>
@@ -762,7 +762,140 @@ export function UnitOneContent() {
                 <AccordionItem value="things">
                     <AccordionTrigger>B. Things</AccordionTrigger>
                     <AccordionContent>
-                        <p className="text-muted-foreground">In the above examples, we see the place village which has houses, so let us see the things we find in a house.</p>
+                        <p className="text-muted-foreground mb-2">In the above examples, we see the place village which has houses, so let us see the things we find in a house.</p>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Things We Find in the House/or at Home</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <ul className="list-disc pl-6 text-muted-foreground columns-2 md:columns-3 space-y-1 text-sm">
+                                    <li>casserole: isafuriya</li>
+                                    <li>knife: imbugita</li>
+                                    <li>metal stove: imbabura</li>
+                                    <li>three Stones: amashiga</li>
+                                    <li>cooking stones: amashiga</li>
+                                    <li>sickle: agakero</li>
+                                    <li>saw: umusumeno</li>
+                                    <li>mat: ikirago</li>
+                                    <li>watering can: irozwari</li>
+                                    <li>toolcan: ikidumu</li>
+                                    <li>kettle: ibirika</li>
+                                    <li>mirror: ikiyo</li>
+                                    <li>glasses: ibirahuri/amarori</li>
+                                    <li>needle: urushinge</li>
+                                    <li>sword: inkota</li>
+                                    <li>soap: isabuni</li>
+                                    <li>fire: umuriro</li>
+                                    <li>scissors: umukasi</li>
+                                    <li>mortar: isekuro</li>
+                                    <li>pestle: umuhini</li>
+                                    <li>comb: igisokozo</li>
+                                    <li>sieve: akayungiro</li>
+                                    <li>can: ikigopo</li>
+                                    <li>tin: umugereni</li>
+                                    <li>lid: umufuniko</li>
+                                    <li>sachet: isashe</li>
+                                    <li>spade: igipawa</li>
+                                    <li>tool: igikoresho</li>
+                                    <li>Broom: umukubuzo</li>
+                                    <li>key lock: igufuri</li>
+                                    <li>padlock: igufuri</li>
+                                    <li>gallon: akadumu</li>
+                                    <li>bag: ibegi</li>
+                                    <li>basin: ibase</li>
+                                    <li>wheelbarrow: inkorofani</li>
+                                    <li>stretcher: inderuzo</li>
+                                    <li>nails: imisumari</li>
+                                    <li>hammer: inyundo</li>
+                                    <li>door: umuryango</li>
+                                    <li>window: idirisha</li>
+                                    <li>honey-comb: ikimamara cinzuki</li>
+                                    <li>mallet: ubuhiri</li>
+                                    <li>iron sheet: amabati</li>
+                                    <li>safety-pin: igikwashu</li>
+                                    <li>razor: urwembe</li>
+                                    <li>brush: uburoso</li>
+                                    <li>funnel: umubirikira</li>
+                                    <li>dropper: umwino</li>
+                                    <li>shoes: ibirato</li>
+                                    <li>watch: isaha</li>
+                                    <li>axe: ishoka</li>
+                                    <li>bricks: amatofari</li>
+                                    <li>tablecloth: Igitambara cokumeza</li>
+                                    <li>lamp: itara</li>
+                                    <li>hotpot: isahan zigumya ubushuh</li>
+                                    <li>cork: akarumyo</li>
+                                    <li>pillars: inkingi</li>
+                                    <li>steel wire: utwobogesha ivyombo</li>
+                                    <li>coffin: isandugu</li>
+                                    <li>partition plate: isahani</li>
+                                    <li>bathroom: ubwogero</li>
+                                    <li>roof: toit/igisenge</li>
+                                    <li>floor: hasi munzu</li>
+                                    <li>stool: intebe yistuli</li>
+                                    <li>spear: icumu</li>
+                                    <li>arrows: imyampi</li>
+                                    <li>mattress: imatera</li>
+                                    <li>ladder: ingazi</li>
+                                    <li>rope: umugozi</li>
+                                    <li>jerrycan: akadumu</li>
+                                    <li>tile: amategura</li>
+                                    <li>mosquito net: umusegetera</li>
+                                    <li>Thread: urunyuzi</li>
+                                    <li>Clothline: umugozi wimpuzu</li>
+                                    <li>washing net: ikiwavu c ivyombo</li>
+                                    <li>stopper: ikizibo</li>
+                                    <li>Sauce spoon: ikimamiyo</li>
+                                    <li>wire cloth: clothline</li>
+                                    <li>cradle: isimbizo</li>
+                                    <li>Air-conditioning: climatiseur</li>
+                                    <li>pickaxe: isipiri</li>
+                                    <li>Bath tab: aho kwogera</li>
+                                    <li>rake: irato</li>
+                                    <li>closet: porte manteau</li>
+                                    <li>jar: umubindi</li>
+                                    <li>clothes dryer: imashine yumutsa impuzu</li>
+                                    <li>pitcher: umubindi</li>
+                                    <li>computer: tarakilishi</li>
+                                    <li>kitchen: igikoni</li>
+                                    <li>pillow: umusego</li>
+                                    <li>panga</li>
+                                    <li>curtains: irido</li>
+                                    <li>blanket: uburengeti</li>
+                                    <li>sewing machine: imashine ishona</li>
+                                    <li>bedsheets: amashuka</li>
+                                    <li>telephone: isimu</li>
+                                    <li>teaspoon: akayiko gato</li>
+                                    <li>television: imboneshakure</li>
+                                    <li>slicespoon: ikiyiko kitobaguye</li>
+                                    <li>washing machine: imashin imesa</li>
+                                    <li>billhook: umuhoro (serpette)</li>
+                                    <li>sofa: ifoteye</li>
+                                    <li>cupboard: akabati</li>
+                                    <li>stairs: escaliers/ingazi</li>
+                                    <li>pail: indobo yicuma</li>
+                                    <li>tap: ibomba</li>
+                                    <li>bucket: indobo</li>
+                                    <li>palm oil: amavuta yibigazi</li>
+                                    <li>basket: igiseke</li>
+                                    <li>dishes: ivyombo</li>
+                                    <li>matchbox: ikibiriti cubwampi</li>
+                                    <li>bowl: isorori/ibakuri</li>
+                                    <li>matchsticks: ubwampi</li>
+                                    <li>fridge: ifirigo</li>
+                                    <li>firewood: inkwi</li>
+                                    <li>thermos: iteremosi</li>
+                                    <li>vaccum flask: thermos</li>
+                                    <li>Vaccum bottle: thermos</li>
+                                    <li>flashlight: itoroshe</li>
+                                    <li>Food ingrendients: ibirungo</li>
+                                    <li>mixer: kavanga ibirungo</li>
+                                    <li>iron-press: ipasi</li>
+                                    <li>grill: igikarango</li>
+                                    <li>harcoals: amakara</li>
+                                </ul>
+                            </CardContent>
+                        </Card>
                     </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="family">
@@ -895,4 +1028,5 @@ export function UnitOneContent() {
     </div>
   );
 }
+
 
