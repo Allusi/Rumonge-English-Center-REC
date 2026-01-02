@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -542,6 +542,78 @@ export function UnitOneContent() {
                   <p><strong>MINANI:</strong> Only one.</p>
                   <p><strong>JOSEPH:</strong> Is he a boy?</p>
                   <p><strong>MINANI:</strong> No, she is a girl.</p>
+                  <p><strong>JOSEPH:</strong>What is her tribe?</p>
+                  <p><strong>MINANI:</strong>Her tribe is Hutu.</p>
+                  <p><strong>JOSEPH:</strong>What is yours?</p>
+                  <p><strong>MINANI:</strong>My tribe is Tutsi</p>
+                  <p><strong>JOSEPH :</strong>That is okay,Thank you very much MINANI.</p>
+                  <p><strong>MINANI:</strong>Not at all.</p>
+                  <p><strong>JOSEPH:</strong>I am happy to meet you Mrs MINANI.</p>
+                  <p><strong>ANNA:</strong>I am happy to meet you too,Joseph</p>
+                  <p><strong>JOSEPH:</strong>See you soon.</p>
+                  <p><strong>ANNA:</strong>Okay ,See you soon if God wishes.</p>
+                </CardContent>
+              </Card>
+
+              <div className="space-y-2 pt-4">
+                <h4 className="font-semibold text-xl mb-2 mt-4">C. Request</h4>
+                <p className="text-muted-foreground">A request or making request is a way of asking someone to let you do or use something. To ask permission or authorisation of doing something. See the following expressions used when making request:</p>
+                <ul className="list-disc pl-6 text-muted-foreground">
+                    <li>Can I ....................................?</li>
+                    <li>May I...................................?</li>
+                    <li>Is it alright if you / I.............?</li>
+                    <li>Is it bad if I / you....................?</li>
+                    <li>Do you mind if I / you / he...?</li>
+                    <li>Don't you mind if Anna............?</li>
+                </ul>
+              </div>
+
+              <Card>
+                <CardHeader>
+                    <CardTitle>Examples in a Sentence</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4 text-sm">
+                    <div>
+                        <p><strong>- Can I go out for having a wee?</strong></p>
+                        <p className="text-muted-foreground">{'->'} Yes, you can / Yes, go / No, you can't</p>
+                    </div>
+                    <div>
+                        <p><strong>- May I get in please?</strong></p>
+                        <p className="text-muted-foreground">{'->'} Yes, you may / Why not! / Sure / No, you may not / With pleasure get in</p>
+                    </div>
+                    <div>
+                        <p><strong>- Is it alright if you clean the blackboard?</strong></p>
+                        <p className="text-muted-foreground">{'->'} Yes, it is / No, I am busy now.</p>
+                    </div>
+                    <div>
+                        <p><strong>- Is it bad if I use the red pen?</strong></p>
+                        <p className="text-muted-foreground">{'->'} Yes, it is / No, it is not / No problem</p>
+                    </div>
+                    <div>
+                        <p><strong>- Do you mind if I speak Swahili?</strong></p>
+                        <p className="text-muted-foreground">{'->'} Yes I do mind. / No, I don't mind</p>
+                    </div>
+                     <div>
+                        <p><strong>- Don't you mind if Amina pays?</strong></p>
+                        <p className="text-muted-foreground">{'->'} Oh! I don't mind / With pleasure, she may. / It is okay, she may. / No, it is bad</p>
+                    </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                    <CardTitle>Dialogue Practice: Making a Request</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-1 text-sm">
+                    <p><strong>John:</strong> good afternoon, James!</p>
+                    <p><strong>James:</strong> good afternoon, John!</p>
+                    <p><strong>John:</strong> how are you?</p>
+                    <p><strong>James:</strong> I am fine thank you and you ?</p>
+                    <p><strong>John:</strong> fine too,what about your family?</p>
+                    <p><strong>James:</strong> my family is getting well,what about yours?</p>
+                    <p><strong>John:</strong> they are okay,what news?</p>
+                    <p><strong>James:</strong> news is that, my brother-in-law Julius is very sick.</p>
+                    <p><strong>John:</strong> I feel sorry!</p>
                 </CardContent>
               </Card>
 
