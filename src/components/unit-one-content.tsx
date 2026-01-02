@@ -20,12 +20,13 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./ui/card";
 import { Button } from "./ui/button";
 import { Loader2, Volume2 } from "lucide-react";
-import { getAudioForText } from "@/lib/audio-cache";
+import { useAudioCache } from "@/context/audio-cache-context";
 
 export function UnitOneContent() {
   const [playingLetter, setPlayingLetter] = useState<string | null>(null);
   const [loadingLetter, setLoadingLetter] = useState<string | null>(null);
   const [isClient, setIsClient] = useState(false);
+  const { getAudioForText } = useAudioCache();
 
   useEffect(() => {
     setIsClient(true);
@@ -57,7 +58,7 @@ export function UnitOneContent() {
     } finally {
       setLoadingLetter(null);
     }
-  }, [loadingLetter, playAudio]);
+  }, [loadingLetter, playAudio, getAudioForText]);
 
   const alphabet = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z".split(',');
   const vowels = ["A", "E", "I", "O", "U"];

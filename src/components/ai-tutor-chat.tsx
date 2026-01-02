@@ -30,7 +30,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
-import { getAudioForText } from "@/lib/audio-cache";
+import { useAudioCache } from "@/context/audio-cache-context";
 
 const formSchema = z.object({
   message: z.string().min(1, {
@@ -59,6 +59,8 @@ export function AITutorChat() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const recognitionRef = useRef<any | null>(null); // Using 'any' for SpeechRecognition for broader browser support
+  const { getAudioForText } = useAudioCache();
+
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -95,7 +97,7 @@ export function AITutorChat() {
         console.warn("Speech Recognition not supported in this browser.");
       }
     }
-  }, [form, toast]);
+  }, [form, toast, onSubmit]);
 
 
   useEffect(() => {
@@ -164,7 +166,7 @@ export function AITutorChat() {
     });
   }, []);
 
-  const startConversation = async (mode: InteractionMode) => {
+  const startConversation = useCallback(async (mode: InteractionMode) => {
     setIsLoading(true);
     setError(null);
     
@@ -205,14 +207,14 @@ export function AITutorChat() {
     } finally {
       setIsLoading(false);
     }
-  }
+  }, [getAudioForText, playAudio]);
 
-  const handleModeSelect = (mode: InteractionMode) => {
+  const handleModeSelect = useCallback((mode: InteractionMode) => {
     setInteractionMode(mode);
     if (messages.length === 0) {
       startConversation(mode);
     }
-  }
+  }, [messages.length, startConversation]);
 
   const toggleRecording = () => {
     if (isRecording) {
@@ -233,7 +235,7 @@ export function AITutorChat() {
     }
   };
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  const onSubmit = useCallback(async (values: z.infer<typeof formSchema>) => {
     const userInput: Message = { role: "user", content: values.message };
     const newMessages = [...messages, userInput];
     setMessages(newMessages);
@@ -260,7 +262,7 @@ export function AITutorChat() {
     } finally {
       setIsLoading(false);
     }
-  }
+  }, [messages, form, getAudioForText, interactionMode, playAudio]);
 
   if (!interactionMode) {
     return (
