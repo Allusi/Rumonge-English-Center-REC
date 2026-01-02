@@ -15,6 +15,10 @@
           "format": "email",
           "description": "The user's email address."
         },
+        "loginKey": {
+            "type": "string",
+            "description": "A unique 8-character key for student login."
+        },
         "role": {
           "type": "string",
           "enum": ["student", "admin"],
@@ -60,7 +64,7 @@
             "description": "The student's reason for wanting to learn English."
         }
       },
-      "required": ["name", "email", "role", "age", "address", "enrolledCourseId", "englishLevel", "maritalStatus", "educationalStatus", "learningReason"]
+      "required": ["name", "email", "role", "age", "address", "enrolledCourseId", "englishLevel", "maritalStatus", "educationalStatus", "learningReason", "loginKey"]
     },
     "Course": {
       "title": "Course",

@@ -4,11 +4,13 @@ import {
   Plus,
   ArrowLeft,
   Copy,
+  Search
 } from 'lucide-react';
 import { useCollection, useFirestore } from '@/firebase';
 import { collection, query, where } from 'firebase/firestore';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useState, useMemo } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -22,6 +24,7 @@ import {
 } from '@/components/ui/table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Input } from '@/components/ui/input';
 import { Student } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
 
@@ -30,15 +33,24 @@ export default function StudentsPage() {
   const firestore = useFirestore();
   const router = useRouter();
   const { toast } = useToast();
+  const [searchTerm, setSearchTerm] = useState('');
+  
   const { data: students, loading } = useCollection<Student>(
     firestore ? query(collection(firestore, 'users'), where('role', '==', 'student')) : null
   );
 
-  const handleCopyEmail = (email: string) => {
-    navigator.clipboard.writeText(email);
+  const filteredStudents = useMemo(() => {
+    if (!students) return [];
+    return students.filter(student => 
+      student.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [students, searchTerm]);
+
+  const handleCopyKey = (loginKey: string) => {
+    navigator.clipboard.writeText(loginKey);
     toast({
         title: "Student Key Copied!",
-        description: `The key (email) for registration has been copied to your clipboard.`
+        description: `The key for registration has been copied to your clipboard.`
     });
   };
 
@@ -70,6 +82,18 @@ export default function StudentsPage() {
             </Button>
         </Link>
       </div>
+      
+       <div className="relative w-full max-w-sm">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="search"
+            placeholder="Search students..."
+            className="w-full bg-background pl-8"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+
       <Card>
         <CardContent>
           <Table>
@@ -97,8 +121,8 @@ export default function StudentsPage() {
                   ))}
                 </>
               )}
-              {!loading && students && students.length > 0 ? (
-                students.map((student) => (
+              {!loading && filteredStudents && filteredStudents.length > 0 ? (
+                filteredStudents.map((student) => (
                   <TableRow key={student.id} onClick={() => handleRowClick(student.id)} className="cursor-pointer">
                     <TableCell className="font-medium">
                       <div className="flex items-center gap-3">
@@ -117,7 +141,7 @@ export default function StudentsPage() {
                             size="sm"
                             onClick={(e) => {
                                 e.stopPropagation(); // Prevent row click
-                                handleCopyEmail(student.email);
+                                handleCopyKey(student.loginKey);
                             }}
                         >
                            <Copy className="mr-2 h-4 w-4" />
@@ -130,7 +154,7 @@ export default function StudentsPage() {
                 !loading && (
                     <TableRow>
                         <TableCell colSpan={2} className="h-24 text-center">
-                            No students found.
+                            {students && students.length > 0 ? 'No students match your search.' : 'No students found.'}
                         </TableCell>
                     </TableRow>
                 )

@@ -13,6 +13,7 @@ export type Student = {
   id: string;
   name: string;
   email: string;
+  loginKey: string;
   role: 'student' | 'admin';
   age: number;
   address: string;
@@ -72,5 +73,3 @@ export const announcements: Announcement[] = [
   { id: 'A002', title: 'Holiday Closure', content: 'The center will be closed for public holidays from December 24th to January 2nd.', date: '2024-08-28' },
   { id: 'A003', title: 'New Conversation Club', content: 'Join our new conversation club every Friday at 4 PM to practice your speaking skills.', date: '2024-08-25' },
 ];
-
-    

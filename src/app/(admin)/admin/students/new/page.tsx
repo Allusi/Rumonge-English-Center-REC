@@ -36,7 +36,7 @@ import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 
 const formSchema = z.object({
   fullName: z.string().min(2, { message: 'Full name must be at least 2 characters.' }),
-  email: z.string().email({ message: 'Please enter a valid email address.' }),
+  email: z.string().email({ message: 'Please enter a valid email address.' }).optional().or(z.literal('')),
   age: z.coerce.number().min(5, { message: 'Age must be at least 5.' }),
   address: z.string().min(5, { message: 'Address is required.' }),
   profilePhoto: z.any().optional(),
@@ -69,6 +69,15 @@ export default function NewStudentPage() {
     },
   });
 
+  const generateRandomKey = (length: number) => {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+  };
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
      if (!auth || !firestore) {
       toast({ variant: 'destructive', title: 'Error', description: 'Firebase not configured.' });
@@ -76,12 +85,13 @@ export default function NewStudentPage() {
     }
 
     try {
-      // For student registration, we use the provided email as their login key
-      // and generate a random password, as per the login page logic.
-      const studentEmail = values.email;
+      const loginKey = generateRandomKey(8);
+      // We create a fake email for Firebase Auth, as it requires an email format.
+      // The student will log in with the `loginKey`, not this email.
+      const authEmail = `${loginKey}@rec-online.app`;
       const tempPassword = Math.random().toString(36).slice(-8);
 
-      const userCredential = await createUserWithEmailAndPassword(auth, studentEmail, tempPassword);
+      const userCredential = await createUserWithEmailAndPassword(auth, authEmail, tempPassword);
       const user = userCredential.user;
 
       await updateProfile(user, {
@@ -97,7 +107,8 @@ export default function NewStudentPage() {
       const userDocRef = doc(firestore, "users", user.uid);
       batch.set(userDocRef, {
         name: values.fullName,
-        email: user.email,
+        email: values.email || null,
+        loginKey: loginKey,
         role: 'student',
         age: values.age,
         address: values.address,
@@ -124,7 +135,7 @@ export default function NewStudentPage() {
       
       toast({
         title: "Student Registered Successfully!",
-        description: `${values.fullName} has been added. Their registration key (email) is ${studentEmail}.`,
+        description: `${values.fullName} has been added. Their registration key is ${loginKey}.`,
         duration: 9000
       });
 
@@ -134,7 +145,7 @@ export default function NewStudentPage() {
       console.error("Error registering student: ", error);
       let description = "An unexpected error occurred during registration.";
       if (error.code === 'auth/email-already-in-use') {
-        description = "This email is already registered. Please use a different email.";
+        description = "A user with this key already exists. Please try again.";
       }
       toast({
         variant: "destructive",
@@ -185,11 +196,11 @@ export default function NewStudentPage() {
                         name="email"
                         render={({ field }) => (
                             <FormItem>
-                            <FormLabel>Email Address (Registration Key)</FormLabel>
+                            <FormLabel>Email Address (Optional)</FormLabel>
                             <FormControl>
                                 <Input type="email" placeholder="student@example.com" {...field} />
                             </FormControl>
-                             <FormDescription>This email will be the student's unique key for logging in.</FormDescription>
+                             <FormDescription>Used for communication, not for login.</FormDescription>
                             <FormMessage />
                             </FormItem>
                         )}
@@ -389,5 +400,3 @@ export default function NewStudentPage() {
     </div>
   );
 }
-
-    

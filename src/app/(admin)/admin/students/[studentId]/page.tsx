@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -13,6 +14,7 @@ import {
   HelpCircle,
   ArrowLeft,
   FilePenLine,
+  KeyRound,
 } from 'lucide-react';
 import {
   Card,
@@ -114,8 +116,8 @@ export default function StudentProfilePage() {
                     </Avatar>
                     <div>
                         <h1 className="font-headline text-4xl font-bold tracking-tight">{student.name}</h1>
-                        <p className="text-xl text-muted-foreground flex items-center gap-2">
-                            <AtSign className="h-5 w-5" /> {student.email}
+                        <p className="text-l text-muted-foreground flex items-center gap-2">
+                            <KeyRound className="h-5 w-5" /> {student.loginKey}
                         </p>
                     </div>
                 </div>
@@ -135,6 +137,7 @@ export default function StudentProfilePage() {
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-10 pt-4">
             <DetailItem icon={<User />} label="Full Name" value={student.name} />
+            <DetailItem icon={<AtSign />} label="Email Address" value={student.email} />
             <DetailItem icon={<Cake />} label="Age" value={student.age} />
             <DetailItem icon={<Home />} label="Address" value={student.address} />
             <DetailItem icon={<Phone />} label="Phone Number" value={student.phoneNumber} />
