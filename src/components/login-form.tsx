@@ -26,7 +26,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth, useFirestore } from "@/firebase";
 import { useEffect, useState } from "react";
-import { collection, getDocs, query, where } from "firebase/firestore";
 
 const formSchema = z
   .object({
@@ -68,7 +67,6 @@ export function LoginForm() {
   const router = useRouter();
   const { toast } = useToast();
   const auth = useAuth();
-  const firestore = useFirestore();
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -88,7 +86,7 @@ export function LoginForm() {
   const role = form.watch("role");
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (!auth || !firestore) {
+    if (!auth) {
       toast({
         variant: "destructive",
         title: "Authentication Error",
@@ -101,17 +99,23 @@ export function LoginForm() {
       if (values.role === "admin") {
         const email = values.email!;
         const password = values.password!;
-        await signInWithEmailAndPassword(auth, email, password);
-        toast({
-          title: "Login Successful",
-          description: "Welcome, Admin! Redirecting to your dashboard...",
-        });
-        router.push("/admin/dashboard");
-      } else {
+        
+        // Specific check for the intended admin user
+        if (email === 'admin@rec-online.app' && password === 'password') {
+            await signInWithEmailAndPassword(auth, email, password);
+            toast({
+              title: "Login Successful",
+              description: "Welcome, Admin! Redirecting to your dashboard...",
+            });
+            router.push("/admin/dashboard");
+        } else {
+            // For any other admin login attempt
+             throw new Error("Invalid admin credentials.");
+        }
+
+      } else { // Student Login
         const loginKey = values.key!;
-        // This is the "fake" email address used for Firebase Auth.
         const authEmail = `${loginKey}@rec-online.app`;
-        // This is a temporary, insecure password for the demo.
         const tempPassword = "password"; 
         
         await signInWithEmailAndPassword(auth, authEmail, tempPassword);
@@ -126,8 +130,8 @@ export function LoginForm() {
     } catch (error: any) {
       console.error("Firebase Auth Error:", error);
       let description = "An unexpected error occurred.";
-      if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found' || error.code === 'auth/invalid-email') {
-        description = "Incorrect credentials. Please check your key or password and try again."
+      if (error.code === 'auth/invalid-credential' || error.message === 'Invalid admin credentials.') {
+        description = "Incorrect credentials. Please check your details and try again."
       } else if (error.code) {
         description = error.message;
       }
@@ -141,7 +145,7 @@ export function LoginForm() {
   }
   
   if (!isClient) {
-    return null; // or a loading skeleton
+    return null;
   }
 
   return (
