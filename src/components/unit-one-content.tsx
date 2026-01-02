@@ -15,7 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./ui/card";
 
 export function UnitOneContent() {
   return (
@@ -120,31 +120,48 @@ export function UnitOneContent() {
                 <AccordionItem value="family">
                     <AccordionTrigger>Family Members</AccordionTrigger>
                     <AccordionContent>
-                        <ul className="list-disc pl-6 text-muted-foreground">
+                        <ul className="list-disc pl-6 text-muted-foreground columns-2">
                             <li>Mother / Father</li>
                             <li>Brother / Sister</li>
                             <li>Grandmother / Grandfather</li>
                             <li>Aunt / Uncle / Cousin</li>
+                            <li>Son / Daughter</li>
                         </ul>
                     </AccordionContent>
                 </AccordionItem>
                  <AccordionItem value="body">
                     <AccordionTrigger>Parts of the Body</AccordionTrigger>
                     <AccordionContent>
-                        <ul className="list-disc pl-6 text-muted-foreground">
+                        <ul className="list-disc pl-6 text-muted-foreground columns-2">
                             <li>Head, Hair, Eyes, Nose, Mouth</li>
                             <li>Arm, Hand, Fingers</li>
                             <li>Leg, Foot, Toes</li>
+                            <li>Stomach, Back, Chest</li>
                         </ul>
                     </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="home">
                     <AccordionTrigger>Things at Home</AccordionTrigger>
                     <AccordionContent>
-                        <ul className="list-disc pl-6 text-muted-foreground">
+                        <ul className="list-disc pl-6 text-muted-foreground columns-2">
                             <li>Table, Chair, Bed</li>
                             <li>Plate, Cup, Spoon</li>
                             <li>Door, Window</li>
+                            <li>Kitchen, Bathroom</li>
+                        </ul>
+                    </AccordionContent>
+                </AccordionItem>
+                 <AccordionItem value="places">
+                    <AccordionTrigger>Places</AccordionTrigger>
+                    <AccordionContent>
+                        <ul className="list-disc pl-6 text-muted-foreground columns-2">
+                            <li>Town: agasagara</li>
+                            <li>Bank: ibanki</li>
+                            <li>Forest: ishamba</li>
+                            <li>Village: ikigwati</li>
+                            <li>School: ishure</li>
+                            <li>Hospital: ibitaro</li>
+                            <li>Market: isoko</li>
                         </ul>
                     </AccordionContent>
                 </AccordionItem>
@@ -195,6 +212,51 @@ export function UnitOneContent() {
             </ul>
           </AccordionContent>
         </AccordionItem>
+        
+        <AccordionItem value="dialogues" className="border rounded-lg">
+          <AccordionTrigger className="p-4 text-lg font-semibold">
+            Section 7: Dialogue Practices
+          </AccordionTrigger>
+          <AccordionContent className="p-4 pt-0">
+             <Card>
+                <CardHeader>
+                    <CardTitle>At the Party</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p><strong>A:</strong> Hello, Andy, how is your party?</p>
+                    <p><strong>B:</strong> Very crowded, look there are many people here.</p>
+                    <p><strong>A:</strong> Do you enjoy it?</p>
+                    <p><strong>B:</strong> Yes, very much.</p>
+                </CardContent>
+             </Card>
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value="exercises" className="border rounded-lg">
+          <AccordionTrigger className="p-4 text-lg font-semibold">
+            Section 8: Exercise Application
+          </AccordionTrigger>
+          <AccordionContent className="p-4 pt-0">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Exercise 1</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <ol className="list-decimal pl-6 space-y-2">
+                        <li>Write down three things found at the hospital.</li>
+                        <li>Write down all sections of unit one from section one to the last.</li>
+                        <li>Answer the following questions:
+                            <ul className="list-alpha pl-6">
+                                <li>How do you call a man who missed his wife in war or death?</li>
+                                <li>How do you call someone whose nationality is Tanzania?</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </CardContent>
+            </Card>
+          </AccordionContent>
+        </AccordionItem>
+
       </Accordion>
     </div>
   );
