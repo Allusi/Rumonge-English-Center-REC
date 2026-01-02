@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -22,6 +22,8 @@ import { Button } from "./ui/button";
 import { Loader2, Volume2 } from "lucide-react";
 import { textToSpeech } from "@/ai/flows/tts-flow";
 
+// Simple in-memory cache for audio
+const audioCache = new Map<string, string>();
 
 export function UnitOneContent() {
   const [playingLetter, setPlayingLetter] = useState<string | null>(null);
@@ -32,21 +34,40 @@ export function UnitOneContent() {
     setIsClient(true);
   }, []);
 
-  const playLetter = async (letter: string) => {
+  const playAudio = useCallback((audioUrl: string, letter: string) => {
+    const audio = new Audio(audioUrl);
+    setPlayingLetter(letter);
+    audio.play();
+    audio.onended = () => setPlayingLetter(null);
+    audio.onerror = (e) => {
+        console.error("Error playing audio from cache:", e);
+        setPlayingLetter(null);
+    }
+  }, []);
+
+
+  const playLetter = useCallback(async (letter: string) => {
     if (loadingLetter) return;
+
+    const textToSay = `The letter ${letter}`;
+
+    // Check cache first
+    if (audioCache.has(textToSay)) {
+      playAudio(audioCache.get(textToSay)!, letter);
+      return;
+    }
+
     setLoadingLetter(letter);
     try {
-      const { media } = await textToSpeech(`The letter ${letter}`);
-      const audio = new Audio(media);
-      setPlayingLetter(letter);
-      audio.play();
-      audio.onended = () => setPlayingLetter(null);
+      const { media } = await textToSpeech(textToSay);
+      audioCache.set(textToSay, media); // Cache the new audio
+      playAudio(media, letter);
     } catch (error) {
       console.error("Error playing audio:", error);
     } finally {
       setLoadingLetter(null);
     }
-  };
+  }, [loadingLetter, playAudio]);
 
   const alphabet = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z".split(',');
   const vowels = ["A", "E", "I", "O", "U"];
@@ -751,7 +772,7 @@ export function UnitOneContent() {
                                         <li>Your mother will wait you at the railway station.</li>
                                         <li>400 Christians decided to be Moslems and change their church to a mosque in Burundi.</li>
                                         <li>I have many files in my office.</li>
-                                        <li>In Tanzania, there are many zoos.</li>
+                                        <li>In Tanzania,there are many zoos.</li>
                                         <li>I will go to see my grandfather who lives in a small house at the village.</li>
                                    </ol>
                                </div>
@@ -1569,3 +1590,5 @@ export function UnitOneContent() {
 }
 
   
+
+    
