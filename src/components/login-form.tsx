@@ -108,24 +108,24 @@ export function LoginForm() {
         router.push("/admin/dashboard");
       } else {
         const loginKey = values.key!;
-        // The student account was created with a fake email and temporary password.
-        // We can't know the password on the client-side.
-        // For this demo, we'll show a toast and redirect. A real app would
-        // need a more secure login flow (e.g., custom tokens or a proper password).
+        const authEmail = `${loginKey}@rec-online.app`;
+        // This is a temporary, insecure password for the demo.
+        // A production app should have a proper password reset flow.
+        const tempPassword = "password"; 
+        
+        await signInWithEmailAndPassword(auth, authEmail, tempPassword);
+
         toast({
-            title: "Login Attempt",
-            description: `Attempting to log in with key: ${loginKey}. Redirecting...`,
+            title: "Login Successful",
+            description: `Welcome! Redirecting to your dashboard...`,
         });
-        // This is a simplification. We are not actually signing the user in here.
-        // We're just redirecting. The layout's auth guard will handle if they are truly logged in.
-        // A proper implementation would involve a server-side check of the key
-        // and returning a custom token to sign the user in.
+
         router.push("/student/dashboard");
       }
     } catch (error: any) {
       console.error("Firebase Auth Error:", error);
       let description = "An unexpected error occurred.";
-      if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
+      if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found' || error.code === 'auth/invalid-email') {
         description = "Incorrect credentials. Please check your key or password and try again."
       } else if (error.code) {
         description = error.message;
@@ -235,5 +235,3 @@ export function LoginForm() {
     </Form>
   );
 }
-
-    

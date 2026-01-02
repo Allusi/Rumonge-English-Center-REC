@@ -85,9 +85,11 @@ export default function NewStudentPage() {
     try {
       const loginKey = generateRandomKey(8);
       // We create a fake email for Firebase Auth, as it requires an email format.
-      // The student will log in with the `loginKey`, not this email.
+      // The student will log in with the `loginKey`, but the auth system uses this email.
       const authEmail = `${loginKey}@rec-online.app`;
-      const tempPassword = Math.random().toString(36).slice(-8);
+      // This is a temporary, insecure password. In a real application, you would
+      // implement a proper "set your password" flow for the student.
+      const tempPassword = "password";
 
       const userCredential = await createUserWithEmailAndPassword(auth, authEmail, tempPassword);
       const user = userCredential.user;
@@ -105,6 +107,7 @@ export default function NewStudentPage() {
       const userDocRef = doc(firestore, "users", user.uid);
       batch.set(userDocRef, {
         name: values.fullName,
+        email: authEmail, // Store the auth email for reference
         loginKey: loginKey,
         role: 'student',
         age: values.age,
