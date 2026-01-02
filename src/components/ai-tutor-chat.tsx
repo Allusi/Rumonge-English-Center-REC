@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useRef, useEffect } from "react";
@@ -55,6 +56,8 @@ export function AITutorChat() {
   const { toast } = useToast();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isRecording, setIsRecording] = useState(false);
+  const recognitionRef = useRef<any | null>(null); // Using 'any' for SpeechRecognition for broader browser support
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -62,6 +65,37 @@ export function AITutorChat() {
       message: "",
     },
   });
+
+  useEffect(() => {
+    // Initialize speech recognition
+    if (typeof window !== "undefined") {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        const recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'en-US';
+
+        recognition.onresult = (event) => {
+          const transcript = event.results[0][0].transcript;
+          form.setValue("message", transcript);
+          form.handleSubmit(onSubmit)();
+          setIsRecording(false);
+        };
+
+        recognition.onerror = (event) => {
+          console.error("Speech recognition error", event.error);
+          toast({ variant: "destructive", title: "Voice Error", description: `Could not recognize speech: ${event.error}` });
+          setIsRecording(false);
+        };
+        
+        recognitionRef.current = recognition;
+      } else {
+        console.warn("Speech Recognition not supported in this browser.");
+      }
+    }
+  }, [form, toast]);
+
 
   useEffect(() => {
     if (interactionMode === 'video') {
@@ -133,11 +167,12 @@ export function AITutorChat() {
     setIsLoading(true);
     setError(null);
     
-    let welcomeText = "Hi! I'm R.E.C, your personal English tutor. How can I help you practice today?";
+    const studentName = "Student"; // In a real app, this would come from user data
+    let welcomeText = `Hi ${studentName}! I'm R.E.C, your personal English tutor. How can I help you practice today?`;
     if (mode === 'video') {
-      welcomeText = "Hi Welcome to your video session! I'm R.E.C. Let's practice English. What's on your mind?";
+      welcomeText = `Hi ${studentName}, welcome to your video session! I'm R.E.C. Let's practice English. What's on your mind?`;
     } else if (mode === 'audio') {
-      welcomeText = "Hi Welcome to your audio session! I'm R.E.C. Let's start talking. How are you today?";
+      welcomeText = `Hi ${studentName}, welcome to your audio session! I'm R.E.C. Let's start talking. How are you today?`;
     }
 
     try {
@@ -169,6 +204,25 @@ export function AITutorChat() {
       startConversation(mode);
     }
   }
+
+  const toggleRecording = () => {
+    if (isRecording) {
+      recognitionRef.current?.stop();
+      setIsRecording(false);
+    } else {
+      if (recognitionRef.current) {
+        try {
+          recognitionRef.current.start();
+          setIsRecording(true);
+        } catch (err) {
+          console.error("Speech recognition start error", err);
+          toast({ variant: "destructive", title: "Voice Error", description: "Could not start voice recognition. Please check microphone permissions." });
+        }
+      } else {
+        toast({ variant: "destructive", title: "Voice Error", description: "Voice recognition is not supported in your browser." });
+      }
+    }
+  };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const userInput: Message = { role: "user", content: values.message };
@@ -344,7 +398,7 @@ export function AITutorChat() {
                     <FormItem className="flex-grow">
                       <FormControl>
                         <Input
-                          placeholder="Type your message..."
+                          placeholder={isRecording ? "Listening..." : "Type or say something..."}
                           className="flex-1"
                           {...field}
                           disabled={isLoading}
@@ -354,6 +408,11 @@ export function AITutorChat() {
                     </FormItem>
                   )}
                 />
+                {(interactionMode === 'audio' || interactionMode === 'video') && (
+                  <Button type="button" size="icon" onClick={toggleRecording} disabled={isLoading || !recognitionRef.current}>
+                    {isRecording ? <MicOff className="text-destructive animate-pulse" /> : <Mic />}
+                  </Button>
+                )}
                 <Button type="submit" disabled={isLoading}>
                   {isLoading ? (
                     <Loader2 className="animate-spin" />
