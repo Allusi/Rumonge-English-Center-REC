@@ -4,10 +4,11 @@ import {
   Plus,
   ArrowLeft,
   Copy,
-  Search
+  Search,
+  RefreshCw
 } from 'lucide-react';
 import { useCollection, useFirestore } from '@/firebase';
-import { collection, query, where } from 'firebase/firestore';
+import { collection, query, where, doc, updateDoc } from 'firebase/firestore';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState, useMemo } from 'react';
@@ -27,6 +28,17 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Input } from '@/components/ui/input';
 import { Student } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 
 export default function StudentsPage() {
@@ -46,12 +58,37 @@ export default function StudentsPage() {
     );
   }, [students, searchTerm]);
 
-  const handleCopyKey = (loginKey: string) => {
-    navigator.clipboard.writeText(loginKey);
-    toast({
-        title: "Student Key Copied!",
-        description: `The key for registration has been copied to your clipboard.`
-    });
+  const generateRandomKey = (length: number) => {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+  };
+
+  const handleGenerateKey = async (student: Student) => {
+    if (!firestore) return;
+    const newKey = generateRandomKey(8);
+    const newEmail = `${newKey}@rec-online.app`;
+    const studentRef = doc(firestore, "users", student.id);
+    try {
+        await updateDoc(studentRef, { 
+            loginKey: newKey,
+            email: newEmail, // Also update the email used for auth
+        });
+        toast({
+            title: "New Key Generated!",
+            description: `A new login key has been generated for ${student.name}. The old key will no longer work.`
+        });
+    } catch(error) {
+        console.error("Error generating new key:", error);
+        toast({
+            variant: "destructive",
+            title: "Error",
+            description: "Could not generate a new key. Please try again."
+        });
+    }
   };
 
   const handleRowClick = (studentId: string) => {
@@ -136,17 +173,37 @@ export default function StudentsPage() {
                       </div>
                     </TableCell>
                     <TableCell className="text-right">
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={(e) => {
-                                e.stopPropagation(); // Prevent row click
-                                handleCopyKey(student.loginKey);
-                            }}
-                        >
-                           <Copy className="mr-2 h-4 w-4" />
-                            Copy Key
-                        </Button>
+                         <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                   <RefreshCw className="mr-2 h-4 w-4" />
+                                    Generate Key
+                                </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                <AlertDialogTitle>Generate New Login Key?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    This will generate a new login key for {student.name} and invalidate their old key. The student will need to be given the new key to log in. Are you sure?
+                                </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                <AlertDialogCancel onClick={(e) => e.stopPropagation()}>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleGenerateKey(student);
+                                    }}
+                                >
+                                    Yes, Generate New Key
+                                </AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
                     </TableCell>
                   </TableRow>
                 ))
