@@ -28,7 +28,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { useCollection, useFirestore } from '@/firebase';
 import { collection } from 'firebase/firestore';
 import { Course } from '@/lib/data';
-import { Image } from 'lucide-react';
+import { ArrowLeft, Image } from 'lucide-react';
+import Link from 'next/link';
 
 const formSchema = z.object({
   fullName: z.string().min(2, { message: 'Full name must be at least 2 characters.' }),
@@ -45,7 +46,7 @@ const formSchema = z.object({
 
 export default function NewStudentPage() {
     const firestore = useFirestore();
-    const { data: courses } = useCollection<Course>(
+    const { data: courses, loading: coursesLoading } = useCollection<Course>(
         firestore ? collection(firestore, 'courses') : null
     );
 
@@ -70,13 +71,20 @@ export default function NewStudentPage() {
 
   return (
     <div className="flex flex-col gap-6">
-       <div>
-          <h1 className="font-headline text-3xl font-bold tracking-tight">
-            Add a New Student
-          </h1>
-          <p className="text-muted-foreground">
-            Fill out the form below to register a new student in the system.
-          </p>
+       <div className="flex items-center gap-4">
+        <Link href="/admin/students" passHref>
+          <Button variant="outline" size="icon">
+            <ArrowLeft className="h-4 w-4" />
+          </Button>
+        </Link>
+          <div>
+            <h1 className="font-headline text-3xl font-bold tracking-tight">
+                Add a New Student
+            </h1>
+            <p className="text-muted-foreground">
+                Fill out the form below to register a new student in the system.
+            </p>
+          </div>
         </div>
       <Card>
         <CardContent className="pt-6">
@@ -104,7 +112,7 @@ export default function NewStudentPage() {
                             <FormItem>
                             <FormLabel>Age</FormLabel>
                             <FormControl>
-                                <Input type="number" placeholder="Enter student's age" {...field} onChange={(e) => field.onChange(e.target.valueAsNumber)} />
+                                <Input type="number" placeholder="Enter student's age" {...field} onChange={event => field.onChange(+event.target.value)} />
                             </FormControl>
                             <FormMessage />
                             </FormItem>
@@ -169,7 +177,7 @@ export default function NewStudentPage() {
                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                                 <FormControl>
                                 <SelectTrigger>
-                                    <SelectValue placeholder="Select a course to enroll" />
+                                    <SelectValue placeholder={coursesLoading ? "Loading courses..." : "Select a course to enroll"} />
                                 </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
@@ -286,3 +294,5 @@ export default function NewStudentPage() {
     </div>
   );
 }
+
+    
