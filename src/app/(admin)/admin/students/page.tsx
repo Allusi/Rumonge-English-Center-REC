@@ -6,6 +6,7 @@ import {
   UserPlus,
   Trash2,
   KeyRound,
+  ArrowLeft,
 } from 'lucide-react';
 import { useCollection, useFirestore } from '@/firebase';
 import { collection, query, where } from 'firebase/firestore';
@@ -41,14 +42,21 @@ export default function StudentsPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-headline text-3xl font-bold tracking-tight">
-            Student Management
-          </h1>
-          <p className="text-muted-foreground">
-            View and manage all registered students.
-          </p>
+      <div className="flex items-start justify-between">
+        <div className="flex items-center gap-4">
+            <Link href="/admin/dashboard" passHref>
+              <Button variant="outline" size="icon" className="h-9 w-9">
+                <ArrowLeft className="h-4 w-4" />
+              </Button>
+            </Link>
+            <div>
+              <h1 className="font-headline text-3xl font-bold tracking-tight">
+                Student Management
+              </h1>
+              <p className="text-muted-foreground">
+                View and manage all registered students.
+              </p>
+            </div>
         </div>
         <Link href="/admin/students/new" passHref>
             <Button>
