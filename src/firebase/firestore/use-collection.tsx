@@ -64,25 +64,31 @@ export function useCollection<T extends DocumentData>(
         setLoading(false);
         setError(null);
       },
-      (err) => {
-        let path = 'unknown';
-         if (memoizedRef) {
-            if ('path' in memoizedRef) {
-                path = memoizedRef.path;
-            } else {
-                 try {
-                     const tempColl = collection(memoizedRef.firestore, (memoizedRef as any)._query.path.segments.join('/'));
-                     path = tempColl.path;
-                 } catch(e) {
-                    console.error("Could not determine path from query", e);
-                 }
+      (err: any) => {
+        // Only emit a specific permission error if the code matches.
+        if (err.code === 'permission-denied') {
+            let path = 'unknown';
+             if (memoizedRef) {
+                if ('path' in memoizedRef) {
+                    path = memoizedRef.path;
+                } else {
+                     try {
+                         const tempColl = collection(memoizedRef.firestore, (memoizedRef as any)._query.path.segments.join('/'));
+                         path = tempColl.path;
+                     } catch(e) {
+                        console.error("Could not determine path from query", e);
+                     }
+                }
             }
+            const permissionError = new FirestorePermissionError({
+              path: path,
+              operation: 'list',
+            } satisfies SecurityRuleContext);
+            errorEmitter.emit('permission-error', permissionError);
+        } else {
+            // For all other errors, throw them to see the real cause.
+            throw err;
         }
-        const permissionError = new FirestorePermissionError({
-          path: path,
-          operation: 'list',
-        } satisfies SecurityRuleContext);
-        errorEmitter.emit('permission-error', permissionError);
         setError(err);
         setLoading(false);
       }
