@@ -36,7 +36,6 @@ import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 
 const formSchema = z.object({
   fullName: z.string().min(2, { message: 'Full name must be at least 2 characters.' }),
-  email: z.string().email({ message: 'Please enter a valid email address.' }).optional().or(z.literal('')),
   age: z.coerce.number().min(5, { message: 'Age must be at least 5.' }),
   address: z.string().min(5, { message: 'Address is required.' }),
   profilePhoto: z.any().optional(),
@@ -61,7 +60,6 @@ export default function NewStudentPage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
         fullName: '',
-        email: '',
         age: undefined,
         address: '',
         phoneNumber: '',
@@ -107,7 +105,6 @@ export default function NewStudentPage() {
       const userDocRef = doc(firestore, "users", user.uid);
       batch.set(userDocRef, {
         name: values.fullName,
-        email: values.email || null,
         loginKey: loginKey,
         role: 'student',
         age: values.age,
@@ -191,20 +188,7 @@ export default function NewStudentPage() {
                             </FormItem>
                         )}
                     />
-                    <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                            <FormItem>
-                            <FormLabel>Email Address (Optional)</FormLabel>
-                            <FormControl>
-                                <Input type="email" placeholder="student@example.com" {...field} />
-                            </FormControl>
-                             <FormDescription>Used for communication, not for login.</FormDescription>
-                            <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                    
                     <FormField
                         control={form.control}
                         name="age"
@@ -400,5 +384,3 @@ export default function NewStudentPage() {
     </div>
   );
 }
-
-    
