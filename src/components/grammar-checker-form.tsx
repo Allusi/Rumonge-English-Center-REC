@@ -4,9 +4,12 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Loader2, Sparkles, Wand2 } from "lucide-react";
+import { Loader2, Sparkles, Wand2, CheckCircle, XCircle } from "lucide-react";
 
-import { grammarCheckFeedback } from "@/ai/flows/grammar-check-feedback";
+import {
+  grammarCheckFeedback,
+  type GrammarCheckFeedbackOutput,
+} from "@/ai/flows/grammar-check-feedback";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -18,7 +21,20 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Badge } from "@/components/ui/badge";
 
 const formSchema = z.object({
   text: z.string().min(10, {
@@ -27,9 +43,12 @@ const formSchema = z.object({
 });
 
 export function GrammarCheckerForm() {
-  const [feedback, setFeedback] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState<GrammarCheckFeedbackOutput | null>(
+    null
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [originalText, setOriginalText] = useState("");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -42,9 +61,10 @@ export function GrammarCheckerForm() {
     setIsLoading(true);
     setFeedback(null);
     setError(null);
+    setOriginalText(values.text);
     try {
       const result = await grammarCheckFeedback({ text: values.text });
-      setFeedback(result.feedback);
+      setFeedback(result);
     } catch (e) {
       setError("An error occurred while checking grammar. Please try again.");
       console.error(e);
@@ -52,6 +72,62 @@ export function GrammarCheckerForm() {
       setIsLoading(false);
     }
   }
+
+  const renderHighlightedText = () => {
+    if (!feedback || !feedback.hasErrors) {
+      return <p>{originalText}</p>;
+    }
+
+    const { corrections } = feedback;
+    let lastIndex = 0;
+    const parts: React.ReactNode[] = [];
+
+    // Sort corrections by start index to process them in order
+    const sortedCorrections = [...corrections].sort(
+      (a, b) => a.startIndex - b.startIndex
+    );
+
+    sortedCorrections.forEach((correction, index) => {
+      // Add text before the current correction
+      if (correction.startIndex > lastIndex) {
+        parts.push(
+          originalText.substring(lastIndex, correction.startIndex)
+        );
+      }
+
+      // Add the highlighted correction
+      parts.push(
+        <TooltipProvider key={index}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <mark className="cursor-pointer rounded-md bg-destructive/20 px-1 py-0.5 text-destructive">
+                {correction.original}
+              </mark>
+            </TooltipTrigger>
+            <TooltipContent className="max-w-xs">
+              <p className="font-semibold">Correction:</p>
+              <p className="mb-2">
+                <span className="text-muted-foreground line-through">
+                  {correction.original}
+                </span>{" "}
+                <span className="text-green-600">{correction.corrected}</span>
+              </p>
+              <p className="font-semibold">Explanation:</p>
+              <p>{correction.explanation}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      );
+      lastIndex = correction.endIndex;
+    });
+
+    // Add remaining text after the last correction
+    if (lastIndex < originalText.length) {
+      parts.push(originalText.substring(lastIndex));
+    }
+
+    return <p className="leading-relaxed">{parts}</p>;
+  };
 
   return (
     <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
@@ -103,18 +179,52 @@ export function GrammarCheckerForm() {
               </div>
             )}
             {!isLoading && !error && (
-              <div className="prose prose-sm max-w-none text-foreground">
+              <>
                 {feedback ? (
-                  <p>{feedback}</p>
+                  <div className="space-y-6">
+                    <div>
+                      {feedback.hasErrors ? (
+                        <div className="flex items-center gap-2">
+                          <XCircle className="h-5 w-5 text-destructive" />
+                          <p>
+                            We found {feedback.corrections.length} potential
+                            issue
+                            {feedback.corrections.length > 1 ? "s" : ""}. Hover
+                            over the highlights for details.
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2 text-green-600">
+                          <CheckCircle className="h-5 w-5" />
+                          <p>Looks good! No grammatical errors found.</p>
+                        </div>
+                      )}
+                    </div>
+                    <div className="prose prose-sm max-w-none rounded-md border bg-muted/30 p-4 text-foreground">
+                      {renderHighlightedText()}
+                    </div>
+                     {feedback.hasErrors && (
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="text-xl">Corrected Text</CardTitle>
+                          <CardDescription>This is the fully corrected version of your text.</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="leading-relaxed">{feedback.correctedText}</p>
+                        </CardContent>
+                      </Card>
+                     )}
+                  </div>
                 ) : (
                   <div className="flex h-full flex-col items-center justify-center text-center text-muted-foreground">
                     <Sparkles className="mb-4 h-12 w-12" />
                     <p>
-                      Your grammar feedback will appear here once you submit your text.
+                      Your grammar feedback will appear here once you submit
+                      your text.
                     </p>
                   </div>
                 )}
-              </div>
+              </>
             )}
           </CardContent>
         </Card>
