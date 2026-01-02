@@ -25,7 +25,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
 import { useCollection, useFirestore } from '@/firebase';
-import { collection, query, where, doc, writeBatch, serverTimestamp } from 'firebase/firestore';
+import { collection, query, where } from 'firebase/firestore';
 import type { Course } from '@/lib/data';
 import { ArrowLeft, Image } from 'lucide-react';
 import Link from 'next/link';

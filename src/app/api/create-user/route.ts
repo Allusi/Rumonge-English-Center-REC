@@ -28,6 +28,8 @@ export const createUser = onCall(async (request) => {
     const email = `${loginKey}@rec-online.app`;
     const password = 'password';
 
+    let uid;
+
     try {
         // 1. Create user in Firebase Authentication
         const userRecord = await admin.auth().createUser({
@@ -36,7 +38,7 @@ export const createUser = onCall(async (request) => {
             displayName: data.name,
         });
 
-        const uid = userRecord.uid;
+        uid = userRecord.uid;
         
         const batch = db.batch();
 
@@ -57,7 +59,6 @@ export const createUser = onCall(async (request) => {
             educationalStatus: data.educationalStatus,
             learningReason: data.learningReason,
             createdAt: FieldValue.serverTimestamp(),
-            // photoURL is not handled here as we're not uploading files
         });
 
         // 3. Create enrollment record
@@ -70,16 +71,15 @@ export const createUser = onCall(async (request) => {
             enrolledAt: FieldValue.serverTimestamp(),
         });
 
-        // Commit both writes as a single atomic operation
         await batch.commit();
 
         return { success: true, loginKey: loginKey };
 
     } catch (error: any) {
         console.error('Error creating user:', error);
-        // We need to delete the auth user if the db write fails
-        if (error.uid) {
-            await admin.auth().deleteUser(error.uid);
+        // If a UID was created before the DB write failed, delete the auth user.
+        if (uid) {
+            await admin.auth().deleteUser(uid);
         }
         return { success: false, error: error.message || 'An unknown error occurred.' };
     }

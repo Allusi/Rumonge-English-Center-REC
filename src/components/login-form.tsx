@@ -102,6 +102,8 @@ export function LoginForm() {
         const email = values.email!;
         const password = values.password!;
         
+        // This is a temporary, hardcoded check for the admin user.
+        // In a real application, you would have a more robust admin role system.
         if (email.toLowerCase() === 'admin@rec-online.app' && password === 'password') {
             await signInWithEmailAndPassword(auth, email, password);
             toast({
@@ -110,10 +112,11 @@ export function LoginForm() {
             });
             router.push("/admin/dashboard");
         } else {
+             // Throw a generic error to avoid confirming if an email exists
              throw new Error("Invalid admin credentials.");
         }
 
-      } else { 
+      } else { // Student login
         const loginKey = values.key!;
         const authEmail = `${loginKey}@rec-online.app`;
         const tempPassword = "password"; 
@@ -130,9 +133,12 @@ export function LoginForm() {
     } catch (error: any) {
       console.error("Firebase Auth Error:", error);
       let description = "An unexpected error occurred.";
+
+      // Check for specific Firebase auth error codes or our custom error message
       if (error.code === 'auth/invalid-credential' || error.message === 'Invalid admin credentials.') {
         description = "Incorrect credentials. Please check your details and try again."
       } else if (error.code) {
+        // Use the Firebase error message for other auth errors
         description = error.message;
       }
       
@@ -145,6 +151,7 @@ export function LoginForm() {
   }
   
   if (!isClient) {
+    // Render nothing on the server to avoid hydration mismatch
     return null; 
   }
 
