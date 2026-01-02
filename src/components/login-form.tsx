@@ -102,15 +102,18 @@ export function LoginForm() {
         const email = values.email!;
         const password = values.password!;
         
-        // This is a temporary, hardcoded check for the admin user.
-        // In a real application, you would have a more robust admin role system.
+        // In a real app, you'd have a more robust admin system
         if (email.toLowerCase() === 'admin@rec-online.app' && password === 'password') {
-            await signInWithEmailAndPassword(auth, email, password);
-            toast({
-              title: "Login Successful",
-              description: "Welcome, Admin! Redirecting to your dashboard...",
-            });
-            router.push("/admin/dashboard");
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                toast({
+                    title: "Login Successful",
+                    description: "Welcome, Admin! Redirecting to your dashboard...",
+                });
+                router.push("/admin/dashboard");
+            } catch (error) {
+                 throw new Error("Invalid admin credentials.");
+            }
         } else {
              // Throw a generic error to avoid confirming if an email exists
              throw new Error("Invalid admin credentials.");
