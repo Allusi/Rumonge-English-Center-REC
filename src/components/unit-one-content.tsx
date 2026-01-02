@@ -1111,6 +1111,104 @@ export function UnitOneContent() {
                                 </ul>
                             </CardContent>
                         </Card>
+                        <Card className="mt-4">
+                            <CardHeader>
+                                <CardTitle>Domestic Animals</CardTitle>
+                                <CardDescription>At home we find those animals that we call "domestic animals"</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead>Animal</TableHead>
+                                            <TableHead>Male</TableHead>
+                                            <TableHead>Female</TableHead>
+                                            <TableHead>Young</TableHead>
+                                            <TableHead>Meaning</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        <TableRow><TableCell>Cow</TableCell><TableCell>Bull</TableCell><TableCell>Cow</TableCell><TableCell>Calf (m&f) / Heifer (f)</TableCell><TableCell>Inka</TableCell></TableRow>
+                                        <TableRow><TableCell>Goat</TableCell><TableCell>Billy goat</TableCell><TableCell>Nany goat</TableCell><TableCell>Kid</TableCell><TableCell>Impene</TableCell></TableRow>
+                                        <TableRow><TableCell>Sheep</TableCell><TableCell>Ram</TableCell><TableCell>Ewe</TableCell><TableCell>Lamb</TableCell><TableCell>Intama</TableCell></TableRow>
+                                        <TableRow><TableCell>Hen</TableCell><TableCell>Cock</TableCell><TableCell>Hen</TableCell><TableCell>Chicken</TableCell><TableCell>Inkoko</TableCell></TableRow>
+                                        <TableRow><TableCell>Duck</TableCell><TableCell>Droke</TableCell><TableCell>Duck</TableCell><TableCell>Duckling</TableCell><TableCell>Imbata</TableCell></TableRow>
+                                        <TableRow><TableCell>Pig</TableCell><TableCell>Pig</TableCell><TableCell>Sow</TableCell><TableCell>Piglet</TableCell><TableCell>Ingurube</TableCell></TableRow>
+                                        <TableRow><TableCell>Cat</TableCell><TableCell>Tom cat</TableCell><TableCell>Tabby</TableCell><TableCell>Kitten</TableCell><TableCell>Akayabu</TableCell></TableRow>
+                                        <TableRow><TableCell>Dog</TableCell><TableCell>Dog</TableCell><TableCell>Bitch</TableCell><TableCell>Puppy/pup</TableCell><TableCell>Imbwa</TableCell></TableRow>
+                                        <TableRow><TableCell>Hare</TableCell><TableCell></TableCell><TableCell></TableCell><TableCell></TableCell><TableCell>Urukwavu</TableCell></TableRow>
+                                        <TableRow><TableCell>Donkey</TableCell><TableCell>Stallion</TableCell><TableCell>Mare</TableCell><TableCell>Foal</TableCell><TableCell>Indogoba</TableCell></TableRow>
+                                        <TableRow><TableCell>Horse</TableCell><TableCell>Stallion</TableCell><TableCell>Mare</TableCell><TableCell>Foal/Colt(m) filly(f)</TableCell><TableCell>Ifarasi</TableCell></TableRow>
+                                        <TableRow><TableCell>Hamster</TableCell><TableCell></TableCell><TableCell></TableCell><TableCell></TableCell><TableCell>Ipanya</TableCell></TableRow>
+                                        <TableRow><TableCell>Camel</TableCell><TableCell></TableCell><TableCell></TableCell><TableCell></TableCell><TableCell>Ingamiya</TableCell></TableRow>
+                                        <TableRow><TableCell>Pigeon</TableCell><TableCell></TableCell><TableCell></TableCell><TableCell></TableCell><TableCell>Injiwa</TableCell></TableRow>
+                                        <TableRow><TableCell>Guineafowl</TableCell><TableCell></TableCell><TableCell></TableCell><TableCell></TableCell><TableCell>Inkanga</TableCell></TableRow>
+                                    </TableBody>
+                                </Table>
+                            </CardContent>
+                        </Card>
+                        <Card className="mt-4">
+                            <CardHeader><CardTitle>Insects</CardTitle></CardHeader>
+                            <CardContent>
+                                <ul className="list-disc pl-6 text-muted-foreground columns-2 md:columns-3 space-y-1 text-sm">
+                                    <li>Flea: imbaragasa</li>
+                                    <li>Louse: inda</li>
+                                    <li>Bee: uruyuki</li>
+                                    <li>Bee carpenter: ifunderi</li>
+                                    <li>Small centipede: inyongori</li>
+                                    <li>Bedbug: igihere</li>
+                                    <li>Cockroach: inyenzi</li>
+                                    <li>Tse tse fly: ikibugu</li>
+                                    <li>Gnat: agatuku</li>
+                                    <li>Mosquito: umubu</li>
+                                    <li>Wasp: ivubi</li>
+                                    <li>Butterflies: ibinyugunyugu</li>
+                                    <li>Moth: agataranyama</li>
+                                    <li>Jigger: imvunja</li>
+                                    <li>Biting ant / pincher ant: intozi</li>
+                                    <li>Flying ant: inswa</li>
+                                    <li>Cricket: igihori</li>
+                                    <li>Grasshoppers: ibihori</li>
+                                    <li>Fly: insazi</li>
+                                    <li>White Ant: umuswa</li>
+                                    <li>Small /tiny ants: ubunyegeri</li>
+                                    <li>Mantis: intengasi</li>
+                                    <li>Scorpion: akaminimini</li>
+                                    <li>Cicada: cigale(French)</li>
+                                    <li>Dragon fly: libellule (French)</li>
+                                    <li>Spider: igitangurirwa</li>
+                                    <li>Beetle: agakombamavyi</li>
+                                    <li>Nematode: impongwa</li>
+                                    <li>Soldier ant: ibirima</li>
+                                    <li>Sugar ant: ikinyabuki</li>
+                                    <li>Tick: inyondwe</li>
+                                    <li>Cattle tick: inguha</li>
+                                    <li>Grub: ikikogoshi</li>
+                                    <li>Nits: imigi</li>
+                                </ul>
+                            </CardContent>
+                        </Card>
+                        <Card className="mt-4">
+                             <CardHeader><CardTitle>Animals We Find in the Water</CardTitle></CardHeader>
+                             <CardContent>
+                                <ul className="list-disc pl-6 text-muted-foreground columns-2 space-y-1 text-sm">
+                                    <li>Devil fish: umuneke</li>
+                                    <li>Carp: injombo</li>
+                                    <li>Catfish: ikambari</li>
+                                    <li>Sheat (sheatfish): ikambari</li>
+                                    <li>Mudfish: ubwoko bwikambari</li>
+                                    <li>Sardine: isaradine</li>
+                                    <li>Herring: ubwoko bwisaradine</li>
+                                    <li>Eel: umurombo</li>
+                                    <li>Dolphin: idofe</li>
+                                    <li>Whale: ikimizi</li>
+                                    <li>White bait: indagara (small fish)</li>
+                                    <li>Flatfish: ubwoko bwingege (dab)</li>
+                                    <li>Smelt: umuneke</li>
+                                    <li>Jackfish: amarenda (amasembe)</li>
+                                </ul>
+                             </CardContent>
+                        </Card>
                     </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="family">
@@ -1243,7 +1341,3 @@ export function UnitOneContent() {
     </div>
   );
 }
-
-
-
-
