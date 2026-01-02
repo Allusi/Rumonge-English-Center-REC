@@ -21,17 +21,21 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import { useUser, useCollection, useFirestore } from "@/firebase";
-import { collection, query, where, orderBy, limit } from "firebase/firestore";
-import type { Course, Enrollment, Announcement } from "@/lib/data";
+import { useUser, useCollection, useFirestore, useDoc } from "@/firebase";
+import { collection, query, where, orderBy, limit, doc } from "firebase/firestore";
+import type { Course, Enrollment, Announcement, Student } from "@/lib/data";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter } from "next/navigation";
 
 export default function StudentDashboard() {
-  const { user } = useUser();
+  const { user, loading: userLoading } = useUser();
   const firestore = useFirestore();
   const router = useRouter();
-  const studentName = user?.displayName || "Student";
+
+  const userDocRef = (firestore && user) ? doc(firestore, 'users', user.uid) : null;
+  const { data: studentProfile, loading: profileLoading } = useDoc<Student>(userDocRef);
+
+  const studentName = studentProfile?.name || "Student";
   
   const { data: studentEnrollments, loading: enrollmentsLoading } = useCollection<Enrollment>(
     firestore && user ? query(collection(firestore, 'enrollments'), where('studentId', '==', user.uid)) : null
@@ -53,13 +57,13 @@ export default function StudentDashboard() {
     return { ...course, ...enrollment, progress: 0, grade: 'Not Started' }; // Mock progress/grade for now
   }).filter(course => course !== null) as (Course & Enrollment & { progress: number; grade: string; })[] | undefined;
 
-  const isLoading = enrollmentsLoading || coursesLoading || announcementsLoading;
+  const isLoading = userLoading || profileLoading || enrollmentsLoading || coursesLoading || announcementsLoading;
 
   return (
     <div className="flex flex-col gap-8">
       <div>
         <h1 className="font-headline text-3xl font-bold tracking-tight">
-          Welcome back, {studentName}!
+          Welcome back, {isLoading ? <Skeleton className="h-8 w-40 inline-block" /> : studentName}!
         </h1>
         <p className="text-muted-foreground">
           Here's an overview of your learning journey.

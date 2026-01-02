@@ -7,7 +7,6 @@ import {
   Activity,
   UserPlus,
   Plus,
-  BarChart,
 } from 'lucide-react';
 import Link from 'next/link';
 import {
@@ -19,7 +18,7 @@ import {
 } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { useCollection, useFirestore } from '@/firebase';
+import { useCollection, useFirestore, useUser } from '@/firebase';
 import { collection, query, orderBy, limit } from 'firebase/firestore';
 import type { Course, Student, Announcement, Enrollment } from '@/lib/data';
 import {
@@ -37,8 +36,10 @@ import {
 
 export default function AdminDashboard() {
   const firestore = useFirestore();
+  const { user } = useUser();
+
   const { data: students } = useCollection<Student>(
-    firestore ? collection(firestore, 'users') : null
+    firestore ? query(collection(firestore, 'users'), where('role', '==', 'student')) : null
   );
   const { data: courses } = useCollection<Course>(
     firestore ? collection(firestore, 'courses') : null
@@ -54,8 +55,7 @@ export default function AdminDashboard() {
 
   const recentStudents =
     students
-      ?.filter((s) => s.role === 'student')
-      .slice(-5)
+      ?.slice(-5)
       .reverse() || [];
   const recentAnnouncements = announcements?.slice(0, 3) || [];
 
@@ -64,7 +64,7 @@ export default function AdminDashboard() {
     return { name: course.name, count };
   }) || [];
   
-  const studentSignups = students?.filter(s => s.role === 'student' && s.createdAt).reduce((acc: { [key: string]: number }, student) => {
+  const studentSignups = students?.filter(s => s.createdAt).reduce((acc: { [key: string]: number }, student) => {
     const date = new Date(student.createdAt.seconds * 1000).toISOString().split('T')[0];
     acc[date] = (acc[date] || 0) + 1;
     return acc;
@@ -85,12 +85,16 @@ export default function AdminDashboard() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline">
-            <UserPlus className="mr-2 h-4 w-4" /> Add Student
-          </Button>
-          <Button>
-            <Plus className="mr-2 h-4 w-4" /> New Announcement
-          </Button>
+          <Link href="/admin/students/new">
+            <Button variant="outline">
+              <UserPlus className="mr-2 h-4 w-4" /> Add Student
+            </Button>
+          </Link>
+          <Link href="/admin/announcements/new">
+            <Button>
+              <Plus className="mr-2 h-4 w-4" /> New Announcement
+            </Button>
+          </Link>
         </div>
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -104,7 +108,7 @@ export default function AdminDashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {students?.filter((s) => s.role === 'student').length || 0}
+                {students?.length || 0}
               </div>
               <p className="text-xs text-muted-foreground">
                 Currently active students
@@ -173,7 +177,7 @@ export default function AdminDashboard() {
                <ResponsiveContainer width="100%" height={300}>
                   <RechartsBarChart data={enrollmentByCourse} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
                      <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
-                     <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
+                     <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} allowDecimals={false}/>
                     <ChartTooltip content={<ChartTooltipContent />} />
                     <Bar dataKey="count" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
                   </RechartsBarChart>
@@ -191,7 +195,7 @@ export default function AdminDashboard() {
                <ResponsiveContainer width="100%" height={300}>
                   <RechartsBarChart data={studentSignupsChartData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
                      <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
-                     <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
+                     <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} allowDecimals={false} />
                     <ChartTooltip content={<ChartTooltipContent />} />
                     <Bar dataKey="count" fill="hsl(var(--accent))" radius={[4, 4, 0, 0]} />
                   </RechartsBarChart>
@@ -258,9 +262,11 @@ export default function AdminDashboard() {
                         {student.email}
                       </p>
                     </div>
-                    <Button variant="ghost" size="sm">
-                      View
-                    </Button>
+                    <Link href={`/admin/students/${student.id}`}>
+                      <Button variant="ghost" size="sm">
+                        View
+                      </Button>
+                    </Link>
                   </div>
                 ))}
               </div>
