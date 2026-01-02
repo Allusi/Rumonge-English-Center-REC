@@ -1,4 +1,4 @@
-
+'use client';
 import {
   Megaphone,
   Users,
@@ -6,21 +6,35 @@ import {
   Activity,
   UserPlus,
   Plus,
-} from "lucide-react";
-import Link from "next/link";
+} from 'lucide-react';
+import Link from 'next/link';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
-} from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { announcements, courses, students, enrollments } from "@/lib/data";
+} from '@/components/ui/card';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { useCollection } from '@/firebase';
+import { collection } from 'firebase/firestore';
+import { useFirestore } from '@/firebase';
+import { announcements, courses, enrollments } from '@/lib/data';
+
+interface Student {
+  id: string;
+  name: string;
+  email: string;
+}
 
 export default function AdminDashboard() {
-  const recentStudents = students.slice(-5).reverse(); // Get last 5 students
+  const firestore = useFirestore();
+  const { data: students } = useCollection<Student>(
+    firestore ? collection(firestore, 'users') : null
+  );
+
+  const recentStudents = students?.slice(-5).reverse() || [];
   const recentAnnouncements = announcements.slice(0, 3);
 
   return (
@@ -53,7 +67,7 @@ export default function AdminDashboard() {
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{students.length}</div>
+              <div className="text-2xl font-bold">{students?.length || 0}</div>
               <p className="text-xs text-muted-foreground">
                 Currently active students
               </p>
@@ -117,7 +131,10 @@ export default function AdminDashboard() {
             <CardContent>
               <div className="space-y-6">
                 {recentAnnouncements.map((announcement) => (
-                  <div key={announcement.id} className="flex items-start gap-4">
+                  <div
+                    key={announcement.id}
+                    className="flex items-start gap-4"
+                  >
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent/50 text-accent">
                       <Megaphone />
                     </div>
