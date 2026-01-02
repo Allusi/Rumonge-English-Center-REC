@@ -2,15 +2,13 @@
 'use client';
 import {
   Plus,
-  MoreHorizontal,
-  UserPlus,
-  Trash2,
-  KeyRound,
   ArrowLeft,
+  Copy,
 } from 'lucide-react';
 import { useCollection, useFirestore } from '@/firebase';
 import { collection, query, where } from 'firebase/firestore';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -18,27 +16,35 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
   TableHeader,
   TableRow,
+  TableHead
 } from '@/components/ui/table';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Student } from '@/lib/data';
+import { useToast } from '@/hooks/use-toast';
 
 
 export default function StudentsPage() {
   const firestore = useFirestore();
+  const router = useRouter();
+  const { toast } = useToast();
   const { data: students, loading } = useCollection<Student>(
     firestore ? query(collection(firestore, 'users'), where('role', '==', 'student')) : null
   );
+
+  const handleCopyEmail = (email: string) => {
+    navigator.clipboard.writeText(email);
+    toast({
+        title: "Email Copied!",
+        description: `${email} has been copied to your clipboard.`
+    });
+  };
+
+  const handleRowClick = (studentId: string) => {
+    router.push(`/admin/students/${studentId}`);
+  };
 
   return (
     <div className="flex flex-col gap-6">
@@ -69,77 +75,61 @@ export default function StudentsPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>
-                  <span className="sr-only">Actions</span>
-                </TableHead>
+                <TableHead>Student</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {loading && (
                 <>
-                  <TableRow>
-                    <TableCell><Skeleton className="h-8 w-full" /></TableCell>
-                    <TableCell><Skeleton className="h-8 w-full" /></TableCell>
-                    <TableCell><Skeleton className="h-8 w-8" /></TableCell>
-                  </TableRow>
-                   <TableRow>
-                    <TableCell><Skeleton className="h-8 w-full" /></TableCell>
-                    <TableCell><Skeleton className="h-8 w-full" /></TableCell>
-                    <TableCell><Skeleton className="h-8 w-8" /></TableCell>
-                  </TableRow>
+                  {[...Array(3)].map((_, i) => (
+                    <TableRow key={i}>
+                        <TableCell>
+                            <div className="flex items-center gap-3">
+                                <Skeleton className="h-10 w-10 rounded-full" />
+                                <Skeleton className="h-6 w-40" />
+                            </div>
+                        </TableCell>
+                        <TableCell className="text-right">
+                           <Skeleton className="h-8 w-24 ml-auto" />
+                        </TableCell>
+                    </TableRow>
+                  ))}
                 </>
               )}
               {!loading && students && students.length > 0 ? (
                 students.map((student) => (
-                  <TableRow key={student.id}>
+                  <TableRow key={student.id} onClick={() => handleRowClick(student.id)} className="cursor-pointer">
                     <TableCell className="font-medium">
                       <div className="flex items-center gap-3">
-                        <Avatar className="h-8 w-8">
+                        <Avatar className="h-10 w-10">
+                          {student.photoURL && <AvatarImage src={student.photoURL} alt={student.name} />}
                           <AvatarFallback>
-                            {student.name?.charAt(0) || 'U'}
+                            {student.name?.charAt(0) || 'S'}
                           </AvatarFallback>
                         </Avatar>
-                        <span>{student.name}</span>
+                        <span className="font-semibold">{student.name}</span>
                       </div>
                     </TableCell>
-                    <TableCell>{student.email}</TableCell>
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            aria-haspopup="true"
-                            size="icon"
-                            variant="ghost"
-                          >
-                            <MoreHorizontal className="h-4 w-4" />
-                            <span className="sr-only">Toggle menu</span>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <DropdownMenuItem>
-                            <KeyRound className="mr-2 h-4 w-4" />
-                            Generate Key
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <UserPlus className="mr-2 h-4 w-4" />
-                            Enroll in Course
-                          </DropdownMenuItem>
-                          <DropdownMenuItem className="text-destructive">
-                            <Trash2 className="mr-2 h-4 w-4" />
-                            Delete Student
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                    <TableCell className="text-right">
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={(e) => {
+                                e.stopPropagation(); // Prevent row click
+                                handleCopyEmail(student.email);
+                            }}
+                        >
+                           <Copy className="mr-2 h-4 w-4" />
+                            Copy Email (Key)
+                        </Button>
                     </TableCell>
                   </TableRow>
                 ))
               ) : (
                 !loading && (
                     <TableRow>
-                        <TableCell colSpan={3} className="h-24 text-center">
+                        <TableCell colSpan={2} className="h-24 text-center">
                             No students found.
                         </TableCell>
                     </TableRow>
