@@ -151,7 +151,7 @@ export default function StudentsPage() {
                             </div>
                         </TableCell>
                         <TableCell className="text-right">
-                           <Skeleton className="h-8 w-24 ml-auto" />
+                           <Skeleton className="h-8 w-32 ml-auto" />
                         </TableCell>
                     </TableRow>
                   ))}
