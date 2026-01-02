@@ -65,7 +65,7 @@ export function UnitOneContent() {
           <AccordionTrigger className="p-4 text-lg font-semibold">
             Section 1: English Alphabet
           </AccordionTrigger>
-          <AccordionContent className="p-4 pt-0">
+          <AccordionContent className="p-4 pt-0 space-y-4">
             <p className="mb-4 text-muted-foreground">
               In English, we have twenty-six (26) English letters. These are divided into two categories: consonants and vowels. We have twenty-one (21) consonants and five (5) vowels.
             </p>
@@ -108,17 +108,46 @@ export function UnitOneContent() {
                 </ol>
                 <p className="mt-2 text-sm text-muted-foreground">When we speak we use sound and when we write we use letters.</p>
             </div>
-            <div className="mt-4">
-              <h4 className="font-semibold mb-2">Dialogue Practice</h4>
-              <div className="p-4 border rounded-lg bg-muted/50">
+            <div>
+              <h4 className="font-semibold text-lg mb-2">Dialogue Practice</h4>
+              <div className="p-4 border rounded-lg bg-muted/50 space-y-1 text-sm">
                 <p><strong>Anna:</strong> Good morning, Juma!</p>
                 <p><strong>Juma:</strong> Good morning, Anna!</p>
                 <p><strong>Anna:</strong> how are you ?</p>
                 <p><strong>Juma:</strong> I am fine thank you and you?</p>
                 <p><strong>Anna:</strong> fine too, I am happy to meet you, Juma.</p>
+                <p><strong>Juma:</strong> I am happy to meet you too, Anna, where were you nowadays?</p>
+                <p><strong>Anna:</strong> I was at kasulu to learn English language.</p>
+                <p><strong>Juma:</strong> what did you learn?</p>
+                <p><strong>Anna:</strong> we learnt English alphabet.</p>
                 <p><strong>Juma:</strong> how many English letters do we have?</p>
                 <p><strong>Anna:</strong> we have 26 English letters,divided into two classes namely vowels and consonants.</p>
+                <p><strong>Juma:</strong> it means that there are thirteen vowels and thirteen consonants?</p>
+                <p><strong>Anna:</strong> no, there are five vowels and twenty-one consonants.</p>
+                <p><strong>Juma:</strong> can you please teach me those letters?</p>
+                <p><strong>Anna:</strong> yes,let me teach you how to sing them.</p>
+                <p><strong>Juma:</strong> I shall be thankful to you.</p>
+                <p><strong>Anna:</strong> let me sing alone after we will sing together.</p>
+                <p><strong>Juma:</strong> no matter what.</p>
+                <p><strong>Anna:</strong> [ A,B,C,D........Z]</p>
+                <p><strong>Juma:</strong> it is a difficult song.</p>
+                <p><strong>Anna:</strong> no,you are going to find it easy.</p>
+                <p><strong>Juma:</strong> let me wait ,I shall see.</p>
+                <p><strong>Anna:</strong> so , be all ears and repeat after me [A,B,C....]</p>
+                <p><strong>Juma:</strong> okay ,thank you very much for teaching me how to sing English alphabet ,tomorrow I shall go to join unit one at I.E.T.S.</p>
+                <p><strong>Anna:</strong> it is your choice because English is very important nowadays.</p>
+                <p><strong>Juma:</strong> Yeah,see you next week.</p>
+                <p><strong>Anna:</strong> we shall meet if God wishes.</p>
               </div>
+            </div>
+             <div>
+                <h4 className="font-semibold text-lg mb-2">Expressions</h4>
+                 <div className="p-4 border rounded-lg bg-muted/20 space-y-2 text-sm">
+                    <p><strong>1. To be as easy as ABC:</strong> to be very easy (simple).<br/><em>E.g: That song is as easy as ABC.</em></p>
+                    <p><strong>2. From A to B:</strong> from one place to another, from one's starting-point to one's destination.<br/><em>E.g: I used only 20 minutes to go from A to B.</em></p>
+                    <p><strong>3. From A to Z:</strong> all details.<br/><em>E.g: I can tell you what you taught us from A to Z. / I know him from A to Z.</em></p>
+                    <p><strong>4. To be all ears:</strong> to be attentive.<br/><em>E.g: I am all ears for what you are going to tell us.</em></p>
+                 </div>
             </div>
           </AccordionContent>
         </AccordionItem>
