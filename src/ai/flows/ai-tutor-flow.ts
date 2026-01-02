@@ -13,15 +13,25 @@ import {
   type AITutorInput,
   type AITutorOutput,
 } from '@/ai/flows/ai-tutor-types';
+import { z } from 'genkit';
+
+const AITutorFlowInputSchema = z.object({
+  history: z.array(z.object({
+    role: z.enum(['user', 'model']),
+    content: z.string(),
+    isUser: z.boolean(),
+  })),
+});
 
 export async function aiTutor(input: AITutorInput): Promise<AITutorOutput> {
-  const {output} = await aiTutorPrompt(input);
+  const historyWithUserFlag = input.history.map(m => ({ ...m, isUser: m.role === 'user' }));
+  const {output} = await aiTutorPrompt({ history: historyWithUserFlag });
   return output!;
 }
 
 const aiTutorPrompt = ai.definePrompt({
   name: 'aiTutorPrompt',
-  input: {schema: AITutorInputSchema},
+  input: {schema: AITutorFlowInputSchema},
   output: {schema: AITutorOutputSchema},
   prompt: `You are an expert English tutor AI from "Rumonge English School (R.E.C)". Your role is to help students practice and improve their English through conversation. 
 
@@ -35,7 +45,7 @@ const aiTutorPrompt = ai.definePrompt({
   
   Conversation History:
   {{#each history}}
-  {{#if (eq this.role 'user')}}
+  {{#if this.isUser}}
   User: {{{this.content}}}
   {{else}}
   R.E.C: {{{this.content}}}
