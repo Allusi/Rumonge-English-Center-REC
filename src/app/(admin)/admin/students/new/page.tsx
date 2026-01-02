@@ -104,7 +104,7 @@ export default function NewStudentPage() {
                             <FormItem>
                             <FormLabel>Age</FormLabel>
                             <FormControl>
-                                <Input type="number" placeholder="Enter student's age" {...field} />
+                                <Input type="number" placeholder="Enter student's age" {...field} onChange={(e) => field.onChange(e.target.valueAsNumber)} />
                             </FormControl>
                             <FormMessage />
                             </FormItem>
