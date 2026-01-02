@@ -29,8 +29,10 @@ export default function StudentDashboard() {
   );
   const enrolledCourses = studentEnrollments.map((enrollment) => {
     const course = courses.find((c) => c.id === enrollment.courseId);
+    // Ensure course is found before spreading
+    if (!course) return null;
     return { ...course, ...enrollment };
-  });
+  }).filter(course => course !== null) as (Course & Enrollment)[];
 
   const latestAnnouncements = announcements.slice(0, 3);
 
@@ -126,3 +128,18 @@ export default function StudentDashboard() {
     </div>
   );
 }
+
+// Helper types for combining course and enrollment data
+type Course = {
+    id: string;
+    name: string;
+    description: string;
+    level: string;
+};
+
+type Enrollment = {
+    studentId: string;
+    courseId: string;
+    progress: number;
+    grade: string;
+};
