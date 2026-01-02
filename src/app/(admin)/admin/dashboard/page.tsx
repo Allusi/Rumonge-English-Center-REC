@@ -78,10 +78,10 @@ export default function AdminDashboard() {
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="font-headline text-3xl font-bold tracking-tight">
-            Admin Dashboard
+            Welcome, Admin!
           </h1>
           <p className="text-muted-foreground">
-            A complete overview of your school's activity.
+            Here is a complete overview of your school's activity.
           </p>
         </div>
         <div className="flex gap-2">
