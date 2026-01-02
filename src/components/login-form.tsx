@@ -94,8 +94,8 @@ export function LoginForm() {
       role: "student",
       fullName: "",
       key: "",
-      email: "irambonasimeon78@gmail.com",
-      password: "Irambona100@",
+      email: "",
+      password: "",
     },
   });
   
