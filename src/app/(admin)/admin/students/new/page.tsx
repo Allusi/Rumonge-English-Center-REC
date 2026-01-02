@@ -27,7 +27,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useCollection, useFirestore } from '@/firebase';
 import { collection } from 'firebase/firestore';
-import { Course } from '@/lib/data';
+import type { Course } from '@/lib/data';
 import { ArrowLeft, Image } from 'lucide-react';
 import Link from 'next/link';
 
@@ -181,7 +181,7 @@ export default function NewStudentPage() {
                                 </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    {courses?.map(course => (
+                                    {courses?.map((course) => (
                                         <SelectItem key={course.id} value={course.id}>{course.name}</SelectItem>
                                     ))}
                                 </SelectContent>
@@ -294,5 +294,3 @@ export default function NewStudentPage() {
     </div>
   );
 }
-
-    
