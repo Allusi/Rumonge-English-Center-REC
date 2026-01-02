@@ -1,4 +1,3 @@
-
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -25,14 +24,14 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
-import { useCollection, useFirestore, useAuth } from '@/firebase';
-import { collection, query, where, addDoc, serverTimestamp, writeBatch, doc } from 'firebase/firestore';
+import { useCollection, useFirestore } from '@/firebase';
+import { collection, query, where, doc, writeBatch, serverTimestamp } from 'firebase/firestore';
 import type { Course } from '@/lib/data';
 import { ArrowLeft, Image } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { getFunctions, httpsCallable } from 'firebase/functions';
 
 const formSchema = z.object({
   fullName: z.string().min(2, { message: 'Full name must be at least 2 characters.' }),
@@ -49,7 +48,6 @@ const formSchema = z.object({
 
 export default function NewStudentPage() {
     const firestore = useFirestore();
-    const auth = useAuth();
     const router = useRouter();
     const { toast } = useToast();
 
@@ -67,40 +65,21 @@ export default function NewStudentPage() {
     },
   });
 
-  const generateRandomKey = (length: number) => {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    for (let i = 0; i < length; i++) {
-      result += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return result;
-  };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-     if (!auth || !firestore) {
+     if (!firestore) {
       toast({ variant: 'destructive', title: 'Error', description: 'Firebase not configured.' });
       return;
     }
+    
+    const functions = getFunctions(firestore.app);
+    const createUser = httpsCallable(functions, 'createUser');
 
     try {
-      const loginKey = generateRandomKey(8);
-      const authEmail = `${loginKey}@rec-online.app`;
-      const tempPassword = "password";
-
-      const userCredential = await createUserWithEmailAndPassword(auth, authEmail, tempPassword);
-      const user = userCredential.user;
-      
       const course = courses?.find(c => c.id === values.enrolledCourseId);
-
-      const batch = writeBatch(firestore);
-
-      const userDocRef = doc(firestore, "users", user.uid);
-      batch.set(userDocRef, {
+      
+      const studentData = {
         name: values.fullName,
-        email: authEmail,
-        loginKey: loginKey,
-        role: 'student',
-        status: 'active',
         age: values.age,
         address: values.address,
         enrolledCourseId: values.enrolledCourseId,
@@ -109,38 +88,28 @@ export default function NewStudentPage() {
         maritalStatus: values.maritalStatus,
         educationalStatus: values.educationalStatus,
         learningReason: values.learningReason,
-        createdAt: serverTimestamp(),
-      });
-      
-      const enrollmentDocRef = doc(collection(firestore, 'enrollments'));
-      batch.set(enrollmentDocRef, {
-          studentId: user.uid,
-          studentName: values.fullName,
-          courseId: values.enrolledCourseId,
-          courseName: course?.name || 'Unknown Course',
-          enrolledAt: serverTimestamp(),
-      });
+        courseName: course?.name || 'Unknown Course'
+      };
 
-      await batch.commit();
+      const result = await createUser(studentData) as { data: { success: boolean; loginKey?: string; error?: string } };
       
-      toast({
-        title: "Student Registered Successfully!",
-        description: `${values.fullName} has been added. Their registration key is ${loginKey}.`,
-        duration: 9000
-      });
-
-      router.push('/admin/students');
+      if (result.data.success) {
+         toast({
+            title: "Student Registered Successfully!",
+            description: `${values.fullName} has been added. Their registration key is ${result.data.loginKey}.`,
+            duration: 9000
+        });
+        router.push('/admin/students');
+      } else {
+        throw new Error(result.data.error || 'Failed to create user.');
+      }
 
     } catch (error: any) {
       console.error("Error registering student: ", error);
-      let description = "An unexpected error occurred during registration.";
-      if (error.code === 'auth/email-already-in-use') {
-        description = "A user with this key already exists. Please try again.";
-      }
       toast({
         variant: "destructive",
         title: "Registration Failed",
-        description: description,
+        description: error.message || "An unexpected error occurred during registration.",
       });
     }
   }

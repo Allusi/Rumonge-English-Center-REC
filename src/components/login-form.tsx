@@ -26,6 +26,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth, useFirestore } from "@/firebase";
 import { useEffect, useState } from "react";
+import { doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
 
 const formSchema = z
   .object({
@@ -67,6 +68,7 @@ export function LoginForm() {
   const router = useRouter();
   const { toast } = useToast();
   const auth = useAuth();
+  const firestore = useFirestore();
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -86,7 +88,7 @@ export function LoginForm() {
   const role = form.watch("role");
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (!auth) {
+    if (!auth || !firestore) {
       toast({
         variant: "destructive",
         title: "Authentication Error",
@@ -100,8 +102,7 @@ export function LoginForm() {
         const email = values.email!;
         const password = values.password!;
         
-        // Specific check for the intended admin user
-        if (email === 'admin@rec-online.app' && password === 'password') {
+        if (email.toLowerCase() === 'admin@rec-online.app' && password === 'password') {
             await signInWithEmailAndPassword(auth, email, password);
             toast({
               title: "Login Successful",
@@ -109,11 +110,10 @@ export function LoginForm() {
             });
             router.push("/admin/dashboard");
         } else {
-            // For any other admin login attempt
              throw new Error("Invalid admin credentials.");
         }
 
-      } else { // Student Login
+      } else { 
         const loginKey = values.key!;
         const authEmail = `${loginKey}@rec-online.app`;
         const tempPassword = "password"; 
@@ -145,7 +145,7 @@ export function LoginForm() {
   }
   
   if (!isClient) {
-    return null;
+    return null; 
   }
 
   return (
