@@ -22,22 +22,20 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { BookLock } from "lucide-react";
 
-export default function CourseDetailsPage({
-  params,
-}: {
-  params: { courseId: string };
-}) {
+export default function CourseDetailsPage() {
+  const params = useParams();
+  const courseId = params.courseId as string;
   const { user, loading: userLoading } = useUser();
   const firestore = useFirestore();
 
-  const courseRef = firestore ? doc(firestore, 'courses', params.courseId) : null;
+  const courseRef = firestore ? doc(firestore, 'courses', courseId) : null;
   const { data: course, loading: courseLoading } = useDoc<Course>(courseRef);
   
   const enrollmentsQuery = (firestore && user) 
     ? query(
         collection(firestore, 'enrollments'), 
         where('studentId', '==', user.uid),
-        where('courseId', '==', params.courseId)
+        where('courseId', '==', courseId)
       )
     : null;
 
