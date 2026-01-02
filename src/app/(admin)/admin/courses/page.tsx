@@ -1,6 +1,6 @@
 
 'use client';
-import { Plus, MoreHorizontal, CheckCircle, XCircle } from "lucide-react";
+import { Plus, MoreHorizontal, CheckCircle, XCircle, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -29,6 +29,7 @@ import { courses as hardcodedCourses } from "@/lib/data";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect, useMemo } from "react";
 import { useRouter } from 'next/navigation';
+import Link from "next/link";
 
 export default function CoursesPage() {
   const firestore = useFirestore();
@@ -78,14 +79,21 @@ export default function CoursesPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-headline text-3xl font-bold tracking-tight">
-            Course Management
-          </h1>
-          <p className="text-muted-foreground">
-            Create, update, and manage all courses offered.
-          </p>
+      <div className="flex items-start justify-between">
+        <div className="flex items-center gap-4">
+            <Link href="/admin/dashboard" passHref>
+              <Button variant="outline" size="icon" className="h-9 w-9">
+                <ArrowLeft className="h-4 w-4" />
+              </Button>
+            </Link>
+            <div>
+              <h1 className="font-headline text-3xl font-bold tracking-tight">
+                Course Management
+              </h1>
+              <p className="text-muted-foreground">
+                Create, update, and manage all courses offered.
+              </p>
+            </div>
         </div>
         <Button>
           <Plus className="mr-2 h-4 w-4" /> Add New Course
