@@ -37,8 +37,8 @@ export default function StudentsPage() {
   const handleCopyEmail = (email: string) => {
     navigator.clipboard.writeText(email);
     toast({
-        title: "Email Copied!",
-        description: `${email} has been copied to your clipboard.`
+        title: "Student Key Copied!",
+        description: `The key (email) for registration has been copied to your clipboard.`
     });
   };
 
@@ -121,7 +121,7 @@ export default function StudentsPage() {
                             }}
                         >
                            <Copy className="mr-2 h-4 w-4" />
-                            Copy Email (Key)
+                            Copy Key
                         </Button>
                     </TableCell>
                   </TableRow>

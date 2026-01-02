@@ -56,7 +56,7 @@ const formSchema = z
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: ["key"],
-          message: "Please enter a valid email address to register.",
+          message: "Please enter a valid registration key.",
         });
       }
     } else if (data.role === "admin") {
@@ -162,39 +162,51 @@ export function LoginForm() {
         const studentEmail = values.key!; 
         const studentPassword = Math.random().toString(36).slice(-8); 
 
-        const userCredential = await createUserWithEmailAndPassword(auth, studentEmail, studentPassword);
-        const user = userCredential.user;
-        
-        await updateProfile(user, {
-          displayName: values.fullName,
-        });
-
-        const userProfile = {
-            name: values.fullName,
-            email: user.email,
-            role: 'student',
-            createdAt: serverTimestamp(),
-        };
-
-        const userDocRef = doc(firestore, "users", user.uid);
-        
-        setDoc(userDocRef, userProfile).catch(async (serverError) => {
-            const permissionError = new FirestorePermissionError({
-              path: userDocRef.path,
-              operation: 'create',
-              requestResourceData: userProfile,
+        try {
+          await signInWithEmailAndPassword(auth, studentEmail, studentPassword);
+           toast({
+              title: "Login Successful!",
+              description: `Welcome back, ${values.fullName}!`,
             });
-            errorEmitter.emit('permission-error', permissionError);
-        });
+        } catch (error: any) {
+            if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+              const userCredential = await createUserWithEmailAndPassword(auth, studentEmail, studentPassword);
+              const user = userCredential.user;
+              
+              await updateProfile(user, {
+                displayName: values.fullName,
+              });
+
+              const userProfile = {
+                  name: values.fullName,
+                  email: user.email,
+                  role: 'student',
+                  createdAt: serverTimestamp(),
+              };
+
+              const userDocRef = doc(firestore, "users", user.uid);
+              
+              setDoc(userDocRef, userProfile).catch(async (serverError) => {
+                  const permissionError = new FirestorePermissionError({
+                    path: userDocRef.path,
+                    operation: 'create',
+                    requestResourceData: userProfile,
+                  });
+                  errorEmitter.emit('permission-error', permissionError);
+              });
 
 
-        await sendEmailVerification(user);
-        
-        toast({
-          title: "Registration Successful!",
-          description: `Welcome, ${values.fullName}! A verification email has been sent to ${studentEmail}. Your temporary password is: ${studentPassword}`,
-          duration: 9000,
-        });
+              await sendEmailVerification(user);
+              
+              toast({
+                title: "Registration Successful!",
+                description: `Welcome, ${values.fullName}! A verification email has been sent to ${studentEmail}. Your temporary password is: ${studentPassword}`,
+                duration: 9000,
+              });
+          } else {
+            throw error;
+          }
+        }
         router.push("/student/dashboard");
       }
     } catch (error: any) {
@@ -265,12 +277,12 @@ export function LoginForm() {
               name="key"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Your Email</FormLabel>
+                  <FormLabel>Registration Key</FormLabel>
                    <FormControl>
-                    <Input placeholder="Enter your email to register" {...field} />
+                    <Input placeholder="Enter the key provided by your administrator" {...field} />
                   </FormControl>
                    <FormDescription>
-                    A temporary password will be created for you.
+                    This is the unique key (your email) given to you by the school administrator.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
