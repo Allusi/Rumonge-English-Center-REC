@@ -129,26 +129,31 @@ export function AITutorChat() {
     });
   };
 
-  const startConversation = async () => {
+  const startConversation = async (mode: InteractionMode) => {
     setIsLoading(true);
     setError(null);
-    try {
-      const result = await aiTutor({ history: [] });
-      
-      const ttsResult = await textToSpeech(result);
+    
+    let welcomeText = "Hi! I'm R.E.C, your personal English tutor. How can I help you practice today?";
+    if (mode === 'video') {
+      welcomeText = "Hi Welcome to your video session! I'm R.E.C. Let's practice English. What's on your mind?";
+    } else if (mode === 'audio') {
+      welcomeText = "Hi Welcome to your audio session! I'm R.E.C. Let's start talking. How are you today?";
+    }
 
-      const welcomeMessage: Message = {
-        role: "model",
-        content: `Hello! I'm R.E.C, your personal English tutor. I'm here to assist you on your journey of learning English at REC Online. How would you like to practice today?`,
-      };
+    try {
+      const ttsResult = await textToSpeech(welcomeText);
+
       const firstResponse: Message = {
         role: "model",
-        content: result,
+        content: welcomeText,
         audioUrl: ttsResult.media,
       };
 
       setMessages([firstResponse]);
-      playAudio(ttsResult.media, 0);
+
+      if (mode !== 'text') {
+         playAudio(ttsResult.media, 0);
+      }
 
     } catch (e) {
       setError("An error occurred. Please try again.");
@@ -161,7 +166,7 @@ export function AITutorChat() {
   const handleModeSelect = (mode: InteractionMode) => {
     setInteractionMode(mode);
     if (messages.length === 0) {
-      startConversation();
+      startConversation(mode);
     }
   }
 
@@ -364,3 +369,5 @@ export function AITutorChat() {
     </div>
   );
 }
+
+    
