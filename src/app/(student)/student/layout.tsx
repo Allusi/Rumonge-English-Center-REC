@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { LayoutDashboard, LogOut, SpellCheck, Info } from "lucide-react";
+import { LayoutDashboard, LogOut, SpellCheck, Info, MessageCircle } from "lucide-react";
 
 import {
   Sidebar,
@@ -43,6 +43,14 @@ export default function StudentLayout({
                 <SidebarMenuButton tooltip="Dashboard">
                   <LayoutDashboard />
                   Dashboard
+                </SidebarMenuButton>
+              </Link>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <Link href="/student/ai-tutor" passHref>
+                <SidebarMenuButton tooltip="AI Tutor">
+                  <MessageCircle />
+                  AI Tutor
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>
