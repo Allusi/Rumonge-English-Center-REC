@@ -1,5 +1,5 @@
 import { BookCopy, Home, FileText, BarChart2 } from "lucide-react";
-
+import Link from 'next/link';
 import {
   Card,
   CardContent,
@@ -18,6 +18,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { courses, enrollments } from "@/lib/data";
+import { Button } from "@/components/ui/button";
 
 export default function StudentDashboard() {
   const studentId = "S001"; // Mock student ID
@@ -100,6 +101,7 @@ export default function StudentDashboard() {
                 <TableHead>Level</TableHead>
                 <TableHead className="w-[30%]">Progress</TableHead>
                 <TableHead>Grade</TableHead>
+                <TableHead>Action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -117,6 +119,11 @@ export default function StudentDashboard() {
                   </TableCell>
                   <TableCell>
                     <Badge>{course.grade}</Badge>
+                  </TableCell>
+                  <TableCell>
+                     <Link href={`/student/courses/${course.id}`} passHref>
+                        <Button variant="outline" size="sm">View Course</Button>
+                     </Link>
                   </TableCell>
                 </TableRow>
               ))}
