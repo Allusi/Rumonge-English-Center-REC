@@ -23,7 +23,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useCollection, useFirestore } from "@/firebase";
-import { collection, writeBatch, getDocs } from "firebase/firestore";
+import { collection, writeBatch, getDocs, doc } from "firebase/firestore";
 import type { Course } from "@/lib/data";
 import { courses as hardcodedCourses } from "@/lib/data";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -40,7 +40,7 @@ export default function CoursesPage() {
         if (snapshot.empty) {
           const batch = writeBatch(firestore);
           hardcodedCourses.forEach((course) => {
-            const docRef = collection(firestore, "courses").doc(course.id);
+            const docRef = doc(firestore, "courses", course.id);
             batch.set(docRef, { name: course.name, description: course.description, level: course.level });
           });
           await batch.commit();
