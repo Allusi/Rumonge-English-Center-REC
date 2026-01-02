@@ -4,30 +4,19 @@
  * @fileOverview An AI agent that acts as an English tutor.
  *
  * - aiTutor - A function that handles the conversation with the AI tutor.
- * - AITutorInput - The input type for the aiTutor function.
- * - AITutorOutput - The return type for the aiTutor function.
  */
 
 import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import {
+  AITutorInputSchema,
+  AITutorOutputSchema,
+  type AITutorInput,
+  type AITutorOutput,
+} from '@/ai/flows/ai-tutor-types';
 
-const MessageSchema = z.object({
-  role: z.enum(['user', 'model']),
-  content: z.string(),
-});
-
-export const AITutorInputSchema = z.object({
-  history: z.array(MessageSchema),
-});
-export type AITutorInput = z.infer<typeof AITutorInputSchema>;
-
-export const AITutorOutputSchema = z.string();
-export type AITutorOutput = z.infer<typeof AITutorOutputSchema>;
-
-export async function aiTutor(
-  input: AITutorInput
-): Promise<AITutorOutput> {
-  return aiTutorFlow(input);
+export async function aiTutor(input: AITutorInput): Promise<AITutorOutput> {
+  const {output} = await aiTutorPrompt(input);
+  return output!;
 }
 
 const aiTutorPrompt = ai.definePrompt({

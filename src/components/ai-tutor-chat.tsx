@@ -5,7 +5,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Loader2, Send, Sparkles, User, Bot, CameraOff } from "lucide-react";
-import { aiTutor, type AITutorInput } from "@/ai/flows/ai-tutor-flow";
+import { aiTutor } from "@/ai/flows/ai-tutor-flow";
+import { type AITutorInput } from "@/ai/flows/ai-tutor-types";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -114,7 +115,7 @@ export function AITutorChat() {
     form.reset();
 
     try {
-      const result = await aiTutor({ history: newMessages });
+      const result = await aiTutor({ history: newMessages } as AITutorInput);
       setMessages([...newMessages, { role: "model", content: result }]);
     } catch (e) {
       setError("An error occurred while fetching the response. Please try again.");
