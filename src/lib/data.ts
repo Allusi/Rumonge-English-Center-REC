@@ -43,6 +43,21 @@ export type Announcement = {
   readCount?: number;
 };
 
+export type Attendance = {
+    id: string;
+    studentId: string;
+    studentName: string;
+    date: string; // YYYY-MM-DD
+    status: 'present' | 'absent';
+    reason?: string;
+    markedAt: Timestamp;
+};
+
+export type SchoolSettings = {
+    id: 'school'; // Singleton document
+    activeDays: ('Sunday' | 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday')[];
+};
+
 // Data is now fetched from Firestore. This can be kept for fallback or removed.
 export const courses: Omit<Course, 'id'>[] = [
   { name: 'Unit One: The Basics', description: 'Fundamentals of English language for beginners.', level: 'A1', isEnabled: false },

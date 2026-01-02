@@ -147,6 +147,32 @@
         }
       },
       "required": ["readAt"]
+    },
+    "Attendance": {
+      "title": "Attendance",
+      "description": "Represents a daily attendance record for a student.",
+      "type": "object",
+      "properties": {
+        "studentId": { "type": "string" },
+        "studentName": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "status": { "type": "string", "enum": ["present", "absent"] },
+        "reason": { "type": "string" },
+        "markedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["studentId", "studentName", "date", "status", "markedAt"]
+    },
+    "SchoolSettings": {
+      "title": "School Settings",
+      "description": "General settings for the school, such as active days.",
+      "type": "object",
+      "properties": {
+        "activeDays": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"] }
+        }
+      },
+      "required": ["activeDays"]
     }
   },
   "auth": {
@@ -182,6 +208,14 @@
             "$ref": "#/backend/entities/Enrollment"
         },
         "description": "Stores records of student enrollments in courses."
+    },
+    "/attendance/{attendanceId}": {
+      "schema": { "$ref": "#/backend/entities/Attendance" },
+      "description": "Stores all daily attendance records for all students."
+    },
+    "/settings/school": {
+      "schema": { "$ref": "#/backend/entities/SchoolSettings" },
+      "description": "Stores global school settings."
     }
   }
 }
