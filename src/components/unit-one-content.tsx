@@ -159,7 +159,7 @@ export function UnitOneContent() {
           <AccordionContent className="p-4 pt-0 space-y-4">
               <p className="text-muted-foreground">In English language, we have many greetings. Many learners to whom English is not their native language (mother tongue) find it difficult to greet people especially those ones who s/he wants to greet has a certain title or other official positions. The way which people are addressed obviously differs from one culture to another. It is important that we keep these differences separately and that we do not confuse them. We are going to learn two kinds of greetings: Greetings used when greeting respectable people and greetings used when greeting friends.</p>
             
-              <Card>
+               <Card>
                 <CardHeader>
                   <CardTitle>Primary Greetings</CardTitle>
                 </CardHeader>
@@ -216,7 +216,7 @@ export function UnitOneContent() {
                   </div>
                 </CardContent>
               </Card>
-
+              
               <Card>
                 <CardHeader>
                   <CardTitle>Secondary Greetings: Questions and Answers</CardTitle>
@@ -364,106 +364,186 @@ export function UnitOneContent() {
                 </CardContent>
               </Card>
 
-               <div className="space-y-2 pt-4">
-                  <h4 className="font-semibold text-xl mb-2 mt-4">B. Introductions</h4>
-                  <p className="text-muted-foreground">In this part we are going to see three kinds of introductions.</p>
-                  <p className="text-muted-foreground">These are: 1) SELF INTRODUCTION, 2) INTRODUCTION BY QUESTIONS, 3) INTRODUCING OTHERS</p>
-                  <h5 className="font-semibold text-lg pt-2">1. Self Introduction</h5>
-                  <p className="text-muted-foreground">This introduction is done only by one person when s/he is introducing her/himself in front of others. See the following example:</p>
-                </div>
-                 <Card>
-                    <CardHeader>
-                        <CardTitle>Self Introduction Example</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <ul className="list-disc pl-6 text-muted-foreground space-y-1 text-sm columns-2">
-                            <li>My name is Betty.</li>
-                            <li>My first name is Betty</li>
-                            <li>My middle name is Bruce</li>
-                            <li>My last name is William</li>
-                            <li>My nickname is Chinga</li>
-                            <li>I am called Betty</li>
-                            <li>The people call me Betty Bruce</li>
-                            <li>My full name is Betty Bruce William Chinga</li>
-                            <li>I am well known by the name Chinga</li>
-                            <li>My father is John</li>
-                            <li>My father's name is John</li>
-                            <li>My father is called John</li>
-                            <li>My father's middle name is William</li>
-                            <li>My father is well known by the name Magambo</li>
-                            <li>My mother is Catherine</li>
-                            <li>My mother's name is Catherine</li>
-                            <li>My mother is called Catherine</li>
-                            <li>My mother's middle name is Bruce</li>
-                            <li>My mother is well known by the name Change</li>
-                            <li>My brother is Jonathan</li>
-                            <li>My elder brother is Jonas</li>
-                            <li>My younger brother is Jonathan</li>
-                            <li>My sister is Agnes</li>
-                            <li>My elder sister is Quesia</li>
-                            <li>I have two biological brothers and sisters</li>
-                            <li>I come from Makamba, Nyanza-Lac</li>
-                            <li>I am a Burundian</li>
-                            <li>I live at Muyange</li>
-                            <li>I dwell at Muyange</li>
-                            <li>I abide at Muyange</li>
-                            <li>I am married</li>
-                            <li>I am twenty-five (25) years old</li>
-                            <li>I study at UBUMWE secondary school</li>
-                            <li>I am in form four</li>
-                            <li>I am in standard six</li>
-                            <li>I am studies prefect</li>
-                            <li>I am a bachelor</li>
-                            <li>I am a bachelorette</li>
-                            <li>My spouse is Angel</li>
-                            <li>My wife is Angel</li>
-                            <li>My husband is Augustin</li>
-                            <li>My son is Bruce</li>
-                            <li>My first born is Grace</li>
-                            <li>My second child is Bruce</li>
-                            <li>My daughter is Osiane</li>
-                            <li>I have one wife and three children</li>
-                            <li>My favourite job is teaching</li>
-                            <li>My hobby is Reading, studying and writing Books</li>
-                            <li>I love most my wife and children</li>
-                            <li>I hate most Liars</li>
-                            <li>My best drink is water. Etc...</li>
-                        </ul>
-                    </CardContent>
-                </Card>
+              <div className="space-y-2 pt-4">
+                <h4 className="font-semibold text-xl mb-2 mt-4">B. Introductions</h4>
+                <p className="text-muted-foreground">In this part we are going to see three kinds of introductions.</p>
+                <p className="text-muted-foreground">These are: 1) SELF INTRODUCTION, 2) INTRODUCTION BY QUESTIONS, 3) INTRODUCING OTHERS</p>
+                <h5 className="font-semibold text-lg pt-2">1. Self Introduction</h5>
+                <p className="text-muted-foreground">This introduction is done only by one person when s/he is introducing her/himself in front of others. See the following example:</p>
+              </div>
+              <Card>
+                  <CardHeader>
+                      <CardTitle>Self Introduction Example</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                      <ul className="list-disc pl-6 text-muted-foreground space-y-1 text-sm columns-2">
+                          <li>My name is Betty.</li>
+                          <li>My first name is Betty</li>
+                          <li>My middle name is Bruce</li>
+                          <li>My last name is William</li>
+                          <li>My nickname is Chinga</li>
+                          <li>I am called Betty</li>
+                          <li>The people call me Betty Bruce</li>
+                          <li>My full name is Betty Bruce William Chinga</li>
+                          <li>I am well known by the name Chinga</li>
+                          <li>My father is John</li>
+                          <li>My father's name is John</li>
+                          <li>My father is called John</li>
+                          <li>My father's middle name is William</li>
+                          <li>My father is well known by the name Magambo</li>
+                          <li>My mother is Catherine</li>
+                          <li>My mother's name is Catherine</li>
+                          <li>My mother is called Catherine</li>
+                          <li>My mother's middle name is Bruce</li>
+                          <li>My mother is well known by the name Change</li>
+                          <li>My brother is Jonathan</li>
+                          <li>My elder brother is Jonas</li>
+                          <li>My younger brother is Jonathan</li>
+                          <li>My sister is Agnes</li>
+                          <li>My elder sister is Quesia</li>
+                          <li>I have two biological brothers and sisters</li>
+                          <li>I come from Makamba, Nyanza-Lac</li>
+                          <li>I am a Burundian</li>
+                          <li>I live at Muyange</li>
+                          <li>I dwell at Muyange</li>
+                          <li>I abide at Muyange</li>
+                          <li>I am married</li>
+                          <li>I am twenty-five (25) years old</li>
+                          <li>I study at UBUMWE secondary school</li>
+                          <li>I am in form four</li>
+                          <li>I am in standard six</li>
+                          <li>I am studies prefect</li>
+                          <li>I am a bachelor</li>
+                          <li>I am a bachelorette</li>
+                          <li>My spouse is Angel</li>
+                          <li>My wife is Angel</li>
+                          <li>My husband is Augustin</li>
+                          <li>My son is Bruce</li>
+                          <li>My first born is Grace</li>
+                          <li>My second child is Bruce</li>
+                          <li>My daughter is Osiane</li>
+                          <li>I have one wife and three children</li>
+                          <li>My favourite job is teaching</li>
+                          <li>My hobby is Reading, studying and writing Books</li>
+                          <li>I love most my wife and children</li>
+                          <li>I hate most Liars</li>
+                          <li>My best drink is water. Etc...</li>
+                      </ul>
+                  </CardContent>
+              </Card>
 
-                 <Card>
-                    <CardHeader>
-                        <CardTitle>2. Introduction by Questions</CardTitle>
-                        <CardDescription>This introduction is done by more than one person. Here are questions that correspond to the self-introduction examples.</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <ul className="list-disc pl-6 text-muted-foreground space-y-1 text-sm columns-2">
-                            <li>What is your name?</li>
-                            <li>What is your first name?</li>
-                            <li>What is your middle name?</li>
-                            <li>What is your last name?</li>
-                            <li>What is your nick name?</li>
-                            <li>How are you called?</li>
-                            <li>How do the people call you?</li>
-                            <li>What is your full name?</li>
-                            <li>How are you well known?</li>
-                            <li>Who is your father?</li>
-                            <li>What is your father's name?</li>
-                            <li>What is your father's middle name?</li>
-                            <li>How is your father well known?</li>
-                            <li>What is your father?</li>
-                            <li>Who is your mother?</li>
-                            <li>What is your mother's name?</li>
-                            <li>How is your mother called?</li>
-                            <li>What is your mother's middle name?</li>
-                            <li>How is your mother well known?</li>
-                            <li>What is your mother?</li>
-                            <li>How old are you?</li>
-                            <li>What is your age?</li>
-                        </ul>
-                    </CardContent>
-                </Card>
+              <Card>
+                <CardHeader>
+                    <CardTitle>2. Introduction by Questions</CardTitle>
+                    <CardDescription>This introduction is done by more than one person. Here are questions that correspond to the self-introduction examples.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <ul className="list-disc pl-6 text-muted-foreground space-y-1 text-sm columns-2">
+                        <li>What is your name?</li>
+                        <li>What is your first name?</li>
+                        <li>What is your middle name?</li>
+                        <li>What is your last name?</li>
+                        <li>What is your nick name?</li>
+                        <li>How are you called?</li>
+                        <li>How do the people call you?</li>
+                        <li>What is your full name?</li>
+                        <li>How are you well known?</li>
+                        <li>Who is your father?</li>
+                        <li>What is your father's name?</li>
+                        <li>What is your father's middle name?</li>
+                        <li>How is your father well known?</li>
+                        <li>What is your father?</li>
+                        <li>Who is your mother?</li>
+                        <li>What is your mother's name?</li>
+                        <li>How is your mother called?</li>
+                        <li>What is your mother's middle name?</li>
+                        <li>How is your mother well known?</li>
+                        <li>What is your mother?</li>
+                        <li>How old are you?</li>
+                        <li>What is your age?</li>
+                        <li>What is your daily life?</li>
+                        <li>Who is your brother?</li>
+                        <li>Who is your elder brother?</li>
+                        <li>Who is your younger brother?</li>
+                        <li>Who is your sister?</li>
+                        <li>Who is your younger sister?</li>
+                        <li>Who is your elder sister?</li>
+                        <li>What is the name of your sister?</li>
+                        <li>Are you married?</li>
+                        <li>What is your marital status?</li>
+                        <li>Are you a bachelor?</li>
+                        <li>Are you a bachelorette?</li>
+                        <li>Who is your spouse?</li>
+                        <li>Who is your wife?</li>
+                        <li>What is your wife's name?</li>
+                        <li>How is your wife called?</li>
+                        <li>Who is your husband?</li>
+                        <li>Who is your son?</li>
+                        <li>How is your son called?</li>
+                        <li>Who is your first born?</li>
+                        <li>Who is your second child?</li>
+                        <li>Who is your daughter?</li>
+                        <li>How many children do you have?</li>
+                        <li>How many biological brothers and sisters do you have?</li>
+                        <li>Where do you come from?</li>
+                        <li>Where do you live?</li>
+                        <li>Where do you abide?</li>
+                        <li>Where do you dwell?</li>
+                        <li>What is your favourite job?</li>
+                        <li>What is your favourite teacher?</li>
+                        <li>What is your favourite course?</li>
+                        <li>Whom do you love most?</li>
+                        <li>Who is your girlfriend?</li>
+                        <li>Who is your boyfriend?</li>
+                        <li>Who is your Darling?</li>
+                        <li>What is your best friend?</li>
+                        <li>What is your best drink?</li>
+                        <li>What do you do in your daily life?</li>
+                    </ul>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                    <CardTitle>3. Introducing Others</CardTitle>
+                    <CardDescription>This introduction is done by more than two persons for introducing each others one to someone else to make friendship. See the following example given in the conversation between MINANI, ANNA AND JOSEPH.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-1 text-sm">
+                  <p><strong>MINANI:</strong> Hello, Joseph!</p>
+                  <p><strong>JOSEPH:</strong> Hello, MINANI!</p>
+                  <p><strong>MINANI:</strong> How is it?</p>
+                  <p><strong>JOSEPH:</strong> Pretty fine, and you?</p>
+                  <p><strong>MINANI:</strong> So well, where to?</p>
+                  <p><strong>JOSEPH:</strong> To the market, and you?</p>
+                  <p><strong>MINANI:</strong> To the church.</p>
+                  <p><strong>ANNA:</strong> I am sorry MINANI, who is this?</p>
+                  <p><strong>MINANI:</strong> This is my friend, his name is Joseph.</p>
+                  <p><strong>ANNA:</strong> Where does he come from?</p>
+                  <p><strong>MINANI:</strong> He comes from Rutana.</p>
+                  <p><strong>ANNA:</strong> Where does he dwell?</p>
+                  <p><strong>MINANI:</strong> He dwells at Kabonga.</p>
+                  <p><strong>ANNA:</strong> Is he married?</p>
+                  <p><strong>MINANI:</strong> No, he is still bachelor.</p>
+                  <p><strong>ANNA:</strong> What is his tribe?</p>
+                  <p><strong>MINANI:</strong> His tribe is Tutsi.</p>
+                  <p><strong>ANNA:</strong> What is his clan?</p>
+                  <p><strong>MINANI:</strong> His clan is Muhima.</p>
+                  <p><strong>ANNA:</strong> Where does he study nowadays?</p>
+                  <p><strong>MINANI:</strong> He has completed Basic English at F.A.S.C, and he is waiting to join high level at I.E.T.S the following month.</p>
+                  <p><strong>ANNA:</strong> Thank you very much MINANI.</p>
+                  <p><strong>MINANI:</strong> You are welcome.</p>
+                  <p><strong>JOSEPH:</strong> I am sorry MINANI, who is this?</p>
+                  <p><strong>MINANI:</strong> This is my wife, Anna.</p>
+                  <p><strong>JOSEPH:</strong> When have you married to her?</p>
+                  <p><strong>MINANI:</strong> There is three years ago.</p>
+                  <p><strong>JOSEPH:</strong> Has she studied?</p>
+                  <p><strong>MINANI:</strong> Yes, she's completed English advanced level, there is four Years.</p>
+                  <p><strong>JOSEPH:</strong> Oh, good! How many children have got?</p>
+                  <p><strong>MINANI:</strong> Only one.</p>
+                  <p><strong>JOSEPH:</strong> Is he a boy?</p>
+                  <p><strong>MINANI:</strong> No, she is a girl.</p>
+                </CardContent>
+              </Card>
 
           </AccordionContent>
         </AccordionItem>
@@ -619,9 +699,3 @@ export function UnitOneContent() {
     </div>
   );
 }
-
-    
-
-    
-
-
