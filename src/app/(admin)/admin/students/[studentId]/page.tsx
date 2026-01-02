@@ -40,7 +40,7 @@ const DetailItem = ({ icon, label, value }: { icon: React.ReactNode; label: stri
         </div>
         <div>
             <p className="text-sm font-medium text-muted-foreground">{label}</p>
-            <p className="text-lg font-semibold">{value || 'N/A'}</p>
+            <div className="text-lg font-semibold">{value || 'N/A'}</div>
         </div>
     </div>
 );
