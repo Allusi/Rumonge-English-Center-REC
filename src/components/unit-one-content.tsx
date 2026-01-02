@@ -99,7 +99,7 @@ export function UnitOneContent() {
                 </div>
               </div>
             </div>
-             <div className="mt-4 p-4 border rounded-md bg-muted/20">
+            <div className="mt-4 p-4 border rounded-md bg-muted/20">
                 <h4 className="font-semibold mb-2">Note:</h4>
                 <p className="text-sm text-muted-foreground">When writing, the letters can be written in two ways:</p>
                 <ol className="list-decimal pl-5 mt-2 space-y-1 text-sm text-muted-foreground">
@@ -371,6 +371,100 @@ export function UnitOneContent() {
                   <h5 className="font-semibold text-lg pt-2">1. Self Introduction</h5>
                   <p className="text-muted-foreground">This introduction is done only by one person when s/he is introducing her/himself in front of others. See the following example:</p>
                 </div>
+                 <Card>
+                    <CardHeader>
+                        <CardTitle>Self Introduction Example</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <ul className="list-disc pl-6 text-muted-foreground space-y-1 text-sm columns-2">
+                            <li>My name is Betty.</li>
+                            <li>My first name is Betty</li>
+                            <li>My middle name is Bruce</li>
+                            <li>My last name is William</li>
+                            <li>My nickname is Chinga</li>
+                            <li>I am called Betty</li>
+                            <li>The people call me Betty Bruce</li>
+                            <li>My full name is Betty Bruce William Chinga</li>
+                            <li>I am well known by the name Chinga</li>
+                            <li>My father is John</li>
+                            <li>My father's name is John</li>
+                            <li>My father is called John</li>
+                            <li>My father's middle name is William</li>
+                            <li>My father is well known by the name Magambo</li>
+                            <li>My mother is Catherine</li>
+                            <li>My mother's name is Catherine</li>
+                            <li>My mother is called Catherine</li>
+                            <li>My mother's middle name is Bruce</li>
+                            <li>My mother is well known by the name Change</li>
+                            <li>My brother is Jonathan</li>
+                            <li>My elder brother is Jonas</li>
+                            <li>My younger brother is Jonathan</li>
+                            <li>My sister is Agnes</li>
+                            <li>My elder sister is Quesia</li>
+                            <li>I have two biological brothers and sisters</li>
+                            <li>I come from Makamba, Nyanza-Lac</li>
+                            <li>I am a Burundian</li>
+                            <li>I live at Muyange</li>
+                            <li>I dwell at Muyange</li>
+                            <li>I abide at Muyange</li>
+                            <li>I am married</li>
+                            <li>I am twenty-five (25) years old</li>
+                            <li>I study at UBUMWE secondary school</li>
+                            <li>I am in form four</li>
+                            <li>I am in standard six</li>
+                            <li>I am studies prefect</li>
+                            <li>I am a bachelor</li>
+                            <li>I am a bachelorette</li>
+                            <li>My spouse is Angel</li>
+                            <li>My wife is Angel</li>
+                            <li>My husband is Augustin</li>
+                            <li>My son is Bruce</li>
+                            <li>My first born is Grace</li>
+                            <li>My second child is Bruce</li>
+                            <li>My daughter is Osiane</li>
+                            <li>I have one wife and three children</li>
+                            <li>My favourite job is teaching</li>
+                            <li>My hobby is Reading, studying and writing Books</li>
+                            <li>I love most my wife and children</li>
+                            <li>I hate most Liars</li>
+                            <li>My best drink is water. Etc...</li>
+                        </ul>
+                    </CardContent>
+                </Card>
+
+                 <Card>
+                    <CardHeader>
+                        <CardTitle>2. Introduction by Questions</CardTitle>
+                        <CardDescription>This introduction is done by more than one person. Here are questions that correspond to the self-introduction examples.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <ul className="list-disc pl-6 text-muted-foreground space-y-1 text-sm columns-2">
+                            <li>What is your name?</li>
+                            <li>What is your first name?</li>
+                            <li>What is your middle name?</li>
+                            <li>What is your last name?</li>
+                            <li>What is your nick name?</li>
+                            <li>How are you called?</li>
+                            <li>How do the people call you?</li>
+                            <li>What is your full name?</li>
+                            <li>How are you well known?</li>
+                            <li>Who is your father?</li>
+                            <li>What is your father's name?</li>
+                            <li>What is your father's middle name?</li>
+                            <li>How is your father well known?</li>
+                            <li>What is your father?</li>
+                            <li>Who is your mother?</li>
+                            <li>What is your mother's name?</li>
+                            <li>How is your mother called?</li>
+                            <li>What is your mother's middle name?</li>
+                            <li>How is your mother well known?</li>
+                            <li>What is your mother?</li>
+                            <li>How old are you?</li>
+                            <li>What is your age?</li>
+                        </ul>
+                    </CardContent>
+                </Card>
+
           </AccordionContent>
         </AccordionItem>
 
@@ -529,4 +623,5 @@ export function UnitOneContent() {
     
 
     
+
 
