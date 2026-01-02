@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { LogIn } from "lucide-react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -66,6 +67,12 @@ const formSchema = z
 export function LoginForm() {
   const router = useRouter();
   const { toast } = useToast();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -129,7 +136,7 @@ export function LoginForm() {
           )}
         />
 
-        {role === 'student' ? (
+        {isClient && role === 'student' && (
           <>
             <FormField
               control={form.control}
@@ -158,7 +165,8 @@ export function LoginForm() {
               )}
             />
           </>
-        ) : (
+        )}
+        {isClient && role === 'admin' && (
            <>
             <FormField
               control={form.control}
