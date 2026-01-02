@@ -24,15 +24,19 @@ import {
 } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { useCollection, useFirestore } from '@/firebase';
-import { collection, query, where } from 'firebase/firestore';
+import { Card, CardContent } from '@/components/ui/card';
+import { useCollection, useFirestore, useAuth } from '@/firebase';
+import { collection, query, where, addDoc, serverTimestamp, writeBatch, doc } from 'firebase/firestore';
 import type { Course } from '@/lib/data';
 import { ArrowLeft, Image } from 'lucide-react';
 import Link from 'next/link';
+import { useToast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 
 const formSchema = z.object({
   fullName: z.string().min(2, { message: 'Full name must be at least 2 characters.' }),
+  email: z.string().email({ message: 'Please enter a valid email address.' }),
   age: z.coerce.number().min(5, { message: 'Age must be at least 5.' }),
   address: z.string().min(5, { message: 'Address is required.' }),
   profilePhoto: z.any().optional(),
@@ -46,6 +50,10 @@ const formSchema = z.object({
 
 export default function NewStudentPage() {
     const firestore = useFirestore();
+    const auth = useAuth();
+    const router = useRouter();
+    const { toast } = useToast();
+
     const coursesQuery = firestore ? query(collection(firestore, 'courses'), where('isEnabled', '==', true)) : null;
     const { data: courses, loading: coursesLoading } = useCollection<Course>(coursesQuery);
 
@@ -53,6 +61,7 @@ export default function NewStudentPage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
         fullName: '',
+        email: '',
         age: undefined,
         address: '',
         phoneNumber: '',
@@ -60,12 +69,79 @@ export default function NewStudentPage() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // In a real application, you would handle the form submission,
-    // including creating a user in Firebase Auth, uploading the photo to Firebase Storage,
-    // and saving the student data to Firestore.
-    console.log(values);
-    alert('Student registration submitted! Check the console for the form data.');
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+     if (!auth || !firestore) {
+      toast({ variant: 'destructive', title: 'Error', description: 'Firebase not configured.' });
+      return;
+    }
+
+    try {
+      // For student registration, we use the provided email as their login key
+      // and generate a random password, as per the login page logic.
+      const studentEmail = values.email;
+      const tempPassword = Math.random().toString(36).slice(-8);
+
+      const userCredential = await createUserWithEmailAndPassword(auth, studentEmail, tempPassword);
+      const user = userCredential.user;
+
+      await updateProfile(user, {
+        displayName: values.fullName,
+        // photoURL could be set here after uploading the image to Firebase Storage
+      });
+      
+      const course = courses?.find(c => c.id === values.enrolledCourseId);
+
+      const batch = writeBatch(firestore);
+
+      // 1. Create student user profile
+      const userDocRef = doc(firestore, "users", user.uid);
+      batch.set(userDocRef, {
+        name: values.fullName,
+        email: user.email,
+        role: 'student',
+        age: values.age,
+        address: values.address,
+        enrolledCourseId: values.enrolledCourseId,
+        englishLevel: values.englishLevel,
+        phoneNumber: values.phoneNumber,
+        maritalStatus: values.maritalStatus,
+        educationalStatus: values.educationalStatus,
+        learningReason: values.learningReason,
+        createdAt: serverTimestamp(),
+      });
+      
+      // 2. Create enrollment record
+      const enrollmentDocRef = doc(collection(firestore, 'enrollments'));
+      batch.set(enrollmentDocRef, {
+          studentId: user.uid,
+          studentName: values.fullName,
+          courseId: values.enrolledCourseId,
+          courseName: course?.name || 'Unknown Course',
+          enrolledAt: serverTimestamp(),
+      });
+
+      await batch.commit();
+      
+      toast({
+        title: "Student Registered Successfully!",
+        description: `${values.fullName} has been added. Their registration key (email) is ${studentEmail}.`,
+        duration: 9000
+      });
+
+      router.push('/admin/students');
+
+    } catch (error: any) {
+      console.error("Error registering student: ", error);
+      let description = "An unexpected error occurred during registration.";
+      if (error.code === 'auth/email-already-in-use') {
+        description = "This email is already registered. Please use a different email.";
+      }
+      toast({
+        variant: "destructive",
+        title: "Registration Failed",
+        description: description,
+      });
+    }
   }
 
   return (
@@ -100,6 +176,20 @@ export default function NewStudentPage() {
                             <FormControl>
                                 <Input placeholder="Enter student's full name" {...field} />
                             </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Email Address (Registration Key)</FormLabel>
+                            <FormControl>
+                                <Input type="email" placeholder="student@example.com" {...field} />
+                            </FormControl>
+                             <FormDescription>This email will be the student's unique key for logging in.</FormDescription>
                             <FormMessage />
                             </FormItem>
                         )}
@@ -160,6 +250,7 @@ export default function NewStudentPage() {
                                         </Button>
                                     </div>
                                 </FormControl>
+                                <FormDescription>Photo upload is not yet implemented.</FormDescription>
                                 <FormMessage />
                             </FormItem>
                         )}
@@ -287,7 +378,9 @@ export default function NewStudentPage() {
               </div>
 
               <div className="flex justify-end">
-                <Button type="submit">Register Student</Button>
+                <Button type="submit" disabled={form.formState.isSubmitting}>
+                  {form.formState.isSubmitting ? 'Registering...' : 'Register Student'}
+                </Button>
               </div>
             </form>
           </Form>
@@ -296,3 +389,5 @@ export default function NewStudentPage() {
     </div>
   );
 }
+
+    
