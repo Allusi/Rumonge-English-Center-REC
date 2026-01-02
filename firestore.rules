@@ -28,9 +28,12 @@ service cloud.firestore {
       allow read, update, delete: if isOwner(userId);
       // Anyone can create a user profile (for registration)
       allow create: if isSignedIn();
+    }
+    match /users/{userId} {
       // Admins can list all users
       allow list: if isAdmin();
     }
+
 
     // COURSES
     match /courses/{courseId} {
