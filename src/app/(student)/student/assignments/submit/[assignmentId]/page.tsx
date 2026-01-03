@@ -45,6 +45,10 @@ export default function SubmitAssignmentPage() {
 
   const assignmentRef = firestore && assignmentId ? doc(firestore, 'assignments', assignmentId) : null;
   const { data: assignment, loading: assignmentLoading } = useDoc<Assignment>(assignmentRef);
+  
+  const studentRef = firestore && user ? doc(firestore, 'users', user.uid) : null;
+  const { data: studentProfile, loading: studentLoading } = useDoc<Student>(studentRef);
+
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -54,22 +58,17 @@ export default function SubmitAssignmentPage() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (!firestore || !user || !assignment) {
+    if (!firestore || !user || !assignment || !studentProfile) {
       toast({ variant: 'destructive', title: 'Error', description: 'Could not submit. Missing information.' });
       return;
     }
     
     try {
-      // Fetch student profile to get their name
-      const studentDocRef = doc(firestore, 'users', user.uid);
-      const studentDoc = await getDoc(studentDocRef);
-      const studentName = studentDoc.exists() ? (studentDoc.data() as Student).name : 'Anonymous';
-
       await addDoc(collection(firestore, 'submissions'), {
         assignmentId: assignment.id,
         assignmentTitle: assignment.title,
         studentId: user.uid,
-        studentName: studentName,
+        studentName: studentProfile.name,
         courseId: assignment.courseId,
         courseName: assignment.courseName,
         answers: values.answers,
@@ -84,7 +83,7 @@ export default function SubmitAssignmentPage() {
     }
   }
   
-  const isLoading = assignmentLoading || userLoading;
+  const isLoading = assignmentLoading || userLoading || studentLoading;
 
   if (isLoading) {
     return (
