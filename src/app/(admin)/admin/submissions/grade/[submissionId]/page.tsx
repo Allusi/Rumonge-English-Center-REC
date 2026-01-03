@@ -83,8 +83,8 @@ export default function GradeSubmissionPage() {
     }
   }
   
-  const isLoading = submissionLoading || assignmentLoading;
-
+  const isLoading = submissionLoading || (submission && assignmentLoading);
+  
   if (isLoading) {
     return (
       <div className="space-y-6">
@@ -115,14 +115,10 @@ export default function GradeSubmissionPage() {
     );
   }
 
-  if ((!submission && !submissionLoading) || (!assignment && !assignmentLoading && submission)) {
+  // After all loading is complete, if either document is missing, then 404.
+  if (!submission || !assignment) {
     notFound();
   }
-  
-  if (!submission || !assignment) {
-    return null; // Should be handled by loading and notFound states
-  }
-
 
   return (
     <div className="flex flex-col gap-6">
