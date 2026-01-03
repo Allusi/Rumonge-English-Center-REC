@@ -17,20 +17,7 @@ import type { Assignment, AssignmentSubmission } from '@/lib/data';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 
-export default function ViewGradedSubmissionPage() {
-  const firestore = useFirestore();
-  const params = useParams();
-  const submissionId = params.submissionId as string;
-
-  const submissionRef = firestore && submissionId ? doc(firestore, 'submissions', submissionId) : null;
-  const { data: submission, loading: submissionLoading } = useDoc<AssignmentSubmission>(submissionRef);
-
-  const assignmentRef = firestore && submission ? doc(firestore, 'assignments', submission.assignmentId) : null;
-  const { data: assignment, loading: assignmentLoading } = useDoc<Assignment>(assignmentRef);
-
-  const isLoading = submissionLoading || assignmentLoading;
-
-  if (isLoading) {
+function LoadingSkeleton() {
     return (
       <div className="space-y-6">
         <Skeleton className="h-10 w-64" />
@@ -54,82 +41,110 @@ export default function ViewGradedSubmissionPage() {
         </Card>
       </div>
     );
-  }
+}
 
-  if (!submission || !assignment) {
-    return notFound();
-  }
+function GradedSubmissionContent({ submission }: { submission: AssignmentSubmission }) {
+    const firestore = useFirestore();
+    const assignmentRef = firestore ? doc(firestore, 'assignments', submission.assignmentId) : null;
+    const { data: assignment, loading: assignmentLoading } = useDoc<Assignment>(assignmentRef);
 
-  return (
-    <div className="flex flex-col gap-6">
-      <div className="flex items-center gap-4">
-        <Link href="/student/assignments" passHref>
-          <Button variant="outline" size="icon">
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-        </Link>
-        <div>
-          <h1 className="font-headline text-3xl font-bold tracking-tight">
-            Graded Assignment
-          </h1>
-          <p className="text-muted-foreground">
-            Viewing your grade for "{submission.assignmentTitle}".
-          </p>
-        </div>
-      </div>
+    if (assignmentLoading) {
+        return <LoadingSkeleton />;
+    }
 
-       <Card className="flex items-center justify-between p-6">
-          <div className="flex items-center gap-4">
-            <FileCheck2 className="h-10 w-10 text-primary" />
-            <div>
-              <CardTitle className="text-xl">Your Grade</CardTitle>
-              <CardDescription>This assignment has been graded by an administrator.</CardDescription>
-            </div>
-          </div>
-          <div className="text-right">
-              <p className="text-5xl font-bold text-primary">{submission.marks ?? 'N/A'}<span className="text-2xl text-muted-foreground">/{assignment.maxMarks}</span></p>
-          </div>
-        </Card>
+    if (!assignment) {
+        notFound();
+    }
 
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-         <Card>
-            <CardHeader>
-                <CardTitle>Your Submission</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <div className="p-4 border rounded-md bg-muted/30 h-full">
-                    <p className="text-muted-foreground whitespace-pre-wrap">{submission.answers}</p>
+    return (
+        <div className="flex flex-col gap-6">
+            <div className="flex items-center gap-4">
+                <Link href="/student/assignments" passHref>
+                <Button variant="outline" size="icon">
+                    <ArrowLeft className="h-4 w-4" />
+                </Button>
+                </Link>
+                <div>
+                <h1 className="font-headline text-3xl font-bold tracking-tight">
+                    Graded Assignment
+                </h1>
+                <p className="text-muted-foreground">
+                    Viewing your grade for "{submission.assignmentTitle}".
+                </p>
                 </div>
-            </CardContent>
-        </Card>
-         <Card>
-            <CardHeader>
-                 <div className="flex items-center gap-3">
-                    <MessageSquareQuote className="h-6 w-6 text-primary"/>
-                    <CardTitle>Teacher's Feedback</CardTitle>
-                 </div>
-            </CardHeader>
-            <CardContent>
-                {submission.feedback ? (
-                     <div className="p-4 border rounded-md bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800 h-full">
-                        <p className="text-primary whitespace-pre-wrap">{submission.feedback}</p>
-                     </div>
-                ) : (
-                    <p className="text-center text-muted-foreground py-10">No feedback was provided for this submission.</p>
-                )}
-            </CardContent>
-        </Card>
-      </div>
+            </div>
 
-       <Card>
-            <CardHeader>
-                <CardTitle>Original Assignment Instructions</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <p className="text-muted-foreground whitespace-pre-wrap">{assignment.instructions}</p>
-            </CardContent>
-        </Card>
-    </div>
-  );
+            <Card className="flex items-center justify-between p-6">
+                <div className="flex items-center gap-4">
+                    <FileCheck2 className="h-10 w-10 text-primary" />
+                    <div>
+                    <CardTitle className="text-xl">Your Grade</CardTitle>
+                    <CardDescription>This assignment has been graded by an administrator.</CardDescription>
+                    </div>
+                </div>
+                <div className="text-right">
+                    <p className="text-5xl font-bold text-primary">{submission.marks ?? 'N/A'}<span className="text-2xl text-muted-foreground">/{assignment.maxMarks}</span></p>
+                </div>
+            </Card>
+
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Your Submission</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="p-4 border rounded-md bg-muted/30 h-full">
+                            <p className="text-muted-foreground whitespace-pre-wrap">{submission.answers}</p>
+                        </div>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader>
+                        <div className="flex items-center gap-3">
+                            <MessageSquareQuote className="h-6 w-6 text-primary"/>
+                            <CardTitle>Teacher's Feedback</CardTitle>
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                        {submission.feedback ? (
+                            <div className="p-4 border rounded-md bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800 h-full">
+                                <p className="text-primary whitespace-pre-wrap">{submission.feedback}</p>
+                            </div>
+                        ) : (
+                            <p className="text-center text-muted-foreground py-10">No feedback was provided for this submission.</p>
+                        )}
+                    </CardContent>
+                </Card>
+            </div>
+
+            <Card>
+                    <CardHeader>
+                        <CardTitle>Original Assignment Instructions</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-muted-foreground whitespace-pre-wrap">{assignment.instructions}</p>
+                    </CardContent>
+                </Card>
+            </div>
+    );
+}
+
+export default function ViewGradedSubmissionPage() {
+  const firestore = useFirestore();
+  const params = useParams();
+  const submissionId = params.submissionId as string;
+
+  const submissionRef = firestore && submissionId ? doc(firestore, 'submissions', submissionId) : null;
+  const { data: submission, loading: submissionLoading } = useDoc<AssignmentSubmission>(submissionRef);
+
+  if (submissionLoading) {
+    return <LoadingSkeleton />;
+  }
+
+  if (!submission) {
+    notFound();
+  }
+
+  return <GradedSubmissionContent submission={submission} />;
 }
