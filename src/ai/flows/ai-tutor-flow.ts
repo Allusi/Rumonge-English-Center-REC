@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -23,28 +24,38 @@ const AITutorFlowInputSchema = z.object({
   })),
 });
 
+const aiTutorFlow = ai.defineFlow(
+  {
+    name: 'aiTutorFlow',
+    inputSchema: AITutorInputSchema,
+    outputSchema: AITutorOutputSchema,
+  },
+  async (input) => {
+    const historyWithUserFlag = input.history.map(m => ({ ...m, isUser: m.role === 'user' }));
+    const {output} = await aiTutorPrompt({ history: historyWithUserFlag });
+    
+    if (output === null) {
+      console.error("AI tutor returned null output. Returning a fallback message.");
+      return "I'm sorry, I'm having a little trouble thinking. Could you say that again?";
+    }
+    return output;
+  }
+);
+
+
 export async function aiTutor(input: AITutorInput): Promise<AITutorOutput> {
   // If the history is empty, start the conversation.
   if (input.history.length === 0) {
     return "Hello! I'm R.E.C, your friendly AI English tutor. How would you like to practice today?";
   }
-
-  const historyWithUserFlag = input.history.map(m => ({ ...m, isUser: m.role === 'user' }));
-  const {output} = await aiTutorPrompt({ history: historyWithUserFlag });
-  
-  if (output === null) {
-    console.error("AI tutor returned null output. Returning a fallback message.");
-    return "I'm sorry, I'm having a little trouble thinking. Could you say that again?";
-  }
-
-  return output;
+  return aiTutorFlow(input);
 }
 
 const aiTutorPrompt = ai.definePrompt({
   name: 'aiTutorPrompt',
   input: {schema: AITutorFlowInputSchema},
   output: {schema: AITutorOutputSchema},
-  prompt: `You are an expert English tutor AI from "Rumonge English School (R.E.C)". Your role is to help students practice and improve their English through conversation. 
+  prompt: `You are an expert English tutor AI from "Rumonge English School (R.E.C)". Your role is to help students practice and improve their English through conversation. You MUST ALWAYS provide a valid, non-empty string response. Never return null.
 
   - Your name is R.E.C.
   - Be friendly, encouraging, and patient.
