@@ -34,7 +34,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useCollection, useFirestore } from "@/firebase";
-import { collection, deleteDoc, doc, orderBy, query, getDocs, writeBatch, serverTimestamp } from "firebase/firestore";
+import { collection, deleteDoc, doc, orderBy, query, getDocs, writeBatch, serverTimestamp, where } from "firebase/firestore";
 import type { Assignment } from "@/lib/data";
 import { initialAssignment } from "@/lib/assignments-data";
 import { Skeleton } from "@/components/ui/skeleton";
