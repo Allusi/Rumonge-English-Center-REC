@@ -30,7 +30,7 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { useFirestore, useUser, useDoc, useCollection } from '@/firebase';
 import { doc, setDoc, serverTimestamp, query, collection, where } from 'firebase/firestore';
-import type { Attendance, SchoolSettings } from '@/lib/data';
+import type { Attendance, SchoolSettings, Student } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
 import { format, getDay } from 'date-fns';
 import { CalendarOff, CheckCircle, Loader2, PartyPopper } from 'lucide-react';
@@ -48,6 +48,9 @@ export default function StudentAttendancePage() {
   const todayString = format(today, 'yyyy-MM-dd');
   const dayOfWeek = format(today, 'EEEE');
 
+  const studentRef = firestore && user ? doc(firestore, 'users', user.uid) : null;
+  const { data: studentProfile, loading: studentLoading } = useDoc<Student>(studentRef);
+
   const settingsRef = firestore ? doc(firestore, 'settings', 'school') : null;
   const { data: schoolSettings, loading: settingsLoading } = useDoc<SchoolSettings>(settingsRef);
   
@@ -61,12 +64,15 @@ export default function StudentAttendancePage() {
   });
 
   const handleMarkAttendance = async (status: 'present' | 'absent', reason?: string) => {
-    if (!user || !firestore) return;
+    if (!user || !firestore || !studentProfile) {
+        toast({ variant: 'destructive', title: 'Error', description: 'Could not mark attendance, user profile not found.' });
+        return;
+    }
 
     try {
       const attendanceData: Omit<Attendance, 'id'> = {
         studentId: user.uid,
-        studentName: user.displayName || 'Unknown Student',
+        studentName: studentProfile.name, // Use name from Firestore profile
         date: todayString,
         status,
         markedAt: serverTimestamp(),
@@ -92,8 +98,7 @@ export default function StudentAttendancePage() {
     handleMarkAttendance('absent', values.reason);
   };
   
-  const isSchoolDay = schoolSettings?.activeDays.includes(dayOfWeek);
-  const isLoading = userLoading || settingsLoading || attendanceLoading;
+  const isLoading = userLoading || settingsLoading || attendanceLoading || studentLoading;
 
   if (isLoading) {
       return (
