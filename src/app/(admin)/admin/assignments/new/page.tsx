@@ -43,6 +43,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import type { Course } from '@/lib/data';
 import { generateAssignment } from '@/ai/flows/generate-assignment-flow';
 import { useState } from 'react';
+import { Label } from '@/components/ui/label';
 
 const formSchema = z.object({
   title: z.string().min(5, { message: 'Title must be at least 5 characters.' }),
