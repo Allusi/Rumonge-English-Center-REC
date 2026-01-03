@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
   onSnapshot,
   query,
@@ -20,20 +20,6 @@ interface UseCollectionOptions<T> {
   initialData?: T[];
 }
 
-function useMemoizedQuery<T extends Query | CollectionReference | null>(query: T): T {
-    const previousQueryRef = useRef<T | null>(null);
-  
-    if (query) {
-      if (!previousQueryRef.current || !queryEqual(previousQueryRef.current as Query, query as Query)) {
-        previousQueryRef.current = query;
-      }
-    } else {
-        previousQueryRef.current = null;
-    }
-  
-    return previousQueryRef.current as T;
-  }
-
 export function useCollection<T extends DocumentData>(
   ref: Query | CollectionReference | null,
   options?: UseCollectionOptions<T>
@@ -42,7 +28,7 @@ export function useCollection<T extends DocumentData>(
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   
-  const memoizedRef = useMemoizedQuery(ref);
+  const memoizedRef = useMemo(() => ref, [ref ? queryEqual(ref, ref) : ref]);
 
   useEffect(() => {
     if (!memoizedRef) {

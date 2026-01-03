@@ -99,6 +99,7 @@ export default function StudentAttendancePage() {
   };
   
   const isLoading = userLoading || settingsLoading || attendanceLoading || studentLoading;
+  const isSchoolDay = schoolSettings?.activeDays.includes(dayOfWeek);
 
   if (isLoading) {
       return (

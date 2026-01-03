@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
   onSnapshot,
   type DocumentReference,
@@ -15,21 +15,6 @@ interface UseDocOptions<T> {
   initialData?: T;
 }
 
-function useMemoizedDocRef<T extends DocumentReference | null>(docRef: T): T {
-    const previousDocRefRef = useRef<T | null>(null);
-
-    if (docRef) {
-        if (!previousDocRefRef.current || previousDocRefRef.current.path !== docRef.path) {
-            previousDocRefRef.current = docRef;
-        }
-    } else {
-        previousDocRefRef.current = null;
-    }
-
-    return previousDocRefRef.current as T;
-}
-
-
 export function useDoc<T extends DocumentData>(
   ref: DocumentReference | null,
   options?: UseDocOptions<T>
@@ -38,7 +23,7 @@ export function useDoc<T extends DocumentData>(
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   
-  const memoizedRef = useMemoizedDocRef(ref);
+  const memoizedRef = useMemo(() => ref, [ref?.path]);
 
   useEffect(() => {
     if (!memoizedRef) {
