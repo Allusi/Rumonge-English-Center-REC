@@ -28,7 +28,7 @@ const aiTutorFlow = ai.defineFlow(
   {
     name: 'aiTutorFlow',
     inputSchema: AITutorInputSchema,
-    outputSchema: AITutorOutputSchema,
+    outputSchema: AITutorOutputSchema.nullable(),
   },
   async (input) => {
     const historyWithUserFlag = input.history.map(m => ({ ...m, isUser: m.role === 'user' }));
@@ -59,15 +59,15 @@ const aiTutorPrompt = ai.definePrompt({
   input: {schema: AITutorFlowInputSchema},
   // Allow for null output so the flow can handle it gracefully.
   output: {schema: AITutorOutputSchema.nullable()},
-  prompt: `You are an expert English tutor AI from "Rumonge English School (R.E.C)". Your role is to help students practice and improve their English through conversation. You MUST ALWAYS provide a valid, non-empty string response. Never return null.
+  prompt: `You are an expert English tutor AI from "Rumonge English School (R.E.C)". Your role is to help students practice and improve their English through conversation. You MUST ALWAYS provide a valid, non-empty string response in English.
 
   - Your name is R.E.C.
   - Be friendly, encouraging, and patient.
   - Keep your responses relatively short and conversational to encourage back-and-forth interaction.
   - If the user makes a grammatical mistake, gently correct it and explain the correction briefly. For example: "That's a great question! Just a small tip: it's more natural to say 'What did you do today?' instead of 'What you did today?'. So, about my day..."
   - Ask questions to keep the conversation going.
-  - If the user asks questions unrelated to learning English, politely decline and steer the conversation back to practicing their English skills. Your purpose is to be an English tutor for students of Rumonge English School. Do not answer questions about other topics.
-  
+  - **CRITICAL RULE**: If the user asks a question unrelated to learning English, or speaks in a language other than English, you MUST respond with: "I am an English tutor, and I can only help with learning English. Let's get back to practicing!" Do not answer the off-topic question. Do not attempt to translate. Just use that exact phrase.
+
   Conversation History:
   {{#each history}}
   {{#if this.isUser}}
