@@ -30,6 +30,7 @@ import { useRouter, useParams, notFound } from 'next/navigation';
 import type { Assignment, AssignmentSubmission } from '@/lib/data';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Input } from '@/components/ui/input';
+import { useEffect } from 'react';
 
 const formSchema = z.object({
   feedback: z.string().min(10, { message: 'Feedback must be at least 10 characters long.' }),
@@ -52,10 +53,19 @@ export default function GradeSubmissionPage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      feedback: submission?.feedback || '',
-      marks: submission?.marks || 0,
+      feedback: '',
+      marks: 0,
     },
   });
+
+  useEffect(() => {
+    if (submission) {
+        form.reset({
+            feedback: submission.feedback || '',
+            marks: submission.marks || 0
+        });
+    }
+  }, [submission, form]);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (!submissionRef) return;
@@ -105,9 +115,14 @@ export default function GradeSubmissionPage() {
     );
   }
 
-  if (!submission || !assignment) {
-    return notFound();
+  if ((!submission && !submissionLoading) || (!assignment && !assignmentLoading && submission)) {
+    notFound();
   }
+  
+  if (!submission || !assignment) {
+    return null; // Should be handled by loading and notFound states
+  }
+
 
   return (
     <div className="flex flex-col gap-6">
