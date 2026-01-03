@@ -24,7 +24,7 @@ import {
 } from '@/components/ui/card';
 import { useCollection, useDoc, useFirestore } from '@/firebase';
 import { collection, query, where, doc, updateDoc } from 'firebase/firestore';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Send } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter, useParams, notFound } from 'next/navigation';
@@ -80,6 +80,13 @@ export default function EditAssignmentPage() {
       console.error("Error updating assignment: ", error);
       toast({ variant: 'destructive', title: 'Error', description: 'Could not update assignment. Please try again.' });
     }
+  }
+
+  const handleSendToStudents = () => {
+    toast({
+        title: "Feature Coming Soon!",
+        description: "Sending assignments directly to students is not yet implemented.",
+    });
   }
 
   const isLoading = assignmentLoading || coursesLoading;
@@ -178,7 +185,7 @@ export default function EditAssignmentPage() {
                     <FormControl>
                       <Textarea
                         placeholder="Write the full instructions for the assignment here..."
-                        className="resize-y min-h-[150px]"
+                        className="resize-y min-h-[250px]"
                         {...field}
                       />
                     </FormControl>
@@ -186,7 +193,11 @@ export default function EditAssignmentPage() {
                   </FormItem>
                 )}
               />
-              <div className="flex justify-end">
+              <div className="flex justify-between items-center">
+                 <Button type="button" variant="secondary" onClick={handleSendToStudents}>
+                  <Send className="mr-2 h-4 w-4" />
+                  Send to Students
+                </Button>
                 <Button type="submit" disabled={form.formState.isSubmitting}>
                   {form.formState.isSubmitting ? 'Saving...' : 'Save Changes'}
                 </Button>
