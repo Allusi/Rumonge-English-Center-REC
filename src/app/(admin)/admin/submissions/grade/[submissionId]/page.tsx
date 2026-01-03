@@ -84,6 +84,7 @@ function GradeSubmissionPageContent({ submission }: { submission: AssignmentSubm
     const assignmentRef = firestore ? doc(firestore, 'assignments', submission.assignmentId) : null;
     const { data: assignment, loading: assignmentLoading } = useDoc<Assignment>(assignmentRef);
 
+    // Use a default schema first, which will be replaced once the assignment loads.
     const formSchema = assignment ? createFormSchema(assignment.maxMarks) : createFormSchema(100);
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -94,18 +95,20 @@ function GradeSubmissionPageContent({ submission }: { submission: AssignmentSubm
         },
     });
 
+    // When the assignment (and its maxMarks) loads, we need to update the form's resolver.
     useEffect(() => {
-        if (submission) {
-            form.reset({
-                feedback: submission.feedback || '',
-                marks: submission.marks ?? 0
-            });
-        }
         if (assignment) {
-            // Re-initialize resolver when maxMarks is loaded
-            form.trigger(); 
+            form.reset(
+                {
+                    feedback: submission.feedback || '',
+                    marks: submission.marks ?? 0,
+                },
+                {
+                    keepDirty: true,
+                }
+            );
         }
-    }, [submission, assignment, form]);
+    }, [assignment, submission, form]);
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         if (!firestore) return;
@@ -128,7 +131,7 @@ function GradeSubmissionPageContent({ submission }: { submission: AssignmentSubm
     }
 
     if (!assignment) {
-        // This case should be handled by the parent component now
+        // This case is handled by the parent component now, but as a fallback.
         return notFound();
     }
 
@@ -151,7 +154,7 @@ function GradeSubmissionPageContent({ submission }: { submission: AssignmentSubm
       </div>
       <Card>
         <CardHeader>
-            <CardTitle>Assignment Instructions</CardTitle>
+            <CardTitle>Assignment & Submission</CardTitle>
             <CardDescription className="whitespace-pre-wrap pt-2">{assignment.instructions}</CardDescription>
         </CardHeader>
         <CardContent>
