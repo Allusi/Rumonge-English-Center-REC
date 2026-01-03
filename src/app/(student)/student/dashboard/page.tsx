@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Megaphone } from "lucide-react";
+import { Megaphone, BookCheck } from "lucide-react";
 import Link from 'next/link';
 import {
   Card,
@@ -23,14 +23,13 @@ import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { useUser, useCollection, useFirestore, useDoc } from "@/firebase";
 import { collection, query, where, orderBy, limit, doc } from "firebase/firestore";
-import type { Course, Enrollment, Announcement, Student } from "@/lib/data";
+import type { Course, Enrollment, Announcement, Student, Assignment, AssignmentSubmission } from "@/lib/data";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useRouter } from "next/navigation";
+import { useMemo } from "react";
 
 export default function StudentDashboard() {
   const { user, loading: userLoading } = useUser();
   const firestore = useFirestore();
-  const router = useRouter();
 
   const userDocRef = (firestore && user) ? doc(firestore, 'users', user.uid) : null;
   const { data: studentProfile, loading: profileLoading } = useDoc<Student>(userDocRef);
@@ -41,8 +40,24 @@ export default function StudentDashboard() {
     firestore && user ? query(collection(firestore, 'enrollments'), where('studentId', '==', user.uid)) : null
   );
 
+  const enrolledCourseIds = useMemo(() => studentEnrollments?.map(e => e.courseId) || [], [studentEnrollments]);
+
   const { data: allCourses, loading: coursesLoading } = useCollection<Course>(
     firestore ? query(collection(firestore, 'courses'), where('isEnabled', '==', true)) : null
+  );
+  
+  const { data: allAssignments, loading: assignmentsLoading } = useCollection<Assignment>(
+    firestore && enrolledCourseIds.length > 0 
+    ? query(
+        collection(firestore, 'assignments'), 
+        where('courseId', 'in', enrolledCourseIds),
+        where('status', '==', 'published')
+      ) 
+    : null
+  );
+
+  const { data: allSubmissions, loading: submissionsLoading } = useCollection<AssignmentSubmission>(
+    firestore && user ? query(collection(firestore, 'submissions'), where('studentId', '==', user.uid)) : null
   );
 
   const { data: announcements, loading: announcementsLoading } = useCollection<Announcement>(
@@ -51,13 +66,47 @@ export default function StudentDashboard() {
       : null
   );
 
-  const enrolledCourses = studentEnrollments?.map((enrollment) => {
-    const course = allCourses?.find((c) => c.id === enrollment.courseId);
-    if (!course) return null;
-    return { ...course, ...enrollment, progress: 0, grade: 'Not Started' }; // Mock progress/grade for now
-  }).filter(course => course !== null) as (Course & Enrollment & { progress: number; grade: string; })[] | undefined;
+  const enrolledCourses = useMemo(() => {
+    return studentEnrollments?.map((enrollment) => {
+      const course = allCourses?.find((c) => c.id === enrollment.courseId);
+      if (!course) return null;
 
-  const isLoading = userLoading || profileLoading || enrollmentsLoading || coursesLoading || announcementsLoading;
+      const assignmentsForCourse = allAssignments?.filter(a => a.courseId === course.id) || [];
+      const submissionsForCourse = allSubmissions?.filter(s => s.courseId === course.id) || [];
+      
+      const progress = assignmentsForCourse.length > 0 
+        ? (submissionsForCourse.length / assignmentsForCourse.length) * 100 
+        : 0;
+
+      const gradedSubmissions = submissionsForCourse.filter(s => s.status === 'graded' && s.marks !== undefined);
+      const averageGrade = gradedSubmissions.length > 0
+        ? gradedSubmissions.reduce((acc, s) => acc + s.marks!, 0) / gradedSubmissions.length
+        : null;
+
+      return { 
+        ...course, 
+        ...enrollment, 
+        progress: Math.round(progress), 
+        grade: averageGrade !== null ? `${Math.round(averageGrade)}%` : 'Not Graded' 
+      };
+    }).filter(course => course !== null) as (Course & Enrollment & { progress: number; grade: string; })[] | undefined;
+  }, [studentEnrollments, allCourses, allAssignments, allSubmissions]);
+  
+  const nextAssignment = useMemo(() => {
+    if (!allAssignments || !allSubmissions) return null;
+    
+    const submittedAssignmentIds = new Set(allSubmissions.map(s => s.assignmentId));
+
+    // Sort assignments by creation date, oldest first
+    const sortedAssignments = [...allAssignments].sort((a, b) => 
+        (a.createdAt?.toMillis() || 0) - (b.createdAt?.toMillis() || 0)
+    );
+
+    return sortedAssignments.find(a => !submittedAssignmentIds.has(a.id));
+
+  }, [allAssignments, allSubmissions]);
+
+  const isLoading = userLoading || profileLoading || enrollmentsLoading || coursesLoading || announcementsLoading || assignmentsLoading || submissionsLoading;
 
   return (
     <div className="flex flex-col gap-8">
@@ -69,6 +118,33 @@ export default function StudentDashboard() {
           Here's an overview of your learning journey.
         </p>
       </div>
+      
+      {isLoading ? <Skeleton className="h-48 w-full" /> : (
+        <Card className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground">
+          <CardHeader>
+             <div className="flex items-center gap-3">
+              <BookCheck className="h-6 w-6"/>
+              <CardTitle>Your Next Step</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {nextAssignment ? (
+              <div>
+                <p className="text-lg font-semibold">{nextAssignment.title}</p>
+                <p className="text-sm opacity-80 mb-4">From course: {nextAssignment.courseName}</p>
+                <Link href={`/student/assignments/submit/${nextAssignment.id}`}>
+                  <Button variant="secondary">Start Assignment</Button>
+                </Link>
+              </div>
+            ) : (
+              <div>
+                 <p className="text-lg font-semibold">You're all caught up!</p>
+                 <p className="text-sm opacity-80">There are no new assignments for you at the moment. Great job!</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
         <div className="md:col-span-2">
@@ -86,7 +162,7 @@ export default function StudentDashboard() {
                     <TableHead>Course</TableHead>
                     <TableHead>Level</TableHead>
                     <TableHead className="w-[30%]">Progress</TableHead>
-                    <TableHead>Grade</TableHead>
+                    <TableHead>Avg. Grade</TableHead>
                     <TableHead>Action</TableHead>
                   </TableRow>
                 </TableHeader>
