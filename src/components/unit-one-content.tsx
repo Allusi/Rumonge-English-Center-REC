@@ -1911,7 +1911,110 @@ export function UnitOneContent() {
                                     <li>Testicles: amatengatwa</li>
                                     <li>Knee: ivi</li>
                                     <li>Hamstring: muntege</li>
+                                    <li>Calf: ipfundo</li>
+                                    <li>Heel: agatsintsiri</li>
+                                    <li>Index: urutoke rwakabiri</li>
+                                    <li>Thumb: urukumu</li>
+                                    <li>Middle finger: urutoke mukuru</li>
+                                    <li>Ring finger: urutoke rwurupete</li>
+                                    <li>Little finger: agahererezi</li>
+                                    <li>Chest: igikiriza</li>
+                                    <li>Gardenlove:umugara wokugikiriza</li>
+                                    <li>Nipple: imoko</li>
+                                    <li>Breast: ibere</li>
+                                    <li>Stomach: inda</li>
+                                    <li>Belly: inda</li>
+                                    <li>Navel: umukondo</li>
+                                    <li>Back: umugongo</li>
+                                    <li>Rib: urubavu</li>
+                                    <li>Pupil: imbonero( part black)</li>
+                                    <li>Muscles: imitsi</li>
+                                    <li>Skin: urukoba</li>
+                                    <li>Appendix: agatorero</li>
+                                    <li>Esophagus : igihogohogo</li>
+                                    <li>Liver: igitigu</li>
+                                    <li>Heart: umutima</li>
+                                    <li>Lungs: Amahaha</li>
+                                    <li>Bones: amagufa</li>
+                                    <li>Fontanelle : uruhorihori</li>
                                 </ul>
+                                <p className="text-sm font-semibold mt-4">NB: TO TICKLE : KUDIGADIGA</p>
+                            </CardContent>
+                        </Card>
+                         <Card className="mt-6">
+                            <CardHeader>
+                                <CardTitle>Numbers</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <h4 className="font-semibold text-lg mb-2">A. Cardinal Numbers</h4>
+                                <p className="text-sm text-muted-foreground mb-4">Cardinal numbers are the numbers that we use when counting people, things etc... See the following list of them.</p>
+                                <div className="grid grid-cols-4 gap-4 text-sm">
+                                    <div>
+                                        <p>1. One</p>
+                                        <p>2. Two</p>
+                                        <p>3. Three</p>
+                                        <p>4. Four</p>
+                                        <p>5. Five</p>
+                                        <p>6. Six</p>
+                                        <p>7. Seven</p>
+                                        <p>8. Eight</p>
+                                        <p>9. Nine</p>
+                                        <p>10. Ten</p>
+                                    </div>
+                                    <div>
+                                        <p>11. Eleven</p>
+                                        <p>12. Twelve</p>
+                                        <p>13. Thirteen</p>
+                                        <p>14. Fourteen</p>
+                                        <p>15. Fifteen</p>
+                                        <p>16. Sixteen</p>
+                                        <p>17. Seventeen</p>
+                                        <p>18. Eighteen</p>
+                                        <p>19. Nineteen</p>
+                                        <p>20. Twenty</p>
+                                    </div>
+                                    <div>
+                                        <p>21. Twenty-one</p>
+                                        <p>22. Twenty-two</p>
+                                        <p>23. Twenty-three</p>
+                                        <p>24. Twenty-four</p>
+                                        <p>25. Twenty-five</p>
+                                        <p>26. Twenty-six</p>
+                                        <p>27. Twenty-seven</p>
+                                        <p>28. Twenty-eight</p>
+                                        <p>29. Twenty-nine</p>
+                                        <p>30. Thirty</p>
+                                    </div>
+                                     <div>
+                                        <p>40. Forty</p>
+                                        <p>50. Fifty</p>
+                                        <p>60. Sixty</p>
+                                        <p>70. Seventy</p>
+                                        <p>80. Eighty</p>
+                                        <p>90. Ninety</p>
+                                        <p>100. One hundred/a hundred</p>
+                                    </div>
+                                </div>
+                                <div className="mt-4 text-sm space-y-2">
+                                    <p><strong>Remember:</strong> we have , odd number : 1,3,5,7,9,11,13 etc..</p>
+                                    <p>Even number : 2, 4, 6 ,8 ,10 ,12 ,14 etc....</p>
+                                    <p><strong>Eg:</strong> -Two dogs,five hens,twenty girls,one stick and eighteen students.</p>
+                                    <p>-That girl----&gt;Those four girls,This boy-----------&gt;These two boys.</p>
+                                    <p><strong>NB:</strong>Every day when counting the cardinal numbers between hundreds and dizen,there is the word"" and ""</p>
+                                    <p>E.g: 101: one hundred and one</p>
+                                    <p>254: two hundred and fifty- four</p>
+                                    <p>998: nine hundred and ninety- eight</p>
+                                    <p>Also remember that we put ( - ) a hyphen between dizens and the units numbers. In writing them in words.</p>
+                                    <p>E.G: 88: eighty- eight</p>
+                                    <p>900: nine hundred</p>
+                                    <p>1,000: one thousand</p>
+                                    <p>2,000:two thousand</p>
+                                    <p>1100 :one thousand one hundred</p>
+                                    <p>2500 :two thousand five hundred</p>
+                                    <p>10,000:ten thousand</p>
+                                    <p>200,000:two hundred thousand</p>
+                                    <p>1,000,000:one million</p>
+                                </div>
                             </CardContent>
                         </Card>
                     </AccordionContent>
@@ -2012,11 +2115,3 @@ export function UnitOneContent() {
     </div>
   );
 }
-
-  
-
-    
-
-
-
-
