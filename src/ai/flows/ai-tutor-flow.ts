@@ -32,12 +32,15 @@ const aiTutorFlow = ai.defineFlow(
   },
   async (input) => {
     const historyWithUserFlag = input.history.map(m => ({ ...m, isUser: m.role === 'user' }));
+    
+    // Call the prompt and handle potential null output directly.
     const {output} = await aiTutorPrompt({ history: historyWithUserFlag });
     
     if (output === null) {
       console.error("AI tutor returned null output. Returning a fallback message.");
       return "I'm sorry, I'm having a little trouble thinking. Could you say that again?";
     }
+    
     return output;
   }
 );
@@ -54,7 +57,8 @@ export async function aiTutor(input: AITutorInput): Promise<AITutorOutput> {
 const aiTutorPrompt = ai.definePrompt({
   name: 'aiTutorPrompt',
   input: {schema: AITutorFlowInputSchema},
-  output: {schema: AITutorOutputSchema},
+  // Allow for null output so the flow can handle it gracefully.
+  output: {schema: AITutorOutputSchema.nullable()},
   prompt: `You are an expert English tutor AI from "Rumonge English School (R.E.C)". Your role is to help students practice and improve their English through conversation. You MUST ALWAYS provide a valid, non-empty string response. Never return null.
 
   - Your name is R.E.C.
