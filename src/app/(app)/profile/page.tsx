@@ -57,19 +57,19 @@ export default function ProfilePage() {
   const userDocRef = firestore && user ? doc(firestore, 'users', user.uid) : null;
   const { data: userProfile, loading: profileLoading } = useDoc<Student>(userDocRef);
 
-  const courseRef = firestore && userProfile?.enrolledCourseId ? doc(firestore, 'courses', userProfile.enrolledCourseId) : null;
-  const { data: course, loading: courseLoading } = useDoc<Course>(courseRef);
-  
-  const { data: submissions, loading: submissionsLoading } = useCollection<AssignmentSubmission>(
-    firestore && user && userProfile?.role === 'student' ? query(collection(firestore, 'submissions'), where('studentId', '==', user.uid)) : null
-  );
+  // Conditionally create refs based on user role
+  const isStudent = userProfile?.role === 'student';
+  const courseRef = firestore && isStudent && userProfile?.enrolledCourseId ? doc(firestore, 'courses', userProfile.enrolledCourseId) : null;
+  const submissionsQuery = firestore && user && isStudent ? query(collection(firestore, 'submissions'), where('studentId', '==', user.uid)) : null;
+  const assignmentsQuery = firestore && isStudent && userProfile?.enrolledCourseId ? query(collection(firestore, 'assignments'), where('courseId', '==', userProfile.enrolledCourseId)) : null;
 
-  const { data: assignments, loading: assignmentsLoading } = useCollection<Assignment>(
-    firestore && userProfile?.enrolledCourseId && userProfile?.role === 'student' ? query(collection(firestore, 'assignments'), where('courseId', '==', userProfile.enrolledCourseId)) : null
-  );
+  // Fetch data based on the refs
+  const { data: course, loading: courseLoading } = useDoc<Course>(courseRef);
+  const { data: submissions, loading: submissionsLoading } = useCollection<AssignmentSubmission>(submissionsQuery);
+  const { data: assignments, loading: assignmentsLoading } = useCollection<Assignment>(assignmentsQuery);
   
   const averageGrade = useMemo(() => {
-    if (!submissions || submissions.length === 0 || !assignments) return null;
+    if (!isStudent || !submissions || submissions.length === 0 || !assignments) return null;
 
     const assignmentMaxMarks = new Map<string, number>();
     assignments.forEach(a => assignmentMaxMarks.set(a.id, a.maxMarks));
@@ -88,16 +88,16 @@ export default function ProfilePage() {
     );
     
     return totalMaxMarks > 0 ? Math.round((totalMarks / totalMaxMarks) * 100) : 0;
-  }, [submissions, assignments]);
+  }, [isStudent, submissions, assignments]);
 
 
   const isLoading = useMemo(() => {
     if (userLoading || profileLoading) return true;
-    if (!userProfile) return false; // Not loading if there's no profile
+    if (!userProfile) return false; 
     if (userProfile.role === 'student') {
         return courseLoading || submissionsLoading || assignmentsLoading;
     }
-    return false; // Admins don't have extra data to load on this page
+    return false; // Admins are done loading once their profile is loaded
   }, [userLoading, profileLoading, userProfile, courseLoading, submissionsLoading, assignmentsLoading]);
 
 
