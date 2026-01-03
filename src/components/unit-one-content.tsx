@@ -2213,7 +2213,7 @@ able to make it.</p>
                                     <p><strong>Stella :</strong> so ,we shall talk more in section 4.</p>
                                     <p><strong>Stany :</strong> okay thanks,we shall meet tomorrow at four o'clock.</p>
                                 </div>
-                                <h4 className="font-semibold text-lg mb-2 mt-6">EXPRESSIONS</h4>
+                                <h4 className="font-semibold text-lg my-4">EXPRESSIONS</h4>
                                 <div className="text-sm space-y-2 text-muted-foreground">
                                     <p><strong>Day in,Day out:</strong> continuously or repeatedly over a long period of time.</p>
                                     <p><strong>And all that :</strong> or and that, and so on.</p>
@@ -2233,7 +2233,7 @@ able to make it.</p>
             Section 4: Actions
           </AccordionTrigger>
           <AccordionContent className="p-4 pt-0">
-            <p className="text-muted-foreground mb-2">In section three we learnt about people ,things and places.we hope that you now know many words.in this section, we will learn words which show actions.</p>
+             <p className="text-muted-foreground mb-2">In section three we learnt about people ,things and places.we hope that you now know many words.in this section, we will learn words which show actions.</p>
             <p className="text-muted-foreground mb-2">The action shows us what is happening.</p>
             <p className="text-muted-foreground mb-2">Here are some examples:</p>
             <ul className="list-disc pl-6 text-muted-foreground space-y-2 text-sm">
@@ -2388,6 +2388,52 @@ able to make it.</p>
               <li>Throughout : hose</li>
               <li>Whole : vyose</li>
             </ul>
+             <div className="mt-4">
+                <h5 className="font-semibold text-md mb-2">Study the following examples:</h5>
+                <p className="text-sm text-muted-foreground">Where is the ball?</p>
+                <ul className="list-disc pl-6 text-muted-foreground text-sm space-y-1">
+                    <li>The ball is on the table.</li>
+                    <li>The bottle is under the table.</li>
+                    <li>The boy is behind the car.</li>
+                    <li>The girl is in front of the car.</li>
+                    <li>The cup is inside the box.</li>
+                    <li>The bottle is outside the house.</li>
+                    <li>The water is inside the bottle.</li>
+                    <li>This tree is near the house.</li>
+                    <li>Those trees are far from the house</li>
+                    <li>The boys are going up the hill.</li>
+                    <li>The girl is going down the hill.</li>
+                    <li>The girl is coming from the shop.</li>
+                    <li>She is at school.</li>
+                    <li>The student is going to school.</li>
+                    <li>The rain is raining throughout the country.</li>
+                    <li>The man is going into the house.</li>
+                    <li>I am pouring water onto the table.</li>
+                    <li>Don't pass in sight of him.</li>
+                </ul>
+                <p className="text-sm font-semibold mt-2">NB : WE ASK QUESTIONS BY BEGINNING BY : WHERE IS / ARE ....?</p>
+            </div>
+            <h4 className="font-semibold text-lg my-4">DIALOGUE PRACTICE OF THIS SECTION</h4>
+            <div className="p-4 border rounded-lg bg-muted/50 space-y-1 text-sm">
+                <p><strong>Osias :</strong> hello!</p>
+                <p><strong>Osma :</strong> hello!</p>
+                <p><strong>Osias :</strong> where do you come from?</p>
+                <p><strong>Osma :</strong> I come from school and what is your direction?</p>
+                <p><strong>Osias :</strong> I am going up the hill.</p>
+                <p><strong>Osma :</strong> ooh,I am sorry, can you lend me your English exercise copybook?</p>
+                <p><strong>Osias :</strong> you are sorry! Go home,you will find it inside the box,on the table in the dinning room.</p>
+                <p><strong>Osma :</strong> and what about " Methodology homework ? "</p>
+                <p><strong>Osias :</strong> I haven't yet done it,I shall do it by night.what I have already finished is the drawing a picture in which a cat is running after the mouse,and the mouse in front of it.</p>
+                <p><strong>Osma :</strong> okay ,let me hurry,I am going to meet my uncle beyond that hillock.</p>
+                <p><strong>Osias :</strong> Ciao!</p>
+                <p><strong>Osma :</strong> Ciao!</p>
+            </div>
+             <h4 className="font-semibold text-lg my-4">EXPRESSIONS</h4>
+            <div className="text-sm space-y-2 text-muted-foreground">
+                <p><strong>Man of means:</strong>someone who is very rich.</p>
+                <p><strong>Man in the street :</strong> an ordinary person.</p>
+                <p><strong>Devil day:</strong> unlucky day.</p>
+            </div>
           </AccordionContent>
         </AccordionItem>
         
@@ -2398,13 +2444,14 @@ able to make it.</p>
           <AccordionContent className="p-4 pt-0">
              <Card>
                 <CardHeader>
-                    <CardTitle>At the Party</CardTitle>
+                    <CardTitle>DIALOGUE PRACTICE THAT COMBINES SECTION ONE TO SIX</CardTitle>
+                    <CardDescription>JOHN MEETS HIS FRIENDS MARY AND ANTONY</CardDescription>
                 </CardHeader>
-                <CardContent>
-                    <p><strong>A:</strong> Hello, Andy, how is your party?</p>
-                    <p><strong>B:</strong> Very crowded, look there are many people here.</p>
-                    <p><strong>A:</strong> Do you enjoy it?</p>
-                    <p><strong>B:</strong> Yes, very much.</p>
+                <CardContent className="space-y-1 text-sm">
+                    <p><strong>John :</strong> Good morning, Mary!</p>
+                    <p><strong>Mary :</strong> Good morning, John!</p>
+                    <p><strong>John :</strong> How are you?</p>
+                    <p><strong>Mary :</strong> I am fine thank you and you?</p>
                 </CardContent>
              </Card>
           </AccordionContent>
@@ -2439,7 +2486,3 @@ able to make it.</p>
     </div>
   );
 }
-
-    
-
-    
