@@ -1563,17 +1563,86 @@ export function UnitOneContent() {
                                 </div>
 
                                 <h5 className="font-semibold text-md mb-2 mt-6">DIALOGUE PRACTICE NO 3 ABOUT CLOTHING</h5>
+                                 <h6 className="font-semibold text-sm mb-2">BUYING A NEW SHIRT.</h6>
                                 <div className="p-4 border rounded-lg bg-muted/50 space-y-1 text-sm">
-                                    <ul className="list-disc pl-6 text-muted-foreground">
-                                        <li>Rompers: isarubeti</li>
-                                        <li>Shirt: ishati</li>
-                                        <li>Trousers: ipantalo</li>
-                                    </ul>
+                                  <p><strong>A :</strong> Good morning ,ma'am. May I help you?</p>
+                                  <p><strong>B :</strong> yes,I would like to buy a shirt.</p>
+                                  <p><strong>A :</strong> which color and would you like a long-sleeved or a short-sleeved shirt?</p>
+                                  <p><strong>B :</strong> I will be needing a white long- sleeved shirt.</p>
+                                  <p><strong>A :</strong> have a look at this one.this one is wrinkle resistant, it resists liquid spills and food stains.</p>
+                                  <p><strong>B :</strong> would you have it in a medium size?</p>
+                                  <p><strong>A :</strong> that is exactly what I am holding up to show you.</p>
+                                  <p><strong>B :</strong> May I try it on?</p>
+                                  <p><strong>A :</strong> yes,of course,here it is.</p>
+                                  <p><strong>B :</strong> how much is it by the way?</p>
+                                  <p><strong>A :</strong> 5000tsh.</p>
+                                </div>
+
+                                <div className="mt-4">
+                                  <h5 className="font-semibold text-md mb-2">REMEMBER THAT: FRUITS, FOODS AND CLOTHES ,THEY ARE OF DIFFERENT COLOURS.SO LET US STUDY THE FOLLOWING COLOURS:</h5>
+                                   <ul className="list-disc pl-6 text-muted-foreground text-sm space-y-1">
+                                      <li>White : ibara ryera.</li>
+                                      <li>Green: ibara ryakatsi.</li>
+                                      <li>Black: ibara ryirabura.</li>
+                                      <li>Brown: ibara rya cokora.</li>
+                                      <li>Red: ibara ritukura.</li>
+                                      <li>Blue: ibara ryubururu.</li>
+                                      <li>orange: ibara ryumucungwe.</li>
+                                      <li>Yellow: ibara ryumuhondo.</li>
+                                      <li>Grey: ibara ryumunyota.</li>
+                                   </ul>
+                                   <p className="text-sm mt-2">Eg: what colour is your house</p>
                                 </div>
                             </CardContent>
                         </Card>
                     </AccordionContent>
                 </AccordionItem>
+                 <AccordionItem value="people">
+                    <AccordionTrigger>C. People</AccordionTrigger>
+                    <AccordionContent>
+                        <p className="text-muted-foreground mb-2">In this part we will learn how to call each others in our family,how to name a member of someone's family.</p>
+                        <p className="font-semibold text-sm mb-2">Def: family: -is a group of people in one house.</p>
+                        <p className="font-semibold text-sm mb-4">- mother,father and children ,they make a family.</p>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <p>This is a man.</p>
+                                <p>His name is John.</p>
+                                <p>He comes from Kigoma.</p>
+                                <p>His son is MINANI.</p>
+                                <p>His daughter is Catherine.</p>
+                                <p>His wife is Grace.</p>
+                            </div>
+                             <div>
+                                <p>This is a woman.</p>
+                                <p>Her name is Grace.</p>
+                                <p>She comes from Kigoma</p>
+                                <p>Her son is MINANI</p>
+                                <p>Her daughter is Catherine</p>
+                                <p>Her husband is John</p>
+                            </div>
+                             <div>
+                                <p>This is a boy.</p>
+                                <p>His name is MINANI.</p>
+                                <p>His father is John.</p>
+                                <p>His sister is Catherine</p>
+                                <p>His mother is Grace.</p>
+                            </div>
+                              <div>
+                                <p>This is a girl</p>
+                                <p>Her name is Catherine</p>
+                                <p>Her father is John</p>
+                                <p>Her mother is Grace.</p>
+                                <p>Her brother is Minani</p>
+                            </div>
+                        </div>
+                        <div className="mt-4">
+                           <p>Is this a man? <span className="text-muted-foreground">Yes,this is the man.</span></p>
+                           <p>Is this a boy ? <span className="text-muted-foreground">No, this is not a boy, this is a girl</span></p>
+                           <p>Is this a woman? <span className="text-muted-foreground">No, this is not a woman,this is a man</span></p>
+                        </div>
+                        <h4 className="font-semibold text-lg mt-4">LET US SEE MORE MEMBERS IN OUR FAMILY</h4>
+                    </AccordionContent>
+                 </AccordionItem>
              </Accordion>
           </AccordionContent>
         </AccordionItem>
@@ -1674,4 +1743,5 @@ export function UnitOneContent() {
   
 
     
+
 
