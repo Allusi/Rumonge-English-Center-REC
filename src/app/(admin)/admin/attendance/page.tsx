@@ -67,7 +67,7 @@ export default function AdminAttendancePage() {
 
   const selectedDateString = selectedDate ? format(selectedDate, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd');
   
-  const attendanceQuery = firestore ? query(collection(firestore, 'attendance'), where('date', '==', selectedDateString), orderBy('studentName')) : null;
+  const attendanceQuery = firestore ? query(collection(firestore, 'attendance'), where('date', '==', selectedDateString)) : null;
   const { data: attendanceRecords, loading: attendanceLoading } = useCollection<Attendance>(attendanceQuery);
 
 
