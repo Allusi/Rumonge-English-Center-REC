@@ -2111,6 +2111,43 @@ export function UnitOneContent() {
                                     <li> Day : is a period of twenty- four hours</li>
                                     <li> Hour : is a period of 60 minutes.</li>
                                 </ul>
+                                <h4 className="font-semibold text-lg mb-2 mt-6">TELLING TIME</h4>
+                                <div className="text-sm space-y-2 text-muted-foreground">
+                                    <p>How many days are there in December?</p>
+                                    <ol className="list-decimal pl-6">
+                                        <li>A day has daytime and nighttime</li>
+                                        <li>A daytime has twelve hours and twelve hours for nighttime.</li>
+                                        <li>In a day we have morning, afternoon and evening</li>
+                                        <li>A day ends at midnight 12:00 p.m and a new day begins.</li>
+                                        <li>In telling time,we also use a.m and p.m</li>
+                                    </ol>
+                                    <p>a.m--------&gt;anti- meridiem,in the morning after midnight: this is morning time</p>
+                                    <p>p.m--------&gt;post- meridiem,in the afternoon, in the evening, at midnight, at noon and before midnight: this is afternoon and evening time</p>
+                                    <p>When telling time,there are two questions you have to know,these are : what time is it? And what is the time? And the answers to these questions will start by saying :-It is....... / -The time is.........</p>
+                                    
+                                    <h5 className="font-semibold text-md pt-2">TELLING TIME IN SIMPLE WAY</h5>
+                                    <p>This way is reading the time as it is shown by the watch----&gt;this is common English ( both British and American use this way)</p>
+                                    <p>E.g : 9:11 ---&gt;it is nine eleven</p>
+                                    <p>12:35 ---&gt;the time is twelve thirty- five</p>
+                                    <p>6:30 --&gt; it is six thirty</p>
+                                    <p>2:15 --&gt; it is two fifteen</p>
+                                    <p>1:10 --&gt;the time is one ten</p>
+                                    <p>3:05 -&gt;three oh five/ three naught five</p>
+                                    <p>13:52 -&gt;it is thirteen fifty- two ( 1:52 p.m )</p>
+                                    <p>Say : " o'clock :-when an hour is top.</p>
+                                    <p>-only for whole hours</p>
+                                    <p>E.g : 9:00 ----&gt; it is nine o' clock.</p>
+                                    <p>3:00 ----&gt; the time is three o' clock</p>
+                                    <p>Please pay attention!!!!!---------&gt; Don't use a.m and p.m with whole hours</p>
+                                    <p>---------&gt;Don't use o' clock with morning /afternoon</p>
+                                    
+                                    <h5 className="font-semibold text-md pt-2">OTHER WAY OF TELLING TIME</h5>
+                                    <p>1......................15....................29.....30.....31.......................45.......................59</p>
+                                    <p> &lt;----------past/after-------------&gt; Half. &lt;-------------To/of-------------------&gt;</p>
+                                    <p>E.g: 7:08------&gt;it is eight minutes past/ after seven</p>
+                                    <p>10:27-----&gt;it is twenty- seven minutes past/after ten</p>
+                                    <p>11:15------&gt;it is quarter past/after eleven</p>
+                                </div>
                             </CardContent>
                         </Card>
                     </AccordionContent>
