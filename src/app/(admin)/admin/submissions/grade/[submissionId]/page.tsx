@@ -83,12 +83,18 @@ export default function GradeSubmissionPage() {
     }
   }
   
-  const isLoading = submissionLoading || (submission && assignmentLoading);
+  const isLoading = submissionLoading || assignmentLoading;
   
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <Skeleton className="h-10 w-64" />
+        <div className="flex items-center gap-4">
+            <Skeleton className="h-9 w-9" />
+            <div className='space-y-2'>
+                <Skeleton className="h-8 w-64" />
+                <Skeleton className="h-4 w-48" />
+            </div>
+        </div>
         <Card>
           <CardHeader className="space-y-2">
             <Skeleton className="h-6 w-1/3" />
@@ -115,7 +121,7 @@ export default function GradeSubmissionPage() {
     );
   }
 
-  // After all loading is complete, if either document is missing, then 404.
+  // Only call notFound() after all loading is complete and data is still missing.
   if (!submission || !assignment) {
     notFound();
   }
