@@ -579,7 +579,7 @@ export function UnitOneContent() {
                 <h4 className="font-semibold text-xl mb-2 mt-4">C. Request</h4>
                 <p className="text-muted-foreground">A request or making request is a way of asking someone to let you do or use something. To ask permission or authorisation of doing something. See the following expressions used when making request:</p>
                 <ul className="list-disc pl-6 text-muted-foreground">
-                    <li>Can I ....................................?</li>
+                    <li>Can I ...................................?</li>
                     <li>May I...................................?</li>
                     <li>Is it alright if you / I.............?</li>
                     <li>Is it bad if I / you....................?</li>
@@ -1999,7 +1999,7 @@ export function UnitOneContent() {
                                     <p><strong>Remember:</strong> we have , odd number : 1,3,5,7,9,11,13 etc..</p>
                                     <p>Even number : 2, 4, 6 ,8 ,10 ,12 ,14 etc....</p>
                                     <p><strong>Eg:</strong> -Two dogs,five hens,twenty girls,one stick and eighteen students.</p>
-                                    <p>-That girl{'---->'}<wbr/>Those four girls,This boy{'----------->'}<wbr/>These two boys.</p>
+                                    <p>-That girl{'--->'}<wbr/>Those four girls,This boy{'----------->'}<wbr/>These two boys.</p>
                                     <p><strong>NB:</strong>Every day when counting the cardinal numbers between hundreds and dizen,there is the word"" and ""</p>
                                     <p>E.g: 101: one hundred and one</p>
                                     <p>254: two hundred and fifty- four</p>
@@ -2177,7 +2177,8 @@ export function UnitOneContent() {
                                 <h5 className="font-semibold text-md mb-2">CHANGE APPOINTMENT</h5>
                                 <div className="p-4 border rounded-lg bg-muted/50 space-y-1 text-sm">
                                     <p><strong>A :</strong> Good morning,what can I do for you?</p>
-                                    <p><strong>B :</strong> Good morning, my name is Adele,yesterday I made an appointment with Dr.James,but I think I'll not be able to make it.</p>
+                                    <p><strong>B :</strong> Good morning, my name is Adele,yesterday I made an appointment with Dr.James,but I think I'll not be
+able to make it.</p>
                                     <p><strong>A :</strong> when is your appointment?</p>
                                     <p><strong>B :</strong> it's on Wednesday the 25th,3 days from to day.</p>
                                     <p><strong>A :</strong> what time is the appointment?</p>
@@ -2236,7 +2237,7 @@ export function UnitOneContent() {
             <p className="text-muted-foreground mb-2">The action shows us what is happening.</p>
             <p className="text-muted-foreground mb-2">Here are some examples:</p>
             <ul className="list-disc pl-6 text-muted-foreground space-y-2 text-sm">
-                 <li>A boy is <strong>eating</strong> a banana. {'->'} what is the boy doing? {'->'} he is eating a banana. {'->'} what is the boy eating? {'->'} he is eating the banana.</li>
+                <li>A boy is <strong>eating</strong> a banana. {'->'} what is the boy doing? {'->'} he is eating a banana. {'->'} what is the boy eating? {'->'} he is eating the banana.</li>
                 <li>A girl is going.</li>
                 <li>A man is walking.</li>
                 <li>MINANI is sitting on a chair.</li>
@@ -2296,7 +2297,7 @@ export function UnitOneContent() {
                 <p><strong>Jackson :</strong> yes,here we are,let's go.</p>
               </div>
               <h4 className="font-semibold text-lg my-4">EXPRESSIONS</h4>
-              <div className="text-sm space-y-2 text-muted-foreground">
+               <div className="text-sm space-y-2 text-muted-foreground">
                 <p><strong>1.Be so!---&gt;</strong> urahora utyo/ urama utyo</p>
                 <p><strong>2.a mother to be----&gt;</strong>near to give birth.</p>
                 <p><strong>3.in the family way----&gt;</strong>to be pregnant</p>
@@ -2312,11 +2313,42 @@ export function UnitOneContent() {
              <p className="text-muted-foreground mb-2">In this part, we will see the words which we use when talking to people, things,animals and places.the words which tell us more about people, things ,animals and places.</p>
             <p className="text-muted-foreground mb-2">Look at the following examples :</p>
             <ul className="list-disc pl-6 text-muted-foreground">
-              <li>This is a <strong>tall</strong> boy. This is a <strong>short</strong> boy.<br/><span className="text-xs">Tall and short tell more about the boys</span></li>
-              <li>Anna is a <strong>fat</strong> girl. Christina is a <strong>thin</strong> girl.<br/><span className="text-xs">Fat and thin tell more about the girls.</span></li>
+              <li>This is a <strong>tall</strong> boy. - This is a <strong>short</strong> boy.<br/><span className="text-xs">Tall and short tell more about the boys</span></li>
+              <li>Anna is a <strong>fat</strong> girl. - Christina is a <strong>thin</strong> girl.<br/><span className="text-xs">Fat and thin tell more about the girls.</span></li>
               <li>Albert is sad. -Hamisi is happy.<br/><span className="text-xs">Sad and happy tell more about Albert and Hamisi</span></li>
               <li>Juma is an old man. -Peter is young man<br/>( Juma is 70 years old). ( Peter is 25 years old)<br/><span className="text-xs">Old and young tell more about Juma and Peter</span></li>
             </ul>
+             <div className="p-4 border rounded-lg bg-muted/50 space-y-1 text-sm mt-4">
+                <p><strong>Osiane :</strong> Good morning, Angel</p>
+                <p><strong>Angel :</strong> Good morning, Osiane</p>
+                <p><strong>Osiane :</strong> I am happy to see you again.</p>
+                <p><strong>Angel :</strong> and I also, what are you doing with that beautiful basket?</p>
+                <p><strong>Osiane :</strong> I am from the market.</p>
+                <p><strong>Angel :</strong> what did you buy from there?</p>
+                <p><strong>Osiane :</strong> I bought many things for my new house, like a small plastic table, a red cup, a white cup, a big pot and a sharp panga.</p>
+                <p><strong>Angel :</strong> what about clothes?</p>
+                <p><strong>Osiane :</strong> I bought a short blue skirt for my daughter, a long green dress for my mother,without forgetting that I like brown underwear and brassiere.</p>
+                <p><strong>Osiane :</strong> you will inform me when you go there so as to escort you.</p>
+                <p><strong>Angel :</strong> Don't worry for that but I don't know your new address where you have moved?</p>
+                <p><strong>Osiane :</strong> I live beyond that hill,near NYARUGUSU Road ,where you will find two big houses and a kitchenette, beside there is a tall mango tree with unripe fruits.</p>
+                <p><strong>Angel :</strong> I think that I shall not go astray, I shall ask.</p>
+                <p><strong>Osiane :</strong> okay,you are welcome and you will find hot food ready .</p>
+                <p><strong>Angel :</strong> what will you prepare for me?</p>
+                <p><strong>Osiane :</strong> I shall prepare delicious meal like meat.Besides,beside the meal,there will be lemons as desserts.</p>
+                <p><strong>Angel :</strong> I don't like lemons ,they are sour.</p>
+                <p><strong>Osiane :</strong> and oranges?</p>
+                <p><strong>Angel :</strong> Yes, I like oranges very much,they are as sweet as honey.</p>
+                <p><strong>Osiane :</strong> I shall be happy to see you again.</p>
+                <p><strong>Angel :</strong> and I also.</p>
+                <p><strong>Osiane :</strong> let me leave you,it is late.</p>
+                <p><strong>Angel :</strong> cheerio!</p>
+                <p><strong>Osiane :</strong> cheerio!</p>
+            </div>
+            <h4 className="font-semibold text-lg my-4">EXPRESSIONS</h4>
+            <div className="text-sm space-y-2 text-muted-foreground">
+                <p><strong>1. The long and the short :</strong> in short,in one word.</p>
+                <p><strong>2. Give my best regards :</strong> send my greetings/ love to....</p>
+            </div>
           </AccordionContent>
         </AccordionItem>
 
@@ -2325,12 +2357,36 @@ export function UnitOneContent() {
             Section 6: Words for Position and Direction
           </AccordionTrigger>
           <AccordionContent className="p-4 pt-0">
-             <p className="text-muted-foreground mb-2">These words (prepositions) show us where things are.</p>
-            <ul className="list-disc pl-6 text-muted-foreground">
-              <li>The ball is <strong>on</strong> the table.</li>
-              <li>The bottle is <strong>under</strong> the table.</li>
-              <li>The boy is <strong>behind</strong> the car.</li>
-              <li>The girl is <strong>in front of</strong> the car.</li>
+             <p className="text-muted-foreground mb-2">These words (prepositions) show us where things , people ,animals and places are in relation to us. When you finish this section ,you will be able to tell where people ,things and places are. Where people are going to or coming from. Here are some words :</p>
+            <ul className="list-disc pl-6 text-muted-foreground columns-2">
+              <li>On : Ku</li>
+              <li>At : a , Ku , I , mu</li>
+              <li>Up : hejuru Ku ( iyo gifatanye Nico uvuga )</li>
+              <li>Over : hejuru ( iyo kidafatanye nico uvuga )</li>
+              <li>Down : nasi</li>
+              <li>Below : musi yikintu ariko ntigikorako</li>
+              <li>Under : musi</li>
+              <li>In front of : imbere ya</li>
+              <li>Close to : impande ya</li>
+              <li>In : mu</li>
+              <li>Inside : imbere mu</li>
+              <li>Out : hanze</li>
+              <li>Onto : gukorokera Ku</li>
+              <li>Into : kwerekeza mu</li>
+              <li>To : kwa , I , mu ,Ku</li>
+              <li>Towards : werekeza imbere ya</li>
+              <li>In sight of : mu maso ya</li>
+              <li>Behind : inyuma ya</li>
+              <li>Beyond : au dela</li>
+              <li>From : kuva ,iyo kiva/ uva</li>
+              <li>Along : kunkengera yibarabara canke yuruzi</li>
+              <li>Beside : iruhande</li>
+              <li>Across : ujabuka yibarabara canke uruzi</li>
+              <li>Between : hagati yibintu bibiri</li>
+              <li>Among : hagati yibintu birenze bibiri</li>
+              <li>Through : uciye mu</li>
+              <li>Throughout : hose</li>
+              <li>Whole : vyose</li>
             </ul>
           </AccordionContent>
         </AccordionItem>
