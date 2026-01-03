@@ -137,7 +137,7 @@ export default function AssignmentsPage() {
                   ))
               )}
               {!loading && assignments?.map((assignment) => (
-                <TableRow key={assignment.id}>
+                <TableRow key={assignment.id} onClick={() => router.push(`/admin/assignments/edit/${assignment.id}`)} className="cursor-pointer">
                   <TableCell className="font-medium">{assignment.title}</TableCell>
                   <TableCell>
                     <Badge variant="outline" className="gap-1">
@@ -153,6 +153,7 @@ export default function AssignmentsPage() {
                           aria-haspopup="true"
                           size="icon"
                           variant="ghost"
+                           onClick={(e) => e.stopPropagation()}
                         >
                           <MoreHorizontal className="h-4 w-4" />
                           <span className="sr-only">Toggle menu</span>
@@ -160,7 +161,7 @@ export default function AssignmentsPage() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => router.push(`/admin/assignments/edit/${assignment.id}`)}>
+                        <DropdownMenuItem onClick={(e) => { e.stopPropagation(); router.push(`/admin/assignments/edit/${assignment.id}`)}}>
                           <FilePenLine className="mr-2 h-4 w-4" />
                           Edit
                         </DropdownMenuItem>
@@ -169,6 +170,7 @@ export default function AssignmentsPage() {
                                <DropdownMenuItem
                                   className="text-destructive"
                                   onSelect={(e) => e.preventDefault()}
+                                  onClick={(e) => e.stopPropagation()}
                                 >
                                   <Trash2 className="mr-2 h-4 w-4" />
                                   Delete
