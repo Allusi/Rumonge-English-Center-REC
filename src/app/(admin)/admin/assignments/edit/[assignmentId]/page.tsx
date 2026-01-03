@@ -54,6 +54,11 @@ export default function EditAssignmentPage() {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+        title: '',
+        instructions: '',
+        courseId: '',
+    }
   });
 
   useEffect(() => {
