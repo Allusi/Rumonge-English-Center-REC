@@ -5,5 +5,5 @@ export const initialAssignment = {
     courseId: "C001",
     courseName: "Unit One: The Basics",
     status: 'draft',
-    maxMarks: 100,
+    maxMarks: 10,
 };

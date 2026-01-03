@@ -38,7 +38,6 @@ const formSchema = z.object({
   title: z.string().min(5, { message: 'Title must be at least 5 characters.' }),
   instructions: z.string().min(10, { message: 'Instructions must be at least 10 characters.' }),
   courseId: z.string({ required_error: 'Please select a course.' }),
-  maxMarks: z.coerce.number().min(1, "Maximum marks must be at least 1."),
 });
 
 export default function EditAssignmentPage() {
@@ -60,7 +59,6 @@ export default function EditAssignmentPage() {
         title: '',
         instructions: '',
         courseId: '',
-        maxMarks: 100,
     }
   });
 
@@ -70,7 +68,6 @@ export default function EditAssignmentPage() {
         title: assignment.title,
         instructions: assignment.instructions,
         courseId: assignment.courseId,
-        maxMarks: assignment.maxMarks,
       });
     }
   }, [assignment, form]);
@@ -82,6 +79,7 @@ export default function EditAssignmentPage() {
       await updateDoc(assignmentRef, {
         ...values,
         courseName: course?.name || 'Unknown Course',
+        maxMarks: 10,
       });
       toast({ title: 'Success', description: 'Assignment updated successfully.' });
       router.push('/admin/assignments');
@@ -219,20 +217,7 @@ export default function EditAssignmentPage() {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="maxMarks"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Maximum Marks</FormLabel>
-                    <FormControl>
-                      <Input type="number" placeholder="100" {...field} className="w-40" />
-                    </FormControl>
-                    <FormDescription>The total marks this assignment is out of.</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+               <FormDescription>All assignments are worth 10 marks.</FormDescription>
               <div className="flex justify-between items-center">
                  <Button type="button" variant={assignment?.status === 'published' ? "secondary" : "default"} onClick={handleTogglePublish}>
                   {assignment?.status === 'published' ? (

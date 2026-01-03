@@ -104,7 +104,7 @@ function GradeSubmissionPageContent({ submission }: { submission: AssignmentSubm
     }, [firestore, submission]);
 
     const formSchema = useMemo(() => {
-        return assignment ? createFormSchema(assignment.maxMarks) : createFormSchema(100);
+        return assignment ? createFormSchema(assignment.maxMarks) : createFormSchema(10);
     }, [assignment]);
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -145,7 +145,7 @@ function GradeSubmissionPageContent({ submission }: { submission: AssignmentSubm
     }
 
     if (!assignment) {
-        return notFound();
+        notFound();
     }
 
     return (
@@ -211,7 +211,7 @@ function GradeSubmissionPageContent({ submission }: { submission: AssignmentSubm
                     <FormControl>
                       <Input
                         type="number"
-                        placeholder="e.g., 85"
+                        placeholder="e.g., 8"
                         className="w-40"
                         {...field}
                       />
