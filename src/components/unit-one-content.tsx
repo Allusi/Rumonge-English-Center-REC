@@ -2129,8 +2129,8 @@ export function UnitOneContent() {
                                     <p>This way is reading the time as it is shown by the watch----&gt;this is common English ( both British and American use this way)</p>
                                     <p>E.g : 9:11 ---&gt;it is nine eleven</p>
                                     <p>12:35 ---&gt;the time is twelve thirty- five</p>
-                                    <p>6:30 --&gt; it is six thirty</p>
-                                    <p>2:15 --&gt; it is two fifteen</p>
+                                    <p>6:30 --&gt;it is six thirty</p>
+                                    <p>2:15 --&gt;it is two fifteen</p>
                                     <p>1:10 --&gt;the time is one ten</p>
                                     <p>3:05 -&gt;three oh five/ three naught five</p>
                                     <p>13:52 -&gt;it is thirteen fifty- two ( 1:52 p.m )</p>
@@ -2147,7 +2147,51 @@ export function UnitOneContent() {
                                     <p>E.g: 7:08------&gt;it is eight minutes past/ after seven</p>
                                     <p>10:27-----&gt;it is twenty- seven minutes past/after ten</p>
                                     <p>11:15------&gt;it is quarter past/after eleven</p>
+                                    <p>9:34-----&gt;it is twenty- six minutes to /of ten</p>
+                                    <p>12:45----&gt;it is quarter to/ of one</p>
+                                    <p>7:30-----&gt;it is a half past/after seven</p>
+                                    <p>3:05-----&gt;it is five past /after three</p>
+                                    <p>1:55-----&gt;it is five to / of two</p>
+                                    <p>1:10-----&gt;it is ten past/after one</p>
+                                    <p>NB: with 5/10/20/25 the word minutes is not necessary, but is used with other numbers.</p>
+                                    <p>E.g: 10:25 a.m--------&gt; it is twenty- five past ten</p>
+                                    <p>10:17 p.m-------&gt; it is seventeen minutes past ten.</p>
                                 </div>
+                                <h4 className="font-semibold text-lg mb-2 mt-6">TWENTY- FOUR HOURS</h4>
+                                <div className="text-sm space-y-2 text-muted-foreground">
+                                    <p>We use twenty-four hours clock for two purposes only:</p>
+                                    <ul className="list-disc pl-6">
+                                        <li>For military purposes</li>
+                                        <li>For planned timetable</li>
+                                    </ul>
+                                    <p>E.g:13:45----&gt; the train will arrive at quarter to fourteen.</p>
+                                    <p>19:00---&gt; the soldiers will attack enemies at nineteen o' clock.</p>
+                                    <p>NB:Don't use a.m and p.m with twenty- four hours.</p>
+                                </div>
+                                <h4 className="font-semibold text-lg mb-2 mt-6">HUNDRED HOURS</h4>
+                                 <div className="text-sm space-y-2 text-muted-foreground">
+                                    <p>We use hundred hours for military purpose only.</p>
+                                    <p>E.g:--&gt;the support army will land at nine hundred hours .(9:00).</p>
+                                </div>
+                                <h4 className="font-semibold text-lg mb-2 mt-6">DIALOGUE PRACTICE ABOUT TELLING TIME</h4>
+                                <h5 className="font-semibold text-md mb-2">CHANGE APPOINTMENT</h5>
+                                <div className="p-4 border rounded-lg bg-muted/50 space-y-1 text-sm">
+                                    <p><strong>A :</strong> Good morning,what can I do for you?</p>
+                                    <p><strong>B :</strong> Good morning, my name is Adele,yesterday I made an appointment with Dr.James,but I think I'll not be able to make it.</p>
+                                    <p><strong>A :</strong> when is your appointment?</p>
+                                    <p><strong>B :</strong> it's on Wednesday the 25th,3 days from to day.</p>
+                                    <p><strong>A :</strong> what time is the appointment?</p>
+                                    <p><strong>B :</strong> if I remember correctly it is at three minutes to four.</p>
+                                    <p><strong>A :</strong> ah! I see it in the system now.what day would you like to change it to?</p>
+                                    <p><strong>B :</strong> it's Friday the 27th at quarter past four.OK?</p>
+                                    <p><strong>A :</strong> yes,that will work just fine.</p>
+                                    <p><strong>B :</strong> I'll come in at that time.</p>
+                                </div>
+                                <h4 className="font-semibold text-lg mb-2 mt-6">DIALOGUE PRACTICE OF THIS SECTION 3</h4>
+                                <div className="p-4 border rounded-lg bg-muted/50 space-y-1 text-sm">
+                                  <p><strong>Stella :</strong> Good evening, STANY</p>
+                                </div>
+
                             </CardContent>
                         </Card>
                     </AccordionContent>
@@ -2248,3 +2292,5 @@ export function UnitOneContent() {
     </div>
   );
 }
+
+    
