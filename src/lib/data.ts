@@ -85,6 +85,18 @@ export type SchoolSettings = {
     activeDays: ('Sunday' | 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday')[];
 };
 
+export type AITutorSession = {
+    id: string;
+    studentId: string;
+    studentName: string;
+    createdAt: Timestamp;
+    lastActivity: Timestamp;
+    history: {
+        role: 'user' | 'model';
+        content: string;
+    }[];
+};
+
 // Data is now fetched from Firestore. This can be kept for fallback or removed.
 export const courses: Omit<Course, 'id'>[] = [
   { name: 'Unit One: The Basics', description: 'Fundamentals of English language for beginners.', level: 'A1', isEnabled: false },

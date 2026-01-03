@@ -31,6 +31,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { useAudioCache } from "@/context/audio-cache-context";
+import { useFirestore, useUser, useDoc } from "@/firebase";
+import { collection, addDoc, updateDoc, doc, serverTimestamp } from "firebase/firestore";
+import type { Student } from "@/lib/data";
 
 const formSchema = z.object({
   message: z.string().min(1, {
@@ -51,6 +54,7 @@ export function AITutorChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [sessionId, setSessionId] = useState<string | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [hasCameraPermission, setHasCameraPermission] = useState(true);
   const [interactionMode, setInteractionMode] = useState<InteractionMode>(null);
@@ -60,14 +64,12 @@ export function AITutorChat() {
   const [isRecording, setIsRecording] = useState(false);
   const recognitionRef = useRef<any | null>(null); // Using 'any' for SpeechRecognition for broader browser support
   const { getAudioForText } = useAudioCache();
+  const firestore = useFirestore();
+  const { user, loading: userLoading } = useUser();
+  
+  const studentRef = firestore && user ? doc(firestore, 'users', user.uid) : null;
+  const { data: studentProfile, loading: studentLoading } = useDoc<Student>(studentRef);
 
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      message: "",
-    },
-  });
 
   const playAudio = useCallback((audioUrl: string, messageIndex: number) => {
     if (audioRef.current) {
@@ -100,7 +102,20 @@ export function AITutorChat() {
     });
   }, []);
 
+  const updateFirestoreSession = async (sessionId: string, updatedMessages: Message[]) => {
+    if (!firestore || !sessionId) return;
+    const sessionRef = doc(firestore, "ai_tutor_sessions", sessionId);
+    await updateDoc(sessionRef, {
+      history: updatedMessages.map(({ audioUrl, isPlaying, ...rest }) => rest), // Don't store UI state in DB
+      lastActivity: serverTimestamp(),
+    });
+  };
+
   const onSubmit = useCallback(async (values: z.infer<typeof formSchema>) => {
+    if (!sessionId) {
+      setError("Session not initialized. Please restart the chat.");
+      return;
+    }
     const userInput: Message = { role: "user", content: values.message };
     const newMessages = [...messages, userInput];
     setMessages(newMessages);
@@ -116,6 +131,8 @@ export function AITutorChat() {
       
       const finalMessages = [...newMessages, modelResponse];
       setMessages(finalMessages);
+      
+      await updateFirestoreSession(sessionId, finalMessages);
 
       if (interactionMode !== 'text') {
         playAudio(audioUrl, finalMessages.length - 1);
@@ -127,8 +144,8 @@ export function AITutorChat() {
     } finally {
       setIsLoading(false);
     }
-  }, [messages, form, getAudioForText, interactionMode, playAudio]);
-
+  }, [messages, form, getAudioForText, interactionMode, playAudio, sessionId, firestore]);
+  
   useEffect(() => {
     // Initialize speech recognition
     if (typeof window !== "undefined") {
@@ -196,12 +213,16 @@ export function AITutorChat() {
   }, [messages]);
 
   const startConversation = useCallback(async (mode: InteractionMode) => {
+    if (!firestore || !user || !studentProfile) {
+        setError("Could not start session. User profile not loaded.");
+        return;
+    }
     setIsLoading(true);
     setError(null);
     
     try {
       let initialTutorMessage: string;
-      const studentName = "Student";
+      const studentName = studentProfile?.name || "Student";
 
       switch (mode) {
         case 'video':
@@ -224,7 +245,18 @@ export function AITutorChat() {
         audioUrl: audioUrl,
       };
 
-      setMessages([firstResponse]);
+      const initialMessages = [firstResponse];
+      setMessages(initialMessages);
+
+      const sessionDocRef = await addDoc(collection(firestore, "ai_tutor_sessions"), {
+          studentId: user.uid,
+          studentName: studentProfile.name,
+          createdAt: serverTimestamp(),
+          lastActivity: serverTimestamp(),
+          history: initialMessages.map(({ audioUrl, isPlaying, ...rest }) => rest),
+      });
+      setSessionId(sessionDocRef.id);
+
 
       if (mode !== 'text') {
          playAudio(audioUrl, 0);
@@ -236,7 +268,7 @@ export function AITutorChat() {
     } finally {
       setIsLoading(false);
     }
-  }, [getAudioForText, playAudio]);
+  }, [getAudioForText, playAudio, firestore, user, studentProfile]);
 
   const handleModeSelect = useCallback((mode: InteractionMode) => {
     setInteractionMode(mode);
