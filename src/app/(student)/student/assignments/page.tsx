@@ -16,20 +16,40 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useCollection, useFirestore, useUser } from "@/firebase";
-import { collection, query, where } from "firebase/firestore";
+import { collection, query, where, doc, deleteDoc } from "firebase/firestore";
 import type { Assignment, AssignmentSubmission, Enrollment } from "@/lib/data";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowLeft, BookOpen, Check, Edit } from "lucide-react";
+import { ArrowLeft, BookOpen, Check, MoreHorizontal, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useMemo } from "react";
 import { format } from "date-fns";
+import { useToast } from "@/hooks/use-toast";
 
 export default function StudentAssignmentsPage() {
   const { user, loading: userLoading } = useUser();
   const firestore = useFirestore();
+  const { toast } = useToast();
 
   const { data: enrollments, loading: enrollmentsLoading } = useCollection<Enrollment>(
     firestore && user ? query(collection(firestore, 'enrollments'), where('studentId', '==', user.uid)) : null
@@ -52,15 +72,38 @@ export default function StudentAssignmentsPage() {
   );
 
   const mergedAssignments = useMemo(() => {
-    return assignments?.map(assignment => {
+    if (!assignments) return [];
+    return assignments.map(assignment => {
       const submission = submissions?.find(s => s.assignmentId === assignment.id);
       return {
         ...assignment,
         submissionStatus: submission ? (submission.status === 'graded' ? 'Graded' : 'Submitted') : 'Not Submitted',
         submission: submission,
       };
-    }).sort((a, b) => b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime());
+    }).sort((a, b) => {
+        const dateA = a.createdAt?.toDate()?.getTime() || 0;
+        const dateB = b.createdAt?.toDate()?.getTime() || 0;
+        return dateB - dateA;
+    });
   }, [assignments, submissions]);
+
+  const handleDeleteSubmission = async (submissionId: string) => {
+    if (!firestore) return;
+    try {
+        await deleteDoc(doc(firestore, "submissions", submissionId));
+        toast({
+            title: "Submission Deleted",
+            description: "You can now re-submit your assignment.",
+        });
+    } catch (error) {
+        console.error("Error deleting submission:", error);
+        toast({
+            variant: "destructive",
+            title: "Error",
+            description: "Could not delete your submission. Please try again.",
+        });
+    }
+  };
 
   const isLoading = userLoading || enrollmentsLoading || assignmentsLoading || submissionsLoading;
 
@@ -132,8 +175,40 @@ export default function StudentAssignmentsPage() {
                             <Button variant="outline" size="sm">Submit</Button>
                         </Link>
                     )}
-                    {assignment.submissionStatus === 'Submitted' && (
-                        <Button variant="outline" size="sm" disabled>Submitted</Button>
+                    {assignment.submissionStatus === 'Submitted' && assignment.submission && (
+                        <AlertDialog>
+                             <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button size="icon" variant="ghost">
+                                        <MoreHorizontal className="h-4 w-4" />
+                                        <span className="sr-only">Actions</span>
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                    <AlertDialogTrigger asChild>
+                                        <DropdownMenuItem className="text-destructive">
+                                            <Trash2 className="mr-2 h-4 w-4" />
+                                            Delete Submission
+                                        </DropdownMenuItem>
+                                    </AlertDialogTrigger>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        This will permanently delete your submission. You will be able to submit again. Are you sure you want to continue?
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction onClick={() => handleDeleteSubmission(assignment.submission!.id)} className="bg-destructive hover:bg-destructive/90">
+                                        Yes, Delete
+                                    </AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
                     )}
                      {assignment.submissionStatus === 'Graded' && assignment.submission && (
                         <Link href={`/student/assignments/view/${assignment.submission.id}`} passHref>
