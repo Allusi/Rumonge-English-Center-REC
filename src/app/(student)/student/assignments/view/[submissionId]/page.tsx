@@ -9,8 +9,8 @@ import {
   CardDescription,
 } from '@/components/ui/card';
 import { useFirestore } from '@/firebase';
-import { doc, onSnapshot, type DocumentData } from 'firebase/firestore';
-import { ArrowLeft, FileCheck2, MessageSquareQuote } from 'lucide-react';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { ArrowLeft, FileCheck2, MessageSquareQuote, FileQuestion } from 'lucide-react';
 import Link from 'next/link';
 import { useParams, notFound } from 'next/navigation';
 import type { Assignment, AssignmentSubmission } from '@/lib/data';
@@ -57,6 +57,7 @@ function GradedSubmissionContent({ submission }: { submission: AssignmentSubmiss
                 if (docSnap.exists()) {
                     setAssignment({ id: docSnap.id, ...docSnap.data() } as Assignment);
                 } else {
+                    // Assignment was likely deleted, this is a valid state
                     setAssignment(null);
                 }
                 setAssignmentLoading(false);
@@ -74,9 +75,7 @@ function GradedSubmissionContent({ submission }: { submission: AssignmentSubmiss
         return <LoadingSkeleton />;
     }
 
-    if (!assignment) {
-        notFound();
-    }
+    // `assignment` can be null if it was deleted, but we should still show the grade.
 
     return (
         <div className="flex flex-col gap-6">
@@ -105,7 +104,7 @@ function GradedSubmissionContent({ submission }: { submission: AssignmentSubmiss
                     </div>
                 </div>
                 <div className="text-right">
-                    <p className="text-5xl font-bold text-primary">{submission.marks ?? 'N/A'}<span className="text-2xl text-muted-foreground">/{assignment.maxMarks}</span></p>
+                    <p className="text-5xl font-bold text-primary">{submission.marks ?? 'N/A'}<span className="text-2xl text-muted-foreground">/{assignment?.maxMarks ?? '??'}</span></p>
                 </div>
             </Card>
 
@@ -141,16 +140,24 @@ function GradedSubmissionContent({ submission }: { submission: AssignmentSubmiss
             </div>
 
             <Card>
-                    <CardHeader>
-                        <CardTitle>Original Assignment Instructions</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-2">
-                        {assignment.instructions.split('\n').map((line, index) => (
+                <CardHeader>
+                    <CardTitle>Original Assignment Instructions</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                    {assignment ? (
+                        assignment.instructions.split('\n').map((line, index) => (
                            <p key={index} className="text-muted-foreground">{line}</p>
-                        ))}
-                    </CardContent>
-                </Card>
-            </div>
+                        ))
+                    ) : (
+                        <div className="flex flex-col items-center justify-center text-center text-muted-foreground p-8">
+                            <FileQuestion className="h-10 w-10 mb-4" />
+                            <p className="font-semibold">The original assignment could not be found.</p>
+                            <p className="text-sm">It may have been deleted by an administrator.</p>
+                        </div>
+                    )}
+                </CardContent>
+            </Card>
+        </div>
     );
 }
 
