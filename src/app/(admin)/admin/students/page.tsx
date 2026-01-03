@@ -9,6 +9,7 @@ import {
   Trash2,
   UserCheck,
   UserX,
+  GraduationCap,
 } from 'lucide-react';
 import { useCollection, useFirestore } from '@/firebase';
 import { collection, query, where, doc, updateDoc, deleteDoc } from 'firebase/firestore';
@@ -37,7 +38,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Input } from '@/components/ui/input';
-import { Student } from '@/lib/data';
+import { Student, AssignmentSubmission, Assignment } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
 import {
   AlertDialog,
@@ -59,16 +60,65 @@ export default function StudentsPage() {
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState('');
   
-  const { data: students, loading } = useCollection<Student>(
+  const { data: students, loading: studentsLoading } = useCollection<Student>(
     firestore ? query(collection(firestore, 'users'), where('role', '==', 'student')) : null
   );
+  
+  const { data: submissions, loading: submissionsLoading } = useCollection<AssignmentSubmission>(
+    firestore ? collection(firestore, 'submissions') : null
+  );
+  
+  const { data: assignments, loading: assignmentsLoading } = useCollection<Assignment>(
+      firestore ? collection(firestore, 'assignments') : null
+  );
 
-  const filteredStudents = useMemo(() => {
+  const studentGrades = useMemo(() => {
+    if (!students || !submissions || !assignments) return new Map<string, number>();
+
+    const assignmentMaxMarks = new Map<string, number>();
+    assignments.forEach(a => assignmentMaxMarks.set(a.id, a.maxMarks));
+    
+    const gradesMap = new Map<string, { totalMarks: number, totalMaxMarks: number }>();
+    submissions.forEach(sub => {
+      if (sub.status === 'graded' && sub.marks !== undefined) {
+        const studentId = sub.studentId;
+        const maxMarks = assignmentMaxMarks.get(sub.assignmentId) || 100;
+        
+        const current = gradesMap.get(studentId) || { totalMarks: 0, totalMaxMarks: 0 };
+        gradesMap.set(studentId, {
+          totalMarks: current.totalMarks + sub.marks,
+          totalMaxMarks: current.totalMaxMarks + maxMarks
+        });
+      }
+    });
+
+    const averageGrades = new Map<string, number>();
+    gradesMap.forEach((value, key) => {
+        if (value.totalMaxMarks > 0) {
+            averageGrades.set(key, Math.round((value.totalMarks / value.totalMaxMarks) * 100));
+        } else {
+            averageGrades.set(key, 0);
+        }
+    });
+
+    return averageGrades;
+  }, [students, submissions, assignments]);
+
+
+  const filteredAndSortedStudents = useMemo(() => {
     if (!students) return [];
-    return students.filter(student => 
+    
+    const filtered = students.filter(student => 
       student.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
-  }, [students, searchTerm]);
+    
+    return filtered.sort((a, b) => {
+        const gradeA = studentGrades.get(a.id) ?? -1;
+        const gradeB = studentGrades.get(b.id) ?? -1;
+        return gradeB - gradeA;
+    });
+
+  }, [students, searchTerm, studentGrades]);
 
   const generateRandomKey = (length: number) => {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -149,6 +199,8 @@ export default function StudentsPage() {
     router.push(`/admin/students/${studentId}`);
   };
 
+  const loading = studentsLoading || submissionsLoading || assignmentsLoading;
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-start justify-between">
@@ -191,6 +243,7 @@ export default function StudentsPage() {
             <TableHeader>
               <TableRow>
                 <TableHead>Student</TableHead>
+                <TableHead>Avg. Grade</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
@@ -206,6 +259,7 @@ export default function StudentsPage() {
                                 <Skeleton className="h-6 w-40" />
                             </div>
                         </TableCell>
+                        <TableCell><Skeleton className="h-6 w-16" /></TableCell>
                         <TableCell><Skeleton className="h-6 w-20" /></TableCell>
                         <TableCell className="text-right">
                            <Skeleton className="h-8 w-8 ml-auto" />
@@ -214,8 +268,10 @@ export default function StudentsPage() {
                   ))}
                 </>
               )}
-              {!loading && filteredStudents && filteredStudents.length > 0 ? (
-                filteredStudents.map((student) => (
+              {!loading && filteredAndSortedStudents && filteredAndSortedStudents.length > 0 ? (
+                filteredAndSortedStudents.map((student) => {
+                  const averageGrade = studentGrades.get(student.id);
+                  return (
                   <TableRow key={student.id} onClick={() => handleRowClick(student.id)} className="cursor-pointer">
                     <TableCell className="font-medium">
                       <div className="flex items-center gap-3">
@@ -227,6 +283,16 @@ export default function StudentsPage() {
                         </Avatar>
                         <span className="font-semibold">{student.name}</span>
                       </div>
+                    </TableCell>
+                     <TableCell>
+                        {averageGrade !== undefined ? (
+                             <Badge variant="secondary" className="text-base gap-2">
+                                <GraduationCap className="h-4 w-4"/>
+                                {averageGrade}%
+                             </Badge>
+                        ) : (
+                            <Badge variant="outline">N/A</Badge>
+                        )}
                     </TableCell>
                     <TableCell>
                         <Badge variant={student.status === 'active' ? 'secondary' : 'outline'}>
@@ -311,11 +377,12 @@ export default function StudentsPage() {
                         </DropdownMenu>
                     </TableCell>
                   </TableRow>
-                ))
+                  )
+                })
               ) : (
                 !loading && (
                     <TableRow>
-                        <TableCell colSpan={3} className="h-24 text-center">
+                        <TableCell colSpan={4} className="h-24 text-center">
                             {students && students.length > 0 ? 'No students match your search.' : 'No students found.'}
                         </TableCell>
                     </TableRow>

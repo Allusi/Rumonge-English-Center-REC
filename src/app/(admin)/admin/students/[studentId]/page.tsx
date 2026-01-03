@@ -17,6 +17,7 @@ import {
   KeyRound,
   ShieldCheck,
   ShieldX,
+  Percent,
 } from 'lucide-react';
 import {
   Card,
@@ -26,15 +27,16 @@ import {
   CardDescription,
 } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useDoc, useFirestore } from '@/firebase';
-import { doc } from 'firebase/firestore';
-import type { Student, Course } from '@/lib/data';
+import { useCollection, useDoc, useFirestore } from '@/firebase';
+import { collection, doc, query, where } from 'firebase/firestore';
+import type { Student, Course, Assignment, AssignmentSubmission } from '@/lib/data';
 import { notFound, useParams } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useMemo } from 'react';
 
 const DetailItem = ({ icon, label, value }: { icon: React.ReactNode; label: string; value?: React.ReactNode }) => (
     <div className="flex items-start gap-4">
@@ -58,8 +60,39 @@ export default function StudentProfilePage() {
 
   const courseRef = firestore && student?.enrolledCourseId ? doc(firestore, 'courses', student.enrolledCourseId) : null;
   const { data: course, loading: courseLoading } = useDoc<Course>(courseRef);
+  
+  const { data: submissions, loading: submissionsLoading } = useCollection<AssignmentSubmission>(
+    firestore && studentId ? query(collection(firestore, 'submissions'), where('studentId', '==', studentId)) : null
+  );
 
-  if (studentLoading || courseLoading) {
+  const { data: assignments, loading: assignmentsLoading } = useCollection<Assignment>(
+    firestore && student?.enrolledCourseId ? query(collection(firestore, 'assignments'), where('courseId', '==', student.enrolledCourseId)) : null
+  );
+  
+  const averageGrade = useMemo(() => {
+    if (!submissions || submissions.length === 0 || !assignments) return null;
+
+    const assignmentMaxMarks = new Map<string, number>();
+    assignments.forEach(a => assignmentMaxMarks.set(a.id, a.maxMarks));
+
+    const gradedSubmissions = submissions.filter(s => s.status === 'graded' && s.marks !== undefined);
+    if (gradedSubmissions.length === 0) return null;
+
+    const { totalMarks, totalMaxMarks } = gradedSubmissions.reduce(
+        (acc, sub) => {
+            const maxMarks = assignmentMaxMarks.get(sub.assignmentId) || 100;
+            acc.totalMarks += sub.marks!;
+            acc.totalMaxMarks += maxMarks;
+            return acc;
+        },
+        { totalMarks: 0, totalMaxMarks: 0 }
+    );
+    
+    return totalMaxMarks > 0 ? Math.round((totalMarks / totalMaxMarks) * 100) : 0;
+  }, [submissions, assignments]);
+
+
+  if (studentLoading || courseLoading || submissionsLoading || assignmentsLoading) {
     return (
         <div className="space-y-6">
              <div className="flex justify-between items-start">
@@ -152,6 +185,11 @@ export default function StudentProfilePage() {
             <DetailItem icon={<Phone />} label="Phone Number" value={student.phoneNumber} />
             <DetailItem icon={<BookOpen />} label="Enrolled Course" value={course?.name || 'Not Enrolled'} />
             <DetailItem icon={<GraduationCap />} label="English Level" value={<Badge variant="secondary">{student.englishLevel}</Badge>} />
+            <DetailItem 
+                icon={<Percent />} 
+                label="Average Grade" 
+                value={averageGrade !== null ? <Badge className="text-base">{averageGrade}%</Badge> : 'No grades yet'} 
+            />
             <DetailItem icon={<Heart />} label="Marital Status" value={<span className="capitalize">{student.maritalStatus}</span>} />
             <DetailItem icon={<Briefcase />} label="Educational Status" value={educationalStatusMap[student.educationalStatus as keyof typeof educationalStatusMap] || 'N/A'} />
             <DetailItem icon={<HelpCircle />} label="Reason for Learning" value={<p className="text-base font-normal">{student.learningReason}</p>} />

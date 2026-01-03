@@ -67,6 +67,10 @@
         "learningReason": {
             "type": "string",
             "description": "The student's reason for wanting to learn English."
+        },
+        "averageGrade": {
+            "type": "number",
+            "description": "The student's average grade across all assignments."
         }
       },
       "required": ["name", "email", "role", "age", "address", "enrolledCourseId", "englishLevel", "maritalStatus", "educationalStatus", "learningReason", "loginKey", "status"]
