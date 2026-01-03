@@ -2423,7 +2423,8 @@ able to make it.</p>
                 <p><strong>Osma :</strong> ooh,I am sorry, can you lend me your English exercise copybook?</p>
                 <p><strong>Osias :</strong> you are sorry! Go home,you will find it inside the box,on the table in the dinning room.</p>
                 <p><strong>Osma :</strong> and what about " Methodology homework ? "</p>
-                <p><strong>Osias :</strong> I haven't yet done it,I shall do it by night.what I have already finished is the drawing a picture in which a cat is running after the mouse,and the mouse in front of it.</p>
+                <p><strong>Osias :</strong> I haven't yet done it,I shall do it by night.what I have already finished is the drawing a picture in
+which a cat is running after the mouse,and the mouse in front of it.</p>
                 <p><strong>Osma :</strong> okay ,let me hurry,I am going to meet my uncle beyond that hillock.</p>
                 <p><strong>Osias :</strong> Ciao!</p>
                 <p><strong>Osma :</strong> Ciao!</p>
@@ -2452,6 +2453,44 @@ able to make it.</p>
                     <p><strong>Mary :</strong> Good morning, John!</p>
                     <p><strong>John :</strong> How are you?</p>
                     <p><strong>Mary :</strong> I am fine thank you and you?</p>
+                    <p><strong>John :</strong> I am quite fine.</p>
+                    <p><strong>Mary :</strong> Sorry,where do you come from?</p>
+                    <p><strong>John :</strong> I come from zone nine to visit my parents.</p>
+                    <p><strong>Mary :</strong> Do your parents live in zone nine?</p>
+                    <p><strong>John :</strong> Yes ,they live there with my little brother.</p>
+                    <p><strong>Mary :</strong> OK ,what is your brother's name and how old is he?</p>
+                    <p><strong>John :</strong> His name Juma ,he has 22 years old and you,where do your parents live?</p>
+                    <p><strong>Mary :</strong> My parents stayed in Burundi, they are there looking after my sisters who are at school and also looking after the castle because they are farmers, they breed cows,goats and pigs ,they dislike to breed hens and ducks.besides to those,there are two dogs to guard them.</p>
+                    <p><strong>John :</strong> In which standard or form are they?</p>
+                    <p><strong>Mary :</strong> My younger sister is in standard six and my elder one in form two.</p>
+                    <p><strong>John :</strong> Do they know English well?</p>
+                    <p><strong>Mary :</strong> Yes,they all know how to sing " A,B,C,D......"</p>
+                    <p><strong>Antony :</strong> Good morning all of you?</p>
+                    <p><strong>John and Mary :</strong> Good morning to you.</p>
+                    <p><strong>John :</strong> What about your family?</p>
+                    <p><strong>Antony :</strong> My family is getting well.</p>
+                    <p><strong>John :</strong> -Hello ,Antony,this is my friend,her name is Mary.</p>
+                    <p><strong>John :</strong> -Hello,Mary, this is my friend, his name is Antony.</p>
+                    <p><strong>Mary :</strong> I am happy to meet you Antony.</p>
+                    <p><strong>Antony :</strong> I am happy to meet you too Mary.</p>
+                    <p><strong>Mary :</strong> Where do you live.</p>
+                    <p><strong>Antony :</strong> I live in zone eight near the school.</p>
+                    <p><strong>Mary :</strong> Do you have a wife ?</p>
+                    <p><strong>Antony :</strong> Yes ,I am married with two children, one boy and one girl.my son is in standard two and my daughter is going to start school next year.</p>
+                    <p><strong>Mary :</strong> What is your wife's name?</p>
+                    <p><strong>Antony :</strong> My wife's name is Grace and I am very sorry it is going to rain.can you please help me your umbrella?</p>
+                    <p><strong>Mary :</strong> Yes, here it is,take it.</p>
+                    <p><strong>Antony :</strong> Thank you very much.</p>
+                    <p><strong>Mary :</strong> It is pleasure and see you other day.</p>
+                    <p><strong>Antony :</strong> see you!</p>
+                    <p><strong>John :</strong> Please Antony, let us hurry up at home the rain is coming.</p>
+                    <p><strong>Antony :</strong> Yes,let us go.I am very happy to day to meet a new friend, you have done a good thing to introduce me to Mary.Now we are friends.</p>
+                    <p><strong>John :</strong> Yeah,we just arrive,my home is beside that tall tree,I have a big house,where you see the fat woman who is cooking food ,she is my wife. And other one sat in the plastic chair is my aunt,Huruma.</p>
+                    <p><strong>John's wife :</strong> You are welcome.</p>
+                    <p><strong>John and Antony :</strong> Thank you!</p>
+                    <p><strong>John's wife :</strong> -Get in ,and have seat please!</p>
+                    <p><strong>John's wife :</strong> -Anna? Anna?hurry up please, where is the dishpan,I want two plates, two spoons and one saucespoon.we have to serve our guest food.</p>
+                    <p><strong>Anna :</strong> I am sorry Mum, I don't know where you have kept it and we do the mistake to keep the</p>
                 </CardContent>
              </Card>
           </AccordionContent>
