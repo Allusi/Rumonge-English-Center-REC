@@ -45,6 +45,15 @@ export type Announcement = {
   readCount?: number;
 };
 
+export type Assignment = {
+    id: string;
+    title: string;
+    instructions: string;
+    courseId: string;
+    courseName: string;
+    createdAt: Timestamp;
+};
+
 export type Attendance = {
     id: string;
     studentId: string;

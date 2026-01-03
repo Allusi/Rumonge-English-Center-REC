@@ -120,6 +120,35 @@
       },
       "required": ["title", "content", "date"]
     },
+    "Assignment": {
+      "title": "Assignment",
+      "description": "Represents a written assignment for a course.",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "The title of the assignment."
+        },
+        "instructions": {
+          "type": "string",
+          "description": "Detailed instructions for the assignment."
+        },
+        "courseId": {
+          "type": "string",
+          "description": "The ID of the course this assignment belongs to."
+        },
+        "courseName": {
+            "type": "string",
+            "description": "The name of the course this assignment belongs to."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp when the assignment was created."
+        }
+      },
+      "required": ["title", "instructions", "courseId", "createdAt", "courseName"]
+    },
     "Enrollment": {
         "title": "Enrollment",
         "description": "Represents a student's enrollment in a course.",
@@ -211,6 +240,12 @@
         "$ref": "#/backend/entities/ReadReceipt"
       },
       "description": "Tracks which student has read a specific announcement."
+    },
+    "/assignments/{assignmentId}": {
+      "schema": {
+        "$ref": "#/backend/entities/Assignment"
+      },
+      "description": "Stores all created assignments for all courses."
     },
     "/enrollments/{enrollmentId}": {
         "schema": {
