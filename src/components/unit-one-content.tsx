@@ -2267,7 +2267,7 @@ export function UnitOneContent() {
                 <li>He is digging a hole. {'->'} Is he digging a hole?</li>
                 <li>My father is building a house. {'->'} Is my father building a house?</li>
             </ul>
-            <p className="mt-4 text-sm text-muted-foreground">NB: The words eating, sitting, washing, cooking, listening, walking, speaking, carrying, reading etc...they</p>
+            <p className="mt-4 text-sm text-muted-foreground">NB: The words eating, sitting, washing, cooking, listening, walking, speaking, carrying, reading etc...they show "ACTIONS"</p>
              <h4 className="font-semibold text-lg my-4">DIALOGUE PRACTICE OF THIS SECTION</h4>
               <div className="p-4 border rounded-lg bg-muted/50 space-y-1 text-sm">
                 <p><strong>Hassan :</strong> Hi !</p>
@@ -2383,5 +2383,7 @@ export function UnitOneContent() {
     </div>
   );
 }
+
+    
 
     
