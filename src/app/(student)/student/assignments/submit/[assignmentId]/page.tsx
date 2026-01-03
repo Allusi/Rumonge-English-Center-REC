@@ -136,7 +136,11 @@ export default function SubmitAssignmentPage() {
       <Card>
         <CardHeader>
             <CardTitle>Assignment Instructions</CardTitle>
-            <CardDescription className="whitespace-pre-wrap pt-2">{assignment.instructions}</CardDescription>
+            <CardDescription as="div" className="pt-2 space-y-2">
+                {assignment.instructions.split('\n').map((line, index) => (
+                    <p key={index}>{line}</p>
+                ))}
+            </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>

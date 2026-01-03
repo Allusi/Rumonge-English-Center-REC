@@ -16,6 +16,7 @@ import { useParams, notFound } from 'next/navigation';
 import type { Assignment, AssignmentSubmission } from '@/lib/data';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
+import { useEffect, useState } from 'react';
 
 function LoadingSkeleton() {
     return (
@@ -45,8 +46,22 @@ function LoadingSkeleton() {
 
 function GradedSubmissionContent({ submission }: { submission: AssignmentSubmission }) {
     const firestore = useFirestore();
-    const assignmentRef = firestore ? doc(firestore, 'assignments', submission.assignmentId) : null;
-    const { data: assignment, loading: assignmentLoading } = useDoc<Assignment>(assignmentRef);
+    const [assignment, setAssignment] = useState<Assignment | null>(null);
+    const [assignmentLoading, setAssignmentLoading] = useState(true);
+
+    useEffect(() => {
+        if (firestore && submission) {
+            const assignmentRef = doc(firestore, 'assignments', submission.assignmentId);
+            const unsub = onSnapshot(assignmentRef, (doc) => {
+                if (doc.exists()) {
+                    setAssignment({ id: doc.id, ...doc.data() } as Assignment);
+                }
+                setAssignmentLoading(false);
+            });
+            return () => unsub();
+        }
+    }, [firestore, submission]);
+
 
     if (assignmentLoading) {
         return <LoadingSkeleton />;
@@ -122,8 +137,10 @@ function GradedSubmissionContent({ submission }: { submission: AssignmentSubmiss
                     <CardHeader>
                         <CardTitle>Original Assignment Instructions</CardTitle>
                     </CardHeader>
-                    <CardContent>
-                        <p className="text-muted-foreground whitespace-pre-wrap">{assignment.instructions}</p>
+                    <CardContent className="space-y-2">
+                        {assignment.instructions.split('\n').map((line, index) => (
+                           <p key={index} className="text-muted-foreground">{line}</p>
+                        ))}
                     </CardContent>
                 </Card>
             </div>
@@ -134,9 +151,21 @@ export default function ViewGradedSubmissionPage() {
   const firestore = useFirestore();
   const params = useParams();
   const submissionId = params.submissionId as string;
+  const [submission, setSubmission] = useState<AssignmentSubmission | null>(null);
+  const [submissionLoading, setSubmissionLoading] = useState(true);
 
-  const submissionRef = firestore && submissionId ? doc(firestore, 'submissions', submissionId) : null;
-  const { data: submission, loading: submissionLoading } = useDoc<AssignmentSubmission>(submissionRef);
+  useEffect(() => {
+    if (firestore && submissionId) {
+        const submissionRef = doc(firestore, 'submissions', submissionId);
+        const unsub = onSnapshot(submissionRef, (doc) => {
+            if (doc.exists()) {
+                setSubmission({ id: doc.id, ...doc.data() } as AssignmentSubmission);
+            }
+            setSubmissionLoading(false);
+        });
+        return () => unsub();
+    }
+  }, [firestore, submissionId]);
 
   if (submissionLoading) {
     return <LoadingSkeleton />;
