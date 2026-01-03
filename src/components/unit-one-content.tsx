@@ -2015,6 +2015,102 @@ export function UnitOneContent() {
                                     <p>200,000:two hundred thousand</p>
                                     <p>1,000,000:one million</p>
                                 </div>
+
+                                <h4 className="font-semibold text-lg mb-2 mt-6">FRACTIONS</h4>
+                                <ul className="list-disc pl-6 text-muted-foreground text-sm space-y-1">
+                                    <li>½ :a/one half</li>
+                                    <li>1/3 a/one third</li>
+                                    <li>¼: a /one quarter or a/one fourth</li>
+                                    <li>1/12:one twelfth</li>
+                                    <li>1/16:one sixteenth</li>
+                                    <li>2/3:two thirds</li>
+                                    <li>¾: three quarters/three fourths</li>
+                                    <li>9/10 :nine tenths</li>
+                                    <li>19/56 : nineteen over fifty–six</li>
+                                    <li>31/144 : thirty–one over one four four</li>
+                                    <li>2 ½:two and a half</li>
+                                    <li>5 ⅔:five and two thirds</li>
+                                </ul>
+
+                                <h4 className="font-semibold text-lg mb-2 mt-6">DECIMALS</h4>
+                                <ul className="list-disc pl-6 text-muted-foreground text-sm space-y-1">
+                                    <li>79.3 : seventy-nine point three</li>
+                                    <li>3.142:three point one four two</li>
+                                    <li>0.67 :(zero)point six seven</li>
+                                    <li>(Bre also ) nought point six seven</li>
+                                </ul>
+                                <p className="text-sm text-muted-foreground mt-2">NB: write and say with a point (.)( not a comma )<br/>Say each figure after the point separately</p>
+                                
+                                <h4 className="font-semibold text-lg mb-2 mt-6">MATHEMATICAL EXPRESSIONS</h4>
+                                <ul className="list-disc pl-6 text-muted-foreground text-sm space-y-1">
+                                    <li>X : times /multiplied by</li>
+                                    <li>+: plus</li>
+                                    <li>-: minus</li>
+                                    <li>: divided by</li>
+                                    <li>= equals /is</li>
+                                    <li>% percent</li>
+                                    <li>3² three squared</li>
+                                    <li>5³ five cubed</li>
+                                    <li>6¹⁰ six to the power of ten</li>
+                                </ul>
+
+                                <h4 className="font-semibold text-lg mb-2 mt-6">B. Ordinal Numbers</h4>
+                                <div className="grid grid-cols-4 gap-4 text-sm">
+                                    <div>
+                                        <p>1st :first.</p>
+                                        <p>2nd : second.</p>
+                                        <p>3rd : third.</p>
+                                        <p>4th : fourth.</p>
+                                        <p>5th : fifth.</p>
+                                        <p>6th. : sixth.</p>
+                                        <p>7th. : seventh.</p>
+                                        <p>8th. : eighth.</p>
+                                        <p>9th : ninth.</p>
+                                        <p>10th : tenth.</p>
+                                    </div>
+                                    <div>
+                                        <p>11th. :eleventh.</p>
+                                        <p>12th. : twelfth.</p>
+                                        <p>13th : thirteenth.</p>
+                                        <p>14th : fourteenth.</p>
+                                        <p>15th : fifteenth.</p>
+                                        <p>16th. :sixteenth.</p>
+                                        <p>17th :seventeenth.</p>
+                                        <p>18th : eighteenth.</p>
+                                        <p>19th :nineteenth.</p>
+                                        <p>20th: twentieth.</p>
+                                    </div>
+                                    <div>
+                                        <p>21st : twenty- first.</p>
+                                        <p>22nd : twenty- second.</p>
+                                        <p>23rd: twenty- third.</p>
+                                        <p>24th: twenty- fourth.</p>
+                                        <p>25th : twenty- fifth.</p>
+                                        <p>26th : twenty- sixth.</p>
+                                        <p>27th :twenty- seventh</p>
+                                        <p>28th. :twenty- eighth</p>
+                                        <p>29th. :twenty- ninth</p>
+                                        <p>30th :thirtieth</p>
+                                    </div>
+                                    <div>
+                                        <p>40th: fortieth</p>
+                                        <p>50th. : fiftieth</p>
+                                        <p>60th : sixtieth</p>
+                                        <p>70th : seventieth</p>
+                                        <p>80th : eightieth</p>
+                                        <p>90th :ninetieth</p>
+                                        <p>100th : the one hundredth</p>
+                                    </div>
+                                </div>
+                                <h4 className="font-semibold text-lg mb-2 mt-6">PERIOD OF THE YEAR</h4>
+                                <ul className="text-sm space-y-1 text-muted-foreground">
+                                    <li> Year: is a period of twelve months</li>
+                                    <li> Month : is a period of 28,29,30 and 31 days</li>
+                                    <li> Month : is also a period of four weeks</li>
+                                    <li> Week :is a period of seven days.</li>
+                                    <li> Day : is a period of twenty- four hours</li>
+                                    <li> Hour : is a period of 60 minutes.</li>
+                                </ul>
                             </CardContent>
                         </Card>
                     </AccordionContent>
