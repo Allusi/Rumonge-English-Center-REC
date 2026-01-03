@@ -723,7 +723,7 @@ export function UnitOneContent() {
                                 </div>
                                 <div>
                                     <p><strong>Things we find in the village:</strong> Hoe, panga, brooms, lantern, mat, etc...</p>
-                                    <ul className="list-disc pl-6 text-muted-foreground">
+                                     <ul className="list-disc pl-6 text-muted-foreground">
                                         <li>Nyabigina is my home village.</li>
                                         <li>We use lanterns in our village because there is no electricity.</li>
                                      </ul>
@@ -1640,7 +1640,184 @@ export function UnitOneContent() {
                            <p>Is this a boy ? <span className="text-muted-foreground">No, this is not a boy, this is a girl</span></p>
                            <p>Is this a woman? <span className="text-muted-foreground">No, this is not a woman,this is a man</span></p>
                         </div>
-                        <h4 className="font-semibold text-lg mt-4">LET US SEE MORE MEMBERS IN OUR FAMILY</h4>
+                        <Card className="mt-6">
+                            <CardHeader>
+                                <CardTitle>More Members in Our Family</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <ul className="list-disc pl-6 text-muted-foreground columns-2 md:columns-4 space-y-1 text-sm">
+                                    <li>Mother</li>
+                                    <li>Mum</li>
+                                    <li>Father</li>
+                                    <li>Daddy</li>
+                                    <li>Dad</li>
+                                    <li>Younger brother</li>
+                                    <li>Elder brother</li>
+                                    <li>Younger sister</li>
+                                    <li>Elder sister</li>
+                                    <li>Firstborn</li>
+                                    <li>Second child</li>
+                                    <li>Kid</li>
+                                    <li>Child</li>
+                                    <li>Children</li>
+                                    <li>Baby</li>
+                                    <li>Infant</li>
+                                    <li>Niece</li>
+                                    <li>Nephew</li>
+                                    <li>Half brother</li>
+                                    <li>Half sister</li>
+                                    <li>Great grandchild</li>
+                                    <li>Co-aunt</li>
+                                    <li>Great grand parents</li>
+                                    <li>Co-uncle</li>
+                                    <li>Cousin</li>
+                                    <li>Son in law</li>
+                                    <li>Daughter in law</li>
+                                    <li>Grandson</li>
+                                    <li>Grandfather</li>
+                                    <li>Granddaughter</li>
+                                    <li>Newborn</li>
+                                    <li>Twins</li>
+                                    <li>Triplets</li>
+                                    <li>Quadruplets</li>
+                                    <li>Quintuplets</li>
+                                    <li>Sextuplets</li>
+                                    <li>Septuplets</li>
+                                    <li>Octuplets</li>
+                                    <li>Grandmother</li>
+                                    <li>Bastard child</li>
+                                    <li>Godfather</li>
+                                    <li>Godmother</li>
+                                    <li>Godson</li>
+                                    <li>Goddaughter</li>
+                                    <li>Godchild</li>
+                                    <li>Godchildren</li>
+                                    <li>Stepdaughter</li>
+                                    <li>Great great grandchild</li>
+                                    <li>Stepson</li>
+                                    <li>Stepsister</li>
+                                    <li>Stepbrother</li>
+                                    <li>Stepfather</li>
+                                    <li>Stepmother</li>
+                                    <li>Stepchildren</li>
+                                    <li>Stepchild</li>
+                                    <li>Mother in law</li>
+                                    <li>Father in law</li>
+                                    <li>In-laws</li>
+                                    <li>Uncle</li>
+                                    <li>Aunt</li>
+                                    <li>Great uncle</li>
+                                    <li>Great aunt</li>
+                                    <li>Co-brother in law</li>
+                                    <li>Co-sister in law</li>
+                                    <li>Co-parent</li>
+                                    <li>Great grandchildren</li>
+                                    <li>Great grandson</li>
+                                    <li>Great granddaughter</li>
+                                    <li>Barren</li>
+                                    <li>Childless</li>
+                                    <li>Co-father in law</li>
+                                    <li>Co-mother in law</li>
+                                    <li>Co-wife</li>
+                                    <li>Ex-wife</li>
+                                    <li>Great niece</li>
+                                    <li>Great nephew</li>
+                                    <li>Cousin brother</li>
+                                    <li>Cousin sister</li>
+                                    <li>Foster father</li>
+                                    <li>Foster mother</li>
+                                    <li>Bachelor</li>
+                                    <li>Spinster</li>
+                                    <li>Orphan</li>
+                                    <li>Fatherless</li>
+                                    <li>Motherless</li>
+                                    <li>Parentless</li>
+                                    <li>Fosterson</li>
+                                    <li>Fosterdaughter</li>
+                                    <li>Adopted child</li>
+                                    <li>Grand parents</li>
+                                    <li>Great grandfather</li>
+                                    <li>Great grandmother</li>
+                                    <li>Infertile woman</li>
+                                    <li>Great great grandson</li>
+                                </ul>
+                            </CardContent>
+                        </Card>
+                        <Card className="mt-6">
+                            <CardHeader>
+                                <CardTitle>Practice: How Do You Call Someone's...</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="border rounded-lg p-4 bg-muted/20">
+                                    <h5 className="font-semibold mb-4">Family Tree</h5>
+                                    <div className="text-sm text-center font-mono">
+                                        <p>Thomas + Mary</p>
+                                        <p className="pl-4">|</p>
+                                        <div className="flex justify-center gap-8">
+                                            <p>Egide + Martha</p>
+                                            <p>Paul + Virginia</p>
+                                            <p>Andrew + Solange</p>
+                                        </div>
+                                        <div className="flex justify-around">
+                                           <div className="flex justify-center gap-4">
+                                               <p className="pl-4">|</p>
+                                           </div>
+                                            <div className="flex justify-center gap-4">
+                                               <p className="pl-4">|</p>
+                                           </div>
+                                            <div className="flex justify-center gap-4">
+                                               <p className="pl-4">|</p>
+                                           </div>
+                                        </div>
+                                        <div className="flex justify-around">
+                                            <div className="flex justify-center gap-8">
+                                               <p>Gaston</p>
+                                               <p>Viola</p>
+                                               <p>Albin</p>
+                                            </div>
+                                             <div className="flex justify-center gap-8">
+                                               <p>Fides</p>
+                                               <p>Louis + Nadia</p>
+                                             </div>
+                                              <div className="flex justify-center gap-8">
+                                               <p>Caline</p>
+                                               <p>John</p>
+                                             </div>
+                                        </div>
+                                         <div className="flex justify-around">
+                                           <div/>
+                                            <div className="flex justify-center gap-4 pr-12">
+                                               <p className="pl-4">|</p>
+                                           </div>
+                                           <div/>
+                                        </div>
+                                         <div className="flex justify-around">
+                                           <div/>
+                                            <div className="flex justify-center gap-8 pr-12">
+                                               <p>Lola</p>
+                                               <p>Jimmy</p>
+                                               <p>Joella</p>
+                                               <p>Gretta</p>
+                                            </div>
+                                           <div/>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div className="mt-4 space-y-2 text-sm">
+                                    <p><strong>Gaston calls Thomas:</strong> {'->'} grandfather</p>
+                                    <p><strong>Gaston calls Mary:</strong> {'->'} grandmother</p>
+                                    <p><strong>Gaston calls T&M:</strong> {'->'} grandparents</p>
+                                    <p><strong>Gaston calls Viola:</strong> {'->'} sister</p>
+                                    <p><strong>Gaston calls Albin:</strong> {'->'} brother</p>
+                                    <p><strong>Gaston calls Lola:</strong> {'->'} nephew</p>
+                                    <p><strong>Gaston calls Jimmy:</strong> {'->'} nephew</p>
+                                    <p><strong>Gaston calls Joella:</strong> {'->'} niece</p>
+                                    <p><strong>Gaston calls Louis:</strong> {'->'} brother in law</p>
+                                    <p><strong>Gaston calls Nadia:</strong> {'->'} sister in law</p>
+                                </div>
+                            </CardContent>
+                        </Card>
                     </AccordionContent>
                  </AccordionItem>
              </Accordion>
@@ -1743,5 +1920,6 @@ export function UnitOneContent() {
   
 
     
+
 
 
