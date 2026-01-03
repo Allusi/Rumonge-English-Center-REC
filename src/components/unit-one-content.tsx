@@ -1805,6 +1805,9 @@ export function UnitOneContent() {
                                     </div>
                                 </div>
                                 <div className="mt-4 space-y-2 text-sm">
+                                    <p><strong>Paul calls Thomas:</strong> {'->'} father</p>
+                                    <p><strong>Paul calls Mary:</strong> {'->'} mother</p>
+                                    <p><strong>Paul calls T&M:</strong> {'->'} parents</p>
                                     <p><strong>Gaston calls Thomas:</strong> {'->'} grandfather</p>
                                     <p><strong>Gaston calls Mary:</strong> {'->'} grandmother</p>
                                     <p><strong>Gaston calls T&M:</strong> {'->'} grandparents</p>
@@ -1815,7 +1818,100 @@ export function UnitOneContent() {
                                     <p><strong>Gaston calls Joella:</strong> {'->'} niece</p>
                                     <p><strong>Gaston calls Louis:</strong> {'->'} brother in law</p>
                                     <p><strong>Gaston calls Nadia:</strong> {'->'} sister in law</p>
+                                    <p><strong>Gaston calls John:</strong> {'->'} brother-in-law</p>
+                                    <p><strong>Fides calls Louis:</strong> {'->'} husband</p>
+                                    <p><strong>Fides calls Lola:</strong> {'->'} son</p>
+                                    <p><strong>Fides calls Joella:</strong> {'->'} daughter</p>
+                                    <p><strong>Fides calls Nadia:</strong> {'->'} sister-in-law</p>
+                                    <p><strong>Fides calls John:</strong> {'->'} brother-in-law</p>
+                                    <p><strong>Fides calls Andrew:</strong> {'->'} father-in-law</p>
+                                    <p><strong>Fides calls Solange:</strong> {'->'} mother-in-law</p>
+                                    <p><strong>Andrew calls Fides:</strong> {'->'} daughter-in-law</p>
+                                    <p><strong>Paul calls Louis:</strong> {'->'} son-in-law</p>
+                                    <p><strong>Joella calls Jimmy:</strong> {'->'} brother</p>
+                                    <p><strong>Joella calls Egide:</strong> {'->'} great grandfather</p>
+                                    <p><strong>Joella calls T&M:</strong> {'->'} great grandparents</p>
+                                    <p><strong>Joella calls Nadia:</strong> {'->'} Aunt</p>
+                                    <p><strong>Joella calls John:</strong> {'->'} uncle</p>
+                                    <p><strong>Joella calls Gaston:</strong> {'->'} uncle</p>
+                                    <p><strong>Louis calls Fides:</strong> {'->'} wife</p>
+                                    <p><strong>John calls Jimmy:</strong> {'->'} nephew</p>
+                                    <p><strong>John calls Joella:</strong> {'->'} niece</p>
                                 </div>
+                                <div className="mt-4 text-sm space-y-2">
+                                   <p className="font-semibold">You can also know that:</p>
+                                   <ul className="list-disc pl-6 text-muted-foreground">
+                                       <li><strong>Flower-boys:</strong> ni bahungu bafata amashurwe kubugeni, bagira imbere yumugeni</li>
+                                       <li><strong>Flower-girls:</strong> ni abakobwa bafata amashure kubugeni, bagira imbere yumugeni</li>
+                                       <li><strong>Best man:</strong> ni umuhagarikizi wumugabo kubugeni</li>
+                                       <li><strong>Best lady:</strong> ni umuhagarikizi wumugore kubugeni</li>
+                                       <li><strong>Bond woman:</strong> mke mwenza</li>
+                                       <li><strong>Concubine:</strong> umuhabara</li>
+                                   </ul>
+                                </div>
+                            </CardContent>
+                        </Card>
+                         <Card className="mt-6">
+                            <CardHeader>
+                                <CardTitle>Parts of the Body</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <ul className="list-disc pl-6 text-muted-foreground columns-2 md:columns-3 space-y-1 text-sm">
+                                    <li>Hair: umushatsi</li>
+                                    <li>Eyes: amaso</li>
+                                    <li>Eyelashes: ingohe</li>
+                                    <li>Eyebrows: ibigohegohe</li>
+                                    <li>Nose: izuru</li>
+                                    <li>Nostrils: imyenge yizuru</li>
+                                    <li>Mouth: umunwa</li>
+                                    <li>Dent: iryinyo</li>
+                                    <li>Tooth: iryinyo</li>
+                                    <li>Teeth: amenyo</li>
+                                    <li>Gum; ikinyigishi</li>
+                                    <li>Tongue: ururimi</li>
+                                    <li>Enamel: amarakaraka</li>
+                                    <li>Beards: ubwanwa</li>
+                                    <li>Moustache: ubwanwa</li>
+                                    <li>Chin: agasakanwa</li>
+                                    <li>Forehead: uruhanga</li>
+                                    <li>Neck: izosi</li>
+                                    <li>Cheek: itama</li>
+                                    <li>Jaw: umubangabanga</li>
+                                    <li>Dimples: ubudimpo</li>
+                                    <li>Ear : ugutwi</li>
+                                    <li>Earlobe: ibibabi bwugutwi</li>
+                                    <li>Earwax: ubukurugutwi</li>
+                                    <li>Lips: iminwa</li>
+                                    <li>Lower lip: umunwa wepfo</li>
+                                    <li>Upper lip: umunwa waruguru</li>
+                                    <li>Arm: ukuboko</li>
+                                    <li>Hand : igikonjo</li>
+                                    <li>Upper arm:ukuboko kwaruguru</li>
+                                    <li>Lower arm : ukuboko kwepfo</li>
+                                    <li>Palm: ikiganja</li>
+                                    <li>Wrist: mungingo yikiganja</li>
+                                    <li>Joint: mungingo</li>
+                                    <li>Nails: inzara</li>
+                                    <li>Shoulders: ibitugu</li>
+                                    <li>Armpit: mukwaha</li>
+                                    <li>Leg: ukuguru</li>
+                                    <li>Thigh: itako</li>
+                                    <li>Shin: umurundi</li>
+                                    <li>Ankle: ijisho ryikirenge</li>
+                                    <li>Sole: mukirenge</li>
+                                    <li>Toe: ino</li>
+                                    <li>Big toe: ino rikuru</li>
+                                    <li>Toenail: urwara rwino</li>
+                                    <li>Finger: urutoke</li>
+                                    <li>Fingernail: urwara rwokurotoke</li>
+                                    <li>Instep: hejuru kukirenge</li>
+                                    <li>Buttock: igisusu</li>
+                                    <li>Male organ: igitsina Gabo</li>
+                                    <li>Female organ: igitsina gore</li>
+                                    <li>Testicles: amatengatwa</li>
+                                    <li>Knee: ivi</li>
+                                    <li>Hamstring: muntege</li>
+                                </ul>
                             </CardContent>
                         </Card>
                     </AccordionContent>
@@ -1920,6 +2016,7 @@ export function UnitOneContent() {
   
 
     
+
 
 
 
