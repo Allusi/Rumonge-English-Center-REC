@@ -82,17 +82,23 @@ export default function SubmitAssignmentPage() {
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <Skeleton className="h-10 w-64" />
+        <div className="flex items-center gap-4">
+            <Skeleton className="h-9 w-9" />
+            <div className='space-y-2'>
+                <Skeleton className="h-8 w-64" />
+                <Skeleton className="h-4 w-48" />
+            </div>
+        </div>
         <Card>
           <CardHeader className="space-y-2">
-            <Skeleton className="h-8 w-1/2" />
+            <Skeleton className="h-6 w-1/2" />
             <Skeleton className="h-4 w-1/3" />
           </CardHeader>
           <CardContent className="space-y-6">
             <Skeleton className="h-32" />
             <Skeleton className="h-40" />
             <div className="flex justify-end">
-                <Skeleton className="h-10 w-24" />
+                <Skeleton className="h-10 w-40" />
             </div>
           </CardContent>
         </Card>
