@@ -347,7 +347,7 @@ export function UnitOneContent() {
                     <li>we shall see tomorrow.</li>
                     <li>tatty bye</li>
                     <li>later.</li>
-                    <li>being seen around</li>
+                    <li>being seen around.</li>
                     <li>we shall meet tomorrow</li>
                     <li>see you</li>
                     <li>see you soon.</li>
@@ -1471,14 +1471,105 @@ export function UnitOneContent() {
                                       <li>Pure alcohol: Padbook</li>
                                    </ul>
                                 </div>
+
                                 <h4 className="font-semibold text-lg mb-2 mt-6">B. Clothings</h4>
                                 <p className="text-sm mb-2 text-muted-foreground">What does the girl wear? What does the boy wear? In this part we are going to try to answer to the above questions.</p>
                                 <p className="text-sm mb-2 font-semibold">WE WEAR:</p>
-                                <ul className="list-disc pl-6 text-muted-foreground text-sm">
-                                  <li>Rompers: isarubeti</li>
-                                  <li>Shirt: ishati</li>
-                                  <li>Trousers: ipantalo</li>
+                                <ul className="list-disc pl-6 text-muted-foreground columns-2 md:columns-3 space-y-1 text-sm">
+                                    <li>Jacket: ijaketi</li>
+                                    <li>Shoes: ibirato</li>
+                                    <li>Skirt: ijipo</li>
+                                    <li>Dress: ikanzu</li>
+                                    <li>Socks: amashesheti</li>
+                                    <li>Sweater: igipita cimbeho</li>
+                                    <li>Coat: ikoti</li>
+                                    <li>Raincoat: ikoti yimvura</li>
+                                    <li>Belt: umusipi</li>
+                                    <li>Rain boot: ibotine</li>
+                                    <li>Boots : ibuti</li>
+                                    <li>Bracelet: ibikomo ,imiringa</li>
+                                    <li>Earrings: amahereni</li>
+                                    <li>Wedding flower: </li>
+                                    <li>Overcoat : agakoti kohejuru</li>
+                                    <li>Handkerchief : umuswaro</li>
+                                    <li>Glasses: amarori</li>
+                                    <li>Gloves: amaga</li>
+                                    <li>Hat: inkofera yumuzingi</li>
+                                    <li>Helmet: ikaske</li>
+                                    <li>Necklace: ishenete</li>
+                                    <li>pants: ipantalo</li>
+                                    <li>Pocket: umufuko</li>
+                                    <li>Ring: impeta</li>
+                                    <li>Scarf: igitambara/ ifurare</li>
+                                    <li>Slippers: ikandambili</li>
+                                    <li>Flip- flop: ikandambili</li>
+                                    <li>Sneakers:ibirato vya sport</li>
+                                    <li>Sunglass: amarori yizuba</li>
+                                    <li>Tie: ikaruvate</li>
+                                    <li>Vest: ijire</li>
+                                    <li>Watch: isaha</li>
+                                    <li>Bowtie:agakaruvate</li>
+                                    <li>Jeans : ijinzi</li>
+                                    <li>Necktie : ikaruvate</li>
+                                    <li>Zipper/ zip: imashine yimpuzu</li>
+                                    <li>T-shirt: umupira</li>
+                                    <li>Shorts:ikabutura</li>
+                                    <li>Baby shawl: igikoyi</li>
+                                    <li>Sleeves: amaboko yimpuzu</li>
+                                    <li>Underwear: icupi</li>
+                                    <li>Panties: icupi</li>
+                                    <li>underskirt: isurujipe</li>
+                                    <li>Brassiere; isutiya</li>
+                                    <li>Bra: isutiya</li>
+                                    <li>Blouse: iburuzi</li>
+                                    <li>Cap: ishapo yururimi</li>
+                                    <li>Bikini: isiripe ifatanye nisutiya</li>
+                                    <li>Nightgown: impuzu bararana</li>
+                                    <li>Hoody: umupira winkofera</li>
+                                    <li>Loincloth: igikwembe</li>
+                                    <li>Slit: ipasura</li>
+                                    <li>Weddingdress: urushungi</li>
                                 </ul>
+
+                                <h5 className="font-semibold text-md mb-2 mt-6">DIALOGUE PRACTICE NO 1 ABOUT CLOTHING.</h5>
+                                <h6 className="font-semibold text-sm mb-2">WEARING SUITS AND TIES.</h6>
+                                <div className="p-4 border rounded-lg bg-muted/50 space-y-1 text-sm">
+                                    <p><strong>A :</strong> It is not easy wearing this necktie.I feel like I'm strangling myself.</p>
+                                    <p><strong>B :</strong> ha ha ha!! You're tying a fast knot that's why.</p>
+                                    <p><strong>A :</strong> I don't like wearing suits and ties.I want to wear something more comfortable like jeans and T-shirt?</p>
+                                    <p><strong>B :</strong> No way,it's christina's wedding to day.you can't show up there looking like a bum.</p>
+                                    <p><strong>A :</strong> I hate attending weddings. Everything is so formal.I can't be myself.</p>
+                                    <p><strong>B :</strong> come on ,you need to be prepared for your wedding also.you can't wear a T-shirt and jeans at your wedding, right?</p>
+                                    <p><strong>A :</strong> I'll be the first groom to do that.</p>
+                                    <p><strong>B :</strong> Ha hah!!, I can't wait to see that day.</p>
+                                </div>
+
+                                <h5 className="font-semibold text-md mb-2 mt-6">DIALOGUE PRACTICE NO 2 ABOUT CLOTHING.</h5>
+                                 <h6 className="font-semibold text-sm mb-2">A NEW DRESS</h6>
+                                <div className="p-4 border rounded-lg bg-muted/50 space-y-1 text-sm">
+                                    <p><strong>A :</strong> Wow,Leslie. You look fabulous.</p>
+                                    <p><strong>B :</strong> Really? Thanks.</p>
+                                    <p><strong>A :</strong> Is that your new dress?</p>
+                                    <p><strong>B :</strong> it is.I bought it yesterday.</p>
+                                    <p><strong>A :</strong> is it expensive?</p>
+                                    <p><strong>B :</strong> not at all.how much do you think it is?</p>
+                                    <p><strong>A :</strong> 6500tsh.</p>
+                                    <p><strong>B :</strong> no,just 4500 TSH.</p>
+                                    <p><strong>A :</strong> great.where did you buy it?</p>
+                                    <p><strong>B :</strong> at a shop near my house.</p>
+                                    <p><strong>A :</strong> what's its name?</p>
+                                    <p><strong>B :</strong> VAYURA shop. I'll take you there if you want.</p>
+                                    <p><strong>A :</strong> Ha ha ha!!No,thanks.</p>
+                                </div>
+
+                                <h5 className="font-semibold text-md mb-2 mt-6">DIALOGUE PRACTICE NO 3 ABOUT CLOTHING</h5>
+                                <div className="p-4 border rounded-lg bg-muted/50 space-y-1 text-sm">
+                                    <ul className="list-disc pl-6 text-muted-foreground">
+                                        <li>Rompers: isarubeti</li>
+                                        <li>Shirt: ishati</li>
+                                        <li>Trousers: ipantalo</li>
+                                    </ul>
+                                </div>
                             </CardContent>
                         </Card>
                     </AccordionContent>
@@ -1583,3 +1674,4 @@ export function UnitOneContent() {
   
 
     
+
