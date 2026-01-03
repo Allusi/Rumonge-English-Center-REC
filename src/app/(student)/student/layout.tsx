@@ -95,10 +95,10 @@ export default function StudentLayout({
               </Link>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <Link href="/student/grammar-checker" passHref>
-                <SidebarMenuButton tooltip="Grammar Checker">
+              <Link href="/student/assignment-helper" passHref>
+                <SidebarMenuButton tooltip="Assignment Helper">
                   <SpellCheck />
-                  Grammar Checker
+                  Assignment Helper
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>
