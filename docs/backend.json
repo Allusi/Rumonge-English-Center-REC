@@ -164,13 +164,14 @@
             "studentId": { "type": "string" },
             "studentName": { "type": "string" },
             "courseId": { "type": "string" },
+            "courseName": { "type": "string" },
             "answers": { "type": "string" },
             "submittedAt": { "type": "string", "format": "date-time" },
             "status": { "type": "string", "enum": ["submitted", "graded"] },
             "feedback": { "type": "string" },
             "marks": { "type": "number" }
         },
-        "required": ["assignmentId", "studentId", "courseId", "answers", "submittedAt", "status"]
+        "required": ["assignmentId", "studentId", "courseId", "courseName", "answers", "submittedAt", "status"]
     },
     "Enrollment": {
         "title": "Enrollment",

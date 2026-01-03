@@ -23,12 +23,12 @@ import {
   CardDescription,
 } from '@/components/ui/card';
 import { useDoc, useFirestore, useUser } from '@/firebase';
-import { collection, addDoc, serverTimestamp, doc } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, doc, getDoc } from 'firebase/firestore';
 import { ArrowLeft, Send } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter, useParams, notFound } from 'next/navigation';
-import type { Assignment } from '@/lib/data';
+import type { Assignment, Student } from '@/lib/data';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const formSchema = z.object({
@@ -60,12 +60,18 @@ export default function SubmitAssignmentPage() {
     }
     
     try {
+      // Fetch student profile to get their name
+      const studentDocRef = doc(firestore, 'users', user.uid);
+      const studentDoc = await getDoc(studentDocRef);
+      const studentName = studentDoc.exists() ? (studentDoc.data() as Student).name : 'Anonymous';
+
       await addDoc(collection(firestore, 'submissions'), {
         assignmentId: assignment.id,
         assignmentTitle: assignment.title,
         studentId: user.uid,
-        studentName: user.displayName || 'Anonymous',
+        studentName: studentName,
         courseId: assignment.courseId,
+        courseName: assignment.courseName,
         answers: values.answers,
         submittedAt: serverTimestamp(),
         status: 'submitted',

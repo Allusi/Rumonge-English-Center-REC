@@ -86,7 +86,7 @@ export default function SubmissionsPage() {
                                     {submission.courseName}
                                 </Badge>
                             </TableCell>
-                            <TableCell>{submission.submittedAt ? format(submission.submittedAt.toDate(), 'PPP p') : 'N/A'}</TableCell>
+                            <TableCell>{submission.submittedAt ? format(new Date(submission.submittedAt.seconds * 1000), 'PPP p') : 'N/A'}</TableCell>
                             <TableCell>
                                 <Badge variant={submission.status === 'graded' ? 'default' : 'secondary'}>
                                     {submission.status === 'graded' && <Check className="mr-1 h-3 w-3" />}
