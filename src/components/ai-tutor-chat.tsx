@@ -69,6 +69,66 @@ export function AITutorChat() {
     },
   });
 
+  const playAudio = useCallback((audioUrl: string, messageIndex: number) => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = "";
+    }
+  
+    const newAudio = new Audio(audioUrl);
+    audioRef.current = newAudio;
+  
+    newAudio.onplay = () => {
+      setMessages(prev => prev.map((msg, idx) => ({ ...msg, isPlaying: idx === messageIndex })));
+    };
+  
+    newAudio.onended = () => {
+      setMessages(prev => prev.map((msg, idx) => (idx === messageIndex ? { ...msg, isPlaying: false } : msg)));
+      audioRef.current = null;
+    };
+  
+    newAudio.onerror = (e) => {
+      console.error("Audio playback error:", e);
+      setError("Could not play audio.");
+      setMessages(prev => prev.map((msg, idx) => (idx === messageIndex ? { ...msg, isPlaying: false } : msg)));
+      audioRef.current = null;
+    };
+  
+    newAudio.play().catch(e => {
+        console.error("Audio play promise rejected:", e);
+        setError("Audio playback failed. Please try again.");
+    });
+  }, []);
+
+  const onSubmit = useCallback(async (values: z.infer<typeof formSchema>) => {
+    const userInput: Message = { role: "user", content: values.message };
+    const newMessages = [...messages, userInput];
+    setMessages(newMessages);
+    setIsLoading(true);
+    setError(null);
+    form.reset();
+
+    try {
+      const result = await aiTutor({ history: newMessages } as AITutorInput);
+      const audioUrl = await getAudioForText(result);
+      
+      const modelResponse: Message = { role: "model", content: result, audioUrl: audioUrl };
+      
+      const finalMessages = [...newMessages, modelResponse];
+      setMessages(finalMessages);
+
+      if (interactionMode !== 'text') {
+        playAudio(audioUrl, finalMessages.length - 1);
+      }
+    } catch (e) {
+      setError("An error occurred while fetching the response. Please try again.");
+      console.error(e);
+      setMessages(newMessages); // Keep user message on error
+    } finally {
+      setIsLoading(false);
+    }
+  }, [messages, form, getAudioForText, interactionMode, playAudio]);
+
   useEffect(() => {
     // Initialize speech recognition
     if (typeof window !== "undefined") {
@@ -134,37 +194,6 @@ export function AITutorChat() {
       scrollAreaRef.current.scrollTo({ top: scrollAreaRef.current.scrollHeight, behavior: 'smooth' });
     }
   }, [messages]);
-
-  const playAudio = useCallback((audioUrl: string, messageIndex: number) => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.src = "";
-    }
-  
-    const newAudio = new Audio(audioUrl);
-    audioRef.current = newAudio;
-  
-    newAudio.onplay = () => {
-      setMessages(prev => prev.map((msg, idx) => ({ ...msg, isPlaying: idx === messageIndex })));
-    };
-  
-    newAudio.onended = () => {
-      setMessages(prev => prev.map((msg, idx) => (idx === messageIndex ? { ...msg, isPlaying: false } : msg)));
-      audioRef.current = null;
-    };
-  
-    newAudio.onerror = (e) => {
-      console.error("Audio playback error:", e);
-      setError("Could not play audio.");
-      setMessages(prev => prev.map((msg, idx) => (idx === messageIndex ? { ...msg, isPlaying: false } : msg)));
-      audioRef.current = null;
-    };
-  
-    newAudio.play().catch(e => {
-        console.error("Audio play promise rejected:", e);
-        setError("Audio playback failed. Please try again.");
-    });
-  }, []);
 
   const startConversation = useCallback(async (mode: InteractionMode) => {
     setIsLoading(true);
@@ -234,35 +263,6 @@ export function AITutorChat() {
       }
     }
   };
-
-  const onSubmit = useCallback(async (values: z.infer<typeof formSchema>) => {
-    const userInput: Message = { role: "user", content: values.message };
-    const newMessages = [...messages, userInput];
-    setMessages(newMessages);
-    setIsLoading(true);
-    setError(null);
-    form.reset();
-
-    try {
-      const result = await aiTutor({ history: newMessages } as AITutorInput);
-      const audioUrl = await getAudioForText(result);
-      
-      const modelResponse: Message = { role: "model", content: result, audioUrl: audioUrl };
-      
-      const finalMessages = [...newMessages, modelResponse];
-      setMessages(finalMessages);
-
-      if (interactionMode !== 'text') {
-        playAudio(audioUrl, finalMessages.length - 1);
-      }
-    } catch (e) {
-      setError("An error occurred while fetching the response. Please try again.");
-      console.error(e);
-      setMessages(newMessages); // Keep user message on error
-    } finally {
-      setIsLoading(false);
-    }
-  }, [messages, form, getAudioForText, interactionMode, playAudio]);
 
   if (!interactionMode) {
     return (
