@@ -33,10 +33,12 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Input } from '@/components/ui/input';
 import { useEffect, useState } from 'react';
 
-const formSchema = z.object({
+// Define the schema creation as a function to accept dynamic max marks
+const createFormSchema = (maxMarks: number) => z.object({
   feedback: z.string().min(10, { message: 'Feedback must be at least 10 characters long.' }),
-  marks: z.coerce.number().min(0, "Marks cannot be negative.").max(100, "Marks cannot exceed 100."),
+  marks: z.coerce.number().min(0, "Marks cannot be negative.").max(maxMarks, `Marks cannot exceed ${maxMarks}.`),
 });
+
 
 function LoadingSkeleton() {
   return (
@@ -82,6 +84,8 @@ function GradeSubmissionPageContent({ submission }: { submission: AssignmentSubm
     const assignmentRef = firestore ? doc(firestore, 'assignments', submission.assignmentId) : null;
     const { data: assignment, loading: assignmentLoading } = useDoc<Assignment>(assignmentRef);
 
+    const formSchema = assignment ? createFormSchema(assignment.maxMarks) : createFormSchema(100);
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -97,7 +101,11 @@ function GradeSubmissionPageContent({ submission }: { submission: AssignmentSubm
                 marks: submission.marks ?? 0
             });
         }
-    }, [submission, form]);
+        if (assignment) {
+            // Re-initialize resolver when maxMarks is loaded
+            form.trigger(); 
+        }
+    }, [submission, assignment, form]);
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         if (!firestore) return;
@@ -120,7 +128,8 @@ function GradeSubmissionPageContent({ submission }: { submission: AssignmentSubm
     }
 
     if (!assignment) {
-        notFound();
+        // This case should be handled by the parent component now
+        return notFound();
     }
 
     return (
@@ -192,7 +201,7 @@ function GradeSubmissionPageContent({ submission }: { submission: AssignmentSubm
                       />
                     </FormControl>
                      <FormDescription>
-                      Assign a score out of 100.
+                      Assign a score out of {assignment.maxMarks}.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

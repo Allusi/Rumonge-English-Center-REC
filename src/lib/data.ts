@@ -53,6 +53,7 @@ export type Assignment = {
     courseName: string;
     createdAt: Timestamp;
     status: 'draft' | 'published';
+    maxMarks: number;
 };
 
 export type AssignmentSubmission = {

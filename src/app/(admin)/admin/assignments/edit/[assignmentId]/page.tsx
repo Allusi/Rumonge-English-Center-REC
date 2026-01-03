@@ -12,6 +12,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormDescription,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -24,7 +25,7 @@ import {
 } from '@/components/ui/card';
 import { useCollection, useDoc, useFirestore } from '@/firebase';
 import { collection, query, where, doc, updateDoc } from 'firebase/firestore';
-import { ArrowLeft, Send, Circle, CheckCircle, EyeOff } from 'lucide-react';
+import { ArrowLeft, Send, EyeOff } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter, useParams, notFound } from 'next/navigation';
@@ -37,6 +38,7 @@ const formSchema = z.object({
   title: z.string().min(5, { message: 'Title must be at least 5 characters.' }),
   instructions: z.string().min(10, { message: 'Instructions must be at least 10 characters.' }),
   courseId: z.string({ required_error: 'Please select a course.' }),
+  maxMarks: z.coerce.number().min(1, "Maximum marks must be at least 1."),
 });
 
 export default function EditAssignmentPage() {
@@ -58,6 +60,7 @@ export default function EditAssignmentPage() {
         title: '',
         instructions: '',
         courseId: '',
+        maxMarks: 100,
     }
   });
 
@@ -67,6 +70,7 @@ export default function EditAssignmentPage() {
         title: assignment.title,
         instructions: assignment.instructions,
         courseId: assignment.courseId,
+        maxMarks: assignment.maxMarks,
       });
     }
   }, [assignment, form]);
@@ -151,44 +155,46 @@ export default function EditAssignmentPage() {
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Title</FormLabel>
-                    <FormControl>
-                      <Input placeholder="e.g., 'My Summer Vacation Essay'" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-               <FormField
-                control={form.control}
-                name="courseId"
-                render={({ field }) => (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <FormField
+                  control={form.control}
+                  name="title"
+                  render={({ field }) => (
                     <FormItem>
-                    <FormLabel>Course</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value}>
-                        <FormControl>
-                        <SelectTrigger>
-                            <SelectValue placeholder={coursesLoading ? "Loading courses..." : "Select a course"} />
-                        </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                            {courses?.map((course) => (
-                                <SelectItem key={course.id} value={course.id}>{course.name}</SelectItem>
-                            ))}
-                            {!coursesLoading && courses?.length === 0 && (
-                                <div className="p-4 text-sm text-muted-foreground">No enabled courses available.</div>
-                            )}
-                        </SelectContent>
-                    </Select>
-                    <FormMessage />
+                      <FormLabel>Title</FormLabel>
+                      <FormControl>
+                        <Input placeholder="e.g., 'My Summer Vacation Essay'" {...field} />
+                      </FormControl>
+                      <FormMessage />
                     </FormItem>
-                )}
-              />
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="courseId"
+                  render={({ field }) => (
+                      <FormItem>
+                      <FormLabel>Course</FormLabel>
+                      <Select onValueChange={field.onChange} value={field.value}>
+                          <FormControl>
+                          <SelectTrigger>
+                              <SelectValue placeholder={coursesLoading ? "Loading courses..." : "Select a course"} />
+                          </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                              {courses?.map((course) => (
+                                  <SelectItem key={course.id} value={course.id}>{course.name}</SelectItem>
+                              ))}
+                              {!coursesLoading && courses?.length === 0 && (
+                                  <div className="p-4 text-sm text-muted-foreground">No enabled courses available.</div>
+                              )}
+                          </SelectContent>
+                      </Select>
+                      <FormMessage />
+                      </FormItem>
+                  )}
+                />
+              </div>
               <FormField
                 control={form.control}
                 name="instructions"
@@ -202,6 +208,20 @@ export default function EditAssignmentPage() {
                         {...field}
                       />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="maxMarks"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Maximum Marks</FormLabel>
+                    <FormControl>
+                      <Input type="number" placeholder="100" {...field} className="w-40" />
+                    </FormControl>
+                    <FormDescription>The total marks this assignment is out of.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

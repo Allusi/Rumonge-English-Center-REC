@@ -10,15 +10,12 @@ import {
 } from '@/components/ui/card';
 import { useDoc, useFirestore } from '@/firebase';
 import { doc } from 'firebase/firestore';
-import { ArrowLeft, FileCheck2, MessageSquareQuote, Star } from 'lucide-react';
+import { ArrowLeft, FileCheck2, MessageSquareQuote } from 'lucide-react';
 import Link from 'next/link';
-import { useToast } from '@/hooks/use-toast';
-import { useRouter, useParams, notFound } from 'next/navigation';
+import { useParams, notFound } from 'next/navigation';
 import type { Assignment, AssignmentSubmission } from '@/lib/data';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 
 export default function ViewGradedSubmissionPage() {
   const firestore = useFirestore();
@@ -90,7 +87,7 @@ export default function ViewGradedSubmissionPage() {
             </div>
           </div>
           <div className="text-right">
-              <p className="text-5xl font-bold text-primary">{submission.marks ?? 'N/A'}<span className="text-2xl text-muted-foreground">/100</span></p>
+              <p className="text-5xl font-bold text-primary">{submission.marks ?? 'N/A'}<span className="text-2xl text-muted-foreground">/{assignment.maxMarks}</span></p>
           </div>
         </Card>
 

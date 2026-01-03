@@ -150,9 +150,13 @@
           "type": "string",
           "enum": ["draft", "published"],
           "description": "The status of the assignment."
+        },
+        "maxMarks": {
+          "type": "number",
+          "description": "The maximum possible marks for the assignment."
         }
       },
-      "required": ["title", "instructions", "courseId", "createdAt", "courseName", "status"]
+      "required": ["title", "instructions", "courseId", "createdAt", "courseName", "status", "maxMarks"]
     },
     "AssignmentSubmission": {
         "title": "Assignment Submission",
