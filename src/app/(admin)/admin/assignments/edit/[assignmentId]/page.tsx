@@ -96,10 +96,17 @@ export default function EditAssignmentPage() {
     const newStatus = assignment.status === 'published' ? 'draft' : 'published';
     try {
         await updateDoc(assignmentRef, { status: newStatus });
-        toast({
-            title: `Assignment ${newStatus === 'published' ? 'Published' : 'Unpublished'}`,
-            description: `The assignment is now ${newStatus === 'published' ? 'visible' : 'hidden'} to students.`,
-        });
+        if (newStatus === 'published') {
+            toast({
+                title: 'Assignment Published!',
+                description: "Good luck to all the students! - Irambona Simeon",
+            });
+        } else {
+             toast({
+                title: `Assignment Unpublished`,
+                description: `The assignment is now hidden from students.`,
+            });
+        }
     } catch (error) {
         console.error("Error updating status:", error);
         toast({ variant: 'destructive', title: 'Error', description: 'Could not update assignment status.' });
