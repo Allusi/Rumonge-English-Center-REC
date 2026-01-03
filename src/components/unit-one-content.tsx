@@ -2190,8 +2190,35 @@ export function UnitOneContent() {
                                 <h4 className="font-semibold text-lg mb-2 mt-6">DIALOGUE PRACTICE OF THIS SECTION 3</h4>
                                 <div className="p-4 border rounded-lg bg-muted/50 space-y-1 text-sm">
                                   <p><strong>Stella :</strong> Good evening, STANY</p>
+                                    <p><strong>Stany :</strong> Good evening, Stella</p>
+                                    <p><strong>Stella :</strong> longtime no see,where were you?</p>
+                                    <p><strong>Stany :</strong> I was on Dar-es-salaam.</p>
+                                    <p><strong>Stella :</strong> how is Dar-es-salaam?</p>
+                                    <p><strong>Stany :</strong>It is a city in which we find many hospitals like Muhimbili and Aga khan,those are the main hospitals of Dar-es-salaam. Also we find many schools, supermarkets,shops, churches and Mosques without forgetting that it has many industries like MCL,GOLD STAR PAINTS,CELLO,ETC.....</p>
+                                    <p><strong>Stella :</strong>what places did you visit?</p>
+                                    <p><strong>Stany :</strong> I visited the places like stadium of Julius Nyerere and Julius Nyerere airport.</p>
+                                    <p><strong>Stella :</strong> how are they?</p>
+                                    <p><strong>Stany :</strong> They look amazing,have you never visited Dar-es-salaam?</p>
+                                    <p><strong>Stella :</strong> Not yet,but I visited the zoo of SERENGETI where there are many animals like buffaloes, tigers, lions, gorillas, monkeys and wolves.</p>
+                                    <p><strong>Stany :</strong> Dar-es-salaam is a good looking place.when you reach there,you'll enjoy your life .At kariakoo bazaar,you'll find people buying clothes like T-shirts, pants,under wears and others buying foods like cassava,tomato, sweet potatoes, aubergines and bananas.</p>
+                                    <p><strong>Stella :</strong> it is my hope ,the people of Dar-es-salaam have a luxurious life.</p>
+                                    <p><strong>Stany :</strong> Yes!and know that is a busy city with many people, houses,trains,buses,cars,lorries and aeroplanes.at the train station you will find many people waiting to travel.</p>
+                                    <p><strong>Stella :</strong> do people of Dar-es-salaam breed cows?</p>
+                                    <p><strong>Stany :</strong> No,because it is difficult to get grass to feed them.but neighbouring regions like PWANI AND MOROGORO breed rarely pigs,hens,ducks,goats and rabbits. In Dar-es-salaam you'll find fierce dogs to guard the houses.</p>
+                                    <p><strong>Stella :</strong> you have had a wonderful journey, so when will you turn back there?</p>
+                                    <p><strong>Stany :</strong> if God wishes in September on 26th.</p>
+                                    <p><strong>Stella :</strong> Okay,thanks ----and I also,my uncle promised me to take me there one day to go to visit my cousins.</p>
+                                    <p><strong>Stany :</strong> sounds good!</p>
+                                    <p><strong>Stella :</strong> so ,we shall talk more in section 4.</p>
+                                    <p><strong>Stany :</strong> okay thanks,we shall meet tomorrow at four o'clock.</p>
                                 </div>
-
+                                <h4 className="font-semibold text-lg mb-2 mt-6">EXPRESSIONS</h4>
+                                <div className="text-sm space-y-2 text-muted-foreground">
+                                    <p><strong>Day in,Day out:</strong> continuously or repeatedly over a long period of time.</p>
+                                    <p><strong>And all that :</strong> or and that, and so on.</p>
+                                    <p><strong>Long call :</strong> to pass waste,to defecate.</p>
+                                    <p><strong>Small call :</strong> to pass urine,to urinate.</p>
+                                </div>
                             </CardContent>
                         </Card>
                     </AccordionContent>
@@ -2205,12 +2232,11 @@ export function UnitOneContent() {
             Section 4: Actions
           </AccordionTrigger>
           <AccordionContent className="p-4 pt-0">
-            <p className="text-muted-foreground mb-2">Action words (verbs) tell us what is happening.</p>
+            <p className="text-muted-foreground mb-2">In section three we learnt about people ,things and places.we hope that you now know many words.in this section, we will learn words which show actions.</p>
+            <p className="text-muted-foreground mb-2">The action shows us what is happening.</p>
+            <p className="text-muted-foreground mb-2">Here are some examples:</p>
             <ul className="list-disc pl-6 text-muted-foreground">
-              <li>A boy is <strong>eating</strong> a banana.</li>
-              <li>A girl is <strong>going</strong>.</li>
-              <li>Martha is <strong>washing</strong> her clothes.</li>
-              <li>We are <strong>studying</strong> English.</li>
+              <li>A boy is <strong>eating</strong> a banana. --> what is the boy doing?</li>
             </ul>
           </AccordionContent>
         </AccordionItem>
