@@ -55,7 +55,7 @@ export default function AssignmentsPage() {
   useEffect(() => {
     const seedAssignment = async () => {
         if (firestore && assignmentsCollection) {
-            const snapshot = await getDocs(assignmentsCollection);
+            const snapshot = await getDocs(query(assignmentsCollection, where('title', '==', initialAssignment.title)));
             if (snapshot.empty) {
                 const batch = writeBatch(firestore);
                 const docRef = doc(assignmentsCollection);
