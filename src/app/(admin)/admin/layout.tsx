@@ -3,7 +3,7 @@
 
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BookCopy, LayoutDashboard, LogOut, Megaphone, Users, Info, Loader2, CalendarCheck, FileText, CheckSquare, MessageCircle } from "lucide-react";
+import { BookCopy, LayoutDashboard, LogOut, Megaphone, Users, Info, Loader2, CalendarCheck, FileText, CheckSquare, MessageCircle, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -123,6 +123,14 @@ export default function AdminLayout({
                 <SidebarMenuButton tooltip="AI Tutor Logs">
                   <MessageCircle />
                   AI Tutor
+                </SidebarMenuButton>
+              </Link>
+            </SidebarMenuItem>
+             <SidebarMenuItem>
+              <Link href="/profile" passHref>
+                <SidebarMenuButton tooltip="Profile">
+                  <User />
+                  Profile
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>
