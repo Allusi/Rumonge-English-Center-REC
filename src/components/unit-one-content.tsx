@@ -1999,7 +1999,7 @@ export function UnitOneContent() {
                                     <p><strong>Remember:</strong> we have , odd number : 1,3,5,7,9,11,13 etc..</p>
                                     <p>Even number : 2, 4, 6 ,8 ,10 ,12 ,14 etc....</p>
                                     <p><strong>Eg:</strong> -Two dogs,five hens,twenty girls,one stick and eighteen students.</p>
-                                    <p>-That girl----&gt;Those four girls,This boy-----------&gt;These two boys.</p>
+                                    <p>-That girl{'---->'}<wbr/>Those four girls,This boy{'----------->'}<wbr/>These two boys.</p>
                                     <p><strong>NB:</strong>Every day when counting the cardinal numbers between hundreds and dizen,there is the word"" and ""</p>
                                     <p>E.g: 101: one hundred and one</p>
                                     <p>254: two hundred and fifty- four</p>
@@ -2121,12 +2121,12 @@ export function UnitOneContent() {
                                         <li>A day ends at midnight 12:00 p.m and a new day begins.</li>
                                         <li>In telling time,we also use a.m and p.m</li>
                                     </ol>
-                                    <p>a.m--------&gt;anti- meridiem,in the morning after midnight: this is morning time</p>
-                                    <p>p.m--------&gt;post- meridiem,in the afternoon, in the evening, at midnight, at noon and before midnight: this is afternoon and evening time</p>
+                                    <p>a.m{'-------->'}<wbr/>anti- meridiem,in the morning after midnight: this is morning time</p>
+                                    <p>p.m{'-------->'}<wbr/>post- meridiem,in the afternoon, in the evening, at midnight, at noon and before midnight: this is afternoon and evening time</p>
                                     <p>When telling time,there are two questions you have to know,these are : what time is it? And what is the time? And the answers to these questions will start by saying :-It is....... / -The time is.........</p>
                                     
                                     <h5 className="font-semibold text-md pt-2">TELLING TIME IN SIMPLE WAY</h5>
-                                    <p>This way is reading the time as it is shown by the watch----&gt;this is common English ( both British and American use this way)</p>
+                                    <p>This way is reading the time as it is shown by the watch{'---->'}<wbr/>this is common English ( both British and American use this way)</p>
                                     <p>E.g : 9:11 ---&gt;it is nine eleven</p>
                                     <p>12:35 ---&gt;the time is twelve thirty- five</p>
                                     <p>6:30 --&gt;it is six thirty</p>
@@ -2136,17 +2136,17 @@ export function UnitOneContent() {
                                     <p>13:52 -&gt;it is thirteen fifty- two ( 1:52 p.m )</p>
                                     <p>Say : " o'clock :-when an hour is top.</p>
                                     <p>-only for whole hours</p>
-                                    <p>E.g : 9:00 ----&gt; it is nine o' clock.</p>
-                                    <p>3:00 ----&gt; the time is three o' clock</p>
-                                    <p>Please pay attention!!!!!---------&gt; Don't use a.m and p.m with whole hours</p>
-                                    <p>---------&gt;Don't use o' clock with morning /afternoon</p>
+                                    <p>E.g : 9:00 {'---->'}<wbr/> it is nine o' clock.</p>
+                                    <p>3:00 {'---->'}<wbr/> the time is three o' clock</p>
+                                    <p>Please pay attention!!!!!{'---------&gt;'}<wbr/> Don't use a.m and p.m with whole hours</p>
+                                    <p>{'---------&gt;'}<wbr/>Don't use o' clock with morning /afternoon</p>
                                     
                                     <h5 className="font-semibold text-md pt-2">OTHER WAY OF TELLING TIME</h5>
                                     <p>1......................15....................29.....30.....31.......................45.......................59</p>
                                     <p> &lt;----------past/after-------------&gt; Half. &lt;-------------To/of-------------------&gt;</p>
-                                    <p>E.g: 7:08------&gt;it is eight minutes past/ after seven</p>
+                                    <p>E.g: 7:08{'------&gt;'}<wbr/>it is eight minutes past/ after seven</p>
                                     <p>10:27-----&gt;it is twenty- seven minutes past/after ten</p>
-                                    <p>11:15------&gt;it is quarter past/after eleven</p>
+                                    <p>11:15{'------&gt;'}<wbr/>it is quarter past/after eleven</p>
                                     <p>9:34-----&gt;it is twenty- six minutes to /of ten</p>
                                     <p>12:45----&gt;it is quarter to/ of one</p>
                                     <p>7:30-----&gt;it is a half past/after seven</p>
@@ -2154,7 +2154,7 @@ export function UnitOneContent() {
                                     <p>1:55-----&gt;it is five to / of two</p>
                                     <p>1:10-----&gt;it is ten past/after one</p>
                                     <p>NB: with 5/10/20/25 the word minutes is not necessary, but is used with other numbers.</p>
-                                    <p>E.g: 10:25 a.m--------&gt; it is twenty- five past ten</p>
+                                    <p>E.g: 10:25 a.m{'--------&gt;'}<wbr/> it is twenty- five past ten</p>
                                     <p>10:17 p.m-------&gt; it is seventeen minutes past ten.</p>
                                 </div>
                                 <h4 className="font-semibold text-lg mb-2 mt-6">TWENTY- FOUR HOURS</h4>
@@ -2236,7 +2236,7 @@ export function UnitOneContent() {
             <p className="text-muted-foreground mb-2">The action shows us what is happening.</p>
             <p className="text-muted-foreground mb-2">Here are some examples:</p>
             <ul className="list-disc pl-6 text-muted-foreground space-y-2 text-sm">
-                <li>A boy is <strong>eating</strong> a banana. {'->'} what is the boy doing? {'->'} he is eating a banana. {'->'} what is the boy eating? {'->'} he is eating the banana.</li>
+                 <li>A boy is <strong>eating</strong> a banana. {'->'} what is the boy doing? {'->'} he is eating a banana. {'->'} what is the boy eating? {'->'} he is eating the banana.</li>
                 <li>A girl is going.</li>
                 <li>A man is walking.</li>
                 <li>MINANI is sitting on a chair.</li>
@@ -2261,11 +2261,11 @@ export function UnitOneContent() {
                 <li>A bird is flying. {'->'} A bird is not flying.</li>
                 <li>A boy is carrying a basket. {'->'} A boy is not carrying a basket.</li>
                 <li>You are reading a book. {'->'} what are you doing? {'->'} I am reading a book. {'->'} what are you reading? {'->'} I am reading a book</li>
-                <li>I am taking notes. {'->'} Am I taking notes?</li>
-                <li>You are doing a homework. {'->'} Are you doing a homework?</li>
-                <li>They are harvesting. {'->'} Are they harvesting?</li>
-                <li>He is digging a hole. {'->'} Is he digging a hole?</li>
-                <li>My father is building a house. {'->'} Is my father building a house?</li>
+                <li>I am taking notes.{'->'}Am I taking notes?</li>
+                <li>You are doing a homework.{'->'}Are you doing a homework?</li>
+                <li>They are harvesting.{'->'}Are they harvesting?</li>
+                <li>He is digging a hole.{'->'}Is he digging a hole?</li>
+                <li>My father is building a house.{'->'}Is my father building a house?</li>
             </ul>
             <p className="mt-4 text-sm text-muted-foreground">NB: The words eating, sitting, washing, cooking, listening, walking, speaking, carrying, reading etc...they show "ACTIONS"</p>
              <h4 className="font-semibold text-lg my-4">DIALOGUE PRACTICE OF THIS SECTION</h4>
@@ -2297,9 +2297,9 @@ export function UnitOneContent() {
               </div>
               <h4 className="font-semibold text-lg my-4">EXPRESSIONS</h4>
               <div className="text-sm space-y-2 text-muted-foreground">
-                <p><strong>1.Be so!---></strong> urahora utyo/ urama utyo</p>
-                <p><strong>2.a mother to be----></strong>near to give birth.</p>
-                <p><strong>3.in the family way----></strong>to be pregnant</p>
+                <p><strong>1.Be so!---&gt;</strong> urahora utyo/ urama utyo</p>
+                <p><strong>2.a mother to be----&gt;</strong>near to give birth.</p>
+                <p><strong>3.in the family way----&gt;</strong>to be pregnant</p>
               </div>
           </AccordionContent>
         </AccordionItem>
