@@ -56,8 +56,8 @@ export default function StudentAssignmentsPage() {
       const submission = submissions?.find(s => s.assignmentId === assignment.id);
       return {
         ...assignment,
-        status: submission ? (submission.status === 'graded' ? 'Graded' : 'Submitted') : 'Not Submitted',
-        submission,
+        submissionStatus: submission ? (submission.status === 'graded' ? 'Graded' : 'Submitted') : 'Not Submitted',
+        submission: submission,
       };
     }).sort((a, b) => b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime());
   }, [assignments, submissions]);
@@ -118,20 +118,28 @@ export default function StudentAssignmentsPage() {
                   <TableCell>{assignment.createdAt ? format(assignment.createdAt.toDate(), 'PPP') : '-'}</TableCell>
                   <TableCell>
                     <Badge variant={
-                        assignment.status === 'Submitted' ? 'secondary' : 
-                        assignment.status === 'Graded' ? 'default' : 
+                        assignment.submissionStatus === 'Submitted' ? 'secondary' : 
+                        assignment.submissionStatus === 'Graded' ? 'default' : 
                         'destructive'
                     }>
-                      {assignment.status === 'Graded' && <Check className="mr-1 h-3 w-3"/>}
-                      {assignment.status}
+                      {assignment.submissionStatus === 'Graded' && <Check className="mr-1 h-3 w-3"/>}
+                      {assignment.submissionStatus}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
-                    <Link href={`/student/assignments/submit/${assignment.id}`} passHref>
-                      <Button variant="outline" size="sm" disabled={assignment.status !== 'Not Submitted'}>
-                        {assignment.status === 'Not Submitted' ? 'Submit' : assignment.status === 'Submitted' ? 'View' : 'View Grade'}
-                      </Button>
-                    </Link>
+                    {assignment.submissionStatus === 'Not Submitted' && (
+                        <Link href={`/student/assignments/submit/${assignment.id}`} passHref>
+                            <Button variant="outline" size="sm">Submit</Button>
+                        </Link>
+                    )}
+                    {assignment.submissionStatus === 'Submitted' && (
+                        <Button variant="outline" size="sm" disabled>Submitted</Button>
+                    )}
+                     {assignment.submissionStatus === 'Graded' && assignment.submission && (
+                        <Link href={`/student/assignments/view/${assignment.submission.id}`} passHref>
+                            <Button variant="default" size="sm">View Grade</Button>
+                        </Link>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
