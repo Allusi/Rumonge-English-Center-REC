@@ -2235,9 +2235,39 @@ export function UnitOneContent() {
             <p className="text-muted-foreground mb-2">In section three we learnt about people ,things and places.we hope that you now know many words.in this section, we will learn words which show actions.</p>
             <p className="text-muted-foreground mb-2">The action shows us what is happening.</p>
             <p className="text-muted-foreground mb-2">Here are some examples:</p>
-            <ul className="list-disc pl-6 text-muted-foreground">
-              <li>A boy is <strong>eating</strong> a banana. --> what is the boy doing?</li>
+            <ul className="list-disc pl-6 text-muted-foreground space-y-2 text-sm">
+                <li>A boy is <strong>eating</strong> a banana. {'->'} what is the boy doing? {'->'} he is eating a banana. {'->'} what is the boy eating? {'->'} he is eating the banana.</li>
+                <li>A girl is going.</li>
+                <li>A man is walking.</li>
+                <li>MINANI is sitting on a chair.</li>
+                <li>Martha is washing her clothes.</li>
+                <li>We are studying English course.</li>
+                <li>STANY is writing a letter.</li>
+                <li>The students are learning.</li>
+                <li>Grace is cooking food {'->'} what is Grace doing? {'->'} She is cooking food. {'->'} what is Grace cooking? {'->'} she is cooking food.</li>
+                <li>A boy is listening to the radio.</li>
+                <li>A man is speaking.</li>
+                <li>Asha is drinking milk.</li>
+                <li>My parents are farming.</li>
+                <li>A dog is running away {'->'} what is the dog doing? {'->'} it is running away.</li>
+                <li>Two boys are playing football. {'->'} what are they doing? {'->'} they are playing football.</li>
+                <li>Catherine is sweeping.</li>
+                <li>The baby is crying. {'->'} The baby is not crying.</li>
+                <li>Albert is pushing a car {'->'} Albert is not pushing a car.</li>
+                <li>A man is pulling a cart. {'->'} A man is not pulling a cart.</li>
+                <li>A girl is holding a pen. {'->'} A girl is not holding a pen.</li>
+                <li>Kulwa is riding a bicycle. {'->'} Kulwa is not riding a bicycle.</li>
+                <li>I am driving a car. {'->'} what am I doing? {'->'} I am driving a car. {'->'} what am I driving? {'->'} I am driving a car.</li>
+                <li>A bird is flying. {'->'} A bird is not flying.</li>
+                <li>A boy is carrying a basket. {'->'} A boy is not carrying a basket.</li>
+                <li>You are reading a book. {'->'} what are you doing? {'->'} I am reading a book. {'->'} what are you reading? {'->'} I am reading a book</li>
+                <li>I am taking notes. {'->'} Am I taking notes?</li>
+                <li>You are doing a homework. {'->'} Are you doing a homework?</li>
+                <li>They are harvesting. {'->'} Are they harvesting?</li>
+                <li>He is digging a hole. {'->'} Is he digging a hole?</li>
+                <li>My father is building a house. {'->'} Is my father building a house?</li>
             </ul>
+            <p className="mt-4 text-sm text-muted-foreground">NB: The words eating, sitting, washing, cooking, listening, walking, speaking, carrying, reading etc...they</p>
           </AccordionContent>
         </AccordionItem>
         
