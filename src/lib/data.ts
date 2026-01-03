@@ -54,6 +54,20 @@ export type Assignment = {
     createdAt: Timestamp;
 };
 
+export type AssignmentSubmission = {
+    id: string;
+    assignmentId: string;
+    assignmentTitle: string;
+    studentId: string;
+    studentName: string;
+    courseId: string;
+    answers: string;
+    submittedAt: Timestamp;
+    status: 'submitted' | 'graded';
+    feedback?: string;
+    marks?: number;
+};
+
 export type Attendance = {
     id: string;
     studentId: string;

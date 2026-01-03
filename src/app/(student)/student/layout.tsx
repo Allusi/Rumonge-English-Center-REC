@@ -3,7 +3,7 @@
 
 import type { Metadata } from "next";
 import Link from "next/link";
-import { LayoutDashboard, LogOut, SpellCheck, Info, MessageCircle, Loader2, Megaphone, CalendarCheck } from "lucide-react";
+import { LayoutDashboard, LogOut, SpellCheck, Info, MessageCircle, Loader2, Megaphone, CalendarCheck, FileText } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -75,6 +75,14 @@ export default function StudentLayout({
                 <SidebarMenuButton tooltip="Daily Attendance">
                   <CalendarCheck />
                   Attendance
+                </SidebarMenuButton>
+              </Link>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <Link href="/student/assignments" passHref>
+                <SidebarMenuButton tooltip="My Assignments">
+                  <FileText />
+                  My Assignments
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>

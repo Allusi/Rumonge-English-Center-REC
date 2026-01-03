@@ -149,6 +149,24 @@
       },
       "required": ["title", "instructions", "courseId", "createdAt", "courseName"]
     },
+    "AssignmentSubmission": {
+        "title": "Assignment Submission",
+        "description": "Represents a student's submission for an assignment.",
+        "type": "object",
+        "properties": {
+            "assignmentId": { "type": "string" },
+            "assignmentTitle": { "type": "string" },
+            "studentId": { "type": "string" },
+            "studentName": { "type": "string" },
+            "courseId": { "type": "string" },
+            "answers": { "type": "string" },
+            "submittedAt": { "type": "string", "format": "date-time" },
+            "status": { "type": "string", "enum": ["submitted", "graded"] },
+            "feedback": { "type": "string" },
+            "marks": { "type": "number" }
+        },
+        "required": ["assignmentId", "studentId", "courseId", "answers", "submittedAt", "status"]
+    },
     "Enrollment": {
         "title": "Enrollment",
         "description": "Represents a student's enrollment in a course.",
@@ -246,6 +264,10 @@
         "$ref": "#/backend/entities/Assignment"
       },
       "description": "Stores all created assignments for all courses."
+    },
+    "/submissions/{submissionId}": {
+        "schema": { "$ref": "#/backend/entities/AssignmentSubmission" },
+        "description": "Stores student submissions for assignments."
     },
     "/enrollments/{enrollmentId}": {
         "schema": {

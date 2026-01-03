@@ -3,7 +3,7 @@
 
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BookCopy, LayoutDashboard, LogOut, Megaphone, Users, Info, Loader2, CalendarCheck, FileText } from "lucide-react";
+import { BookCopy, LayoutDashboard, LogOut, Megaphone, Users, Info, Loader2, CalendarCheck, FileText, CheckSquare } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -91,6 +91,14 @@ export default function AdminLayout({
                 <SidebarMenuButton tooltip="Assignments">
                   <FileText />
                   Assignments
+                </SidebarMenuButton>
+              </Link>
+            </SidebarMenuItem>
+             <SidebarMenuItem>
+              <Link href="/admin/submissions" passHref>
+                <SidebarMenuButton tooltip="Submissions">
+                  <CheckSquare />
+                  Submissions
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>
