@@ -34,11 +34,23 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </div>
         );
     }
+    
+    // After loading, if there's still no user, redirect to login.
+    // This handles the case where the user might log out.
+    if (!user) {
+        return (
+             <div className="flex h-screen w-full items-center justify-center">
+                <Loader2 className="h-10 w-10 animate-spin" />
+            </div>
+        );
+    }
 
+    // If the user is authenticated but the profile doesn't exist (e.g., still being created),
+    // continue to show a loading state instead of an error.
     if (!userProfile) {
          return (
             <div className="flex h-screen w-full items-center justify-center">
-                <p>User profile not found. Please log out and try again.</p>
+                <Loader2 className="h-10 w-10 animate-spin" />
             </div>
         );
     }
