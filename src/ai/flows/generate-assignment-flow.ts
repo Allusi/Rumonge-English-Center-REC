@@ -21,7 +21,7 @@ export type GenerateAssignmentInput = z.infer<
 
 const GenerateAssignmentOutputSchema = z.object({
   title: z.string().describe('A concise and relevant title for the assignment.'),
-  instructions: z.string().describe("Detailed instructions for the student. This should include a mix of multiple-choice questions, fill-in-the-blanks, or short answer questions. The instructions should be clear, well-formatted, and directly related to the provided topic and source material. Ensure there are at least 3 distinct questions or tasks."),
+  instructions: z.string().describe("Detailed instructions for the student. This should include a mix of multiple-choice questions, fill-in-the-blanks, or short answer questions. The instructions should be clear, well-formatted with lists and line breaks, and directly related to the provided topic and source material. Ensure there are at least 3 distinct questions or tasks."),
 });
 export type GenerateAssignmentOutput = z.infer<
   typeof GenerateAssignmentOutputSchema
@@ -68,11 +68,18 @@ Expressions:
 - Domestic Animals: Cow, Goat, Hen, Dog.
 ---
 
-Based on the provided topic and source material, generate an assignment with a clear title and detailed instructions. The instructions should include at least three distinct questions or tasks for the student to complete. The tone should be encouraging and clear for a beginner.
+Based on the provided topic and source material, generate an assignment with a clear title and detailed instructions. The instructions should be well-formatted with clear headings (e.g., "Question 1", "Task 2") and use line breaks to separate different parts of the assignment. The instructions must include at least three distinct questions or tasks. The tone should be encouraging and clear for a beginner.
 
-For example, if the topic is "English Alphabet", you could ask students to list the vowels, write the alphabet in lowercase, and use an expression like "from A to Z" in a sentence.
+For example, if the topic is "English Alphabet", an ideal format would be:
 
-If the topic is "Greetings", you could ask them to write a short dialogue using both friendly and respectable greetings.`,
+Question 1:
+List the five vowels in the English alphabet.
+
+Question 2:
+Write the alphabet in lowercase letters from a to z.
+
+Question 3:
+Use the expression "from A to Z" in a sentence.`,
 });
 
 const generateAssignmentFlow = ai.defineFlow(
