@@ -30,103 +30,99 @@ import { useRouter, useParams, notFound } from 'next/navigation';
 import type { Assignment, AssignmentSubmission } from '@/lib/data';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Input } from '@/components/ui/input';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const formSchema = z.object({
   feedback: z.string().min(10, { message: 'Feedback must be at least 10 characters long.' }),
   marks: z.coerce.number().min(0, "Marks cannot be negative.").max(100, "Marks cannot exceed 100."),
 });
 
-export default function GradeSubmissionPage() {
-  const firestore = useFirestore();
-  const router = useRouter();
-  const params = useParams();
-  const submissionId = params.submissionId as string;
-  const { toast } = useToast();
-
-  const submissionRef = firestore && submissionId ? doc(firestore, 'submissions', submissionId) : null;
-  const { data: submission, loading: submissionLoading } = useDoc<AssignmentSubmission>(submissionRef);
-
-  const assignmentRef = firestore && submission ? doc(firestore, 'assignments', submission.assignmentId) : null;
-  const { data: assignment, loading: assignmentLoading } = useDoc<Assignment>(assignmentRef);
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      feedback: '',
-      marks: 0,
-    },
-  });
-
-  useEffect(() => {
-    if (submission) {
-        form.reset({
-            feedback: submission.feedback || '',
-            marks: submission.marks || 0
-        });
-    }
-  }, [submission, form]);
-
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (!submissionRef) return;
-    
-    try {
-      await updateDoc(submissionRef, {
-        ...values,
-        status: 'graded',
-      });
-      toast({ title: 'Success', description: 'The submission has been graded.' });
-      router.push('/admin/submissions');
-    } catch (error) {
-      console.error("Error grading submission: ", error);
-      toast({ variant: 'destructive', title: 'Error', description: 'Could not grade the submission. Please try again.' });
-    }
-  }
-  
-  const isLoading = submissionLoading || assignmentLoading;
-  
-  if (isLoading) {
-    return (
-      <div className="space-y-6">
-        <div className="flex items-center gap-4">
-            <Skeleton className="h-9 w-9" />
-            <div className='space-y-2'>
-                <Skeleton className="h-8 w-64" />
-                <Skeleton className="h-4 w-48" />
-            </div>
-        </div>
-        <Card>
-          <CardHeader className="space-y-2">
-            <Skeleton className="h-6 w-1/3" />
-            <Skeleton className="h-4 w-1/4" />
-          </CardHeader>
-          <CardContent className="space-y-6">
-             <Skeleton className="h-20" />
-             <Skeleton className="h-40" />
-          </CardContent>
-        </Card>
-         <Card>
-            <CardHeader>
-                <Skeleton className="h-6 w-1/4" />
-            </CardHeader>
-            <CardContent className="space-y-4">
-                <Skeleton className="h-24" />
-                <Skeleton className="h-10 w-20" />
-                <div className="flex justify-end">
-                    <Skeleton className="h-10 w-32" />
-                </div>
-            </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  // Only call notFound() after all loading is complete and data is still missing.
-  if (!submission || !assignment) {
-    notFound();
-  }
-
+function LoadingSkeleton() {
   return (
+    <div className="space-y-6">
+      <div className="flex items-center gap-4">
+          <Skeleton className="h-9 w-9" />
+          <div className='space-y-2'>
+              <Skeleton className="h-8 w-64" />
+              <Skeleton className="h-4 w-48" />
+          </div>
+      </div>
+      <Card>
+        <CardHeader className="space-y-2">
+          <Skeleton className="h-6 w-1/3" />
+          <Skeleton className="h-4 w-1/4" />
+        </CardHeader>
+        <CardContent className="space-y-6">
+           <Skeleton className="h-20" />
+           <Skeleton className="h-40" />
+        </CardContent>
+      </Card>
+       <Card>
+          <CardHeader>
+              <Skeleton className="h-6 w-1/4" />
+          </CardHeader>
+          <CardContent className="space-y-4">
+              <Skeleton className="h-24" />
+              <Skeleton className="h-10 w-20" />
+              <div className="flex justify-end">
+                  <Skeleton className="h-10 w-32" />
+              </div>
+          </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+function GradeSubmissionPageContent({ submission }: { submission: AssignmentSubmission }) {
+    const firestore = useFirestore();
+    const router = useRouter();
+    const { toast } = useToast();
+
+    const assignmentRef = firestore ? doc(firestore, 'assignments', submission.assignmentId) : null;
+    const { data: assignment, loading: assignmentLoading } = useDoc<Assignment>(assignmentRef);
+
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            feedback: submission.feedback || '',
+            marks: submission.marks ?? 0,
+        },
+    });
+
+    useEffect(() => {
+        if (submission) {
+            form.reset({
+                feedback: submission.feedback || '',
+                marks: submission.marks ?? 0
+            });
+        }
+    }, [submission, form]);
+
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        if (!firestore) return;
+        const submissionRef = doc(firestore, 'submissions', submission.id);
+        try {
+            await updateDoc(submissionRef, {
+                ...values,
+                status: 'graded',
+            });
+            toast({ title: 'Success', description: 'The submission has been graded.' });
+            router.push('/admin/submissions');
+        } catch (error) {
+            console.error("Error grading submission: ", error);
+            toast({ variant: 'destructive', title: 'Error', description: 'Could not grade the submission. Please try again.' });
+        }
+    }
+
+    if (assignmentLoading) {
+        return <LoadingSkeleton />;
+    }
+
+    if (!assignment) {
+        notFound();
+    }
+
+    return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center gap-4">
         <Link href="/admin/submissions" passHref>
@@ -211,5 +207,24 @@ export default function GradeSubmissionPage() {
         </CardContent>
       </Card>
     </div>
-  );
+    );
+}
+
+export default function GradeSubmissionPage() {
+    const firestore = useFirestore();
+    const params = useParams();
+    const submissionId = params.submissionId as string;
+
+    const submissionRef = firestore && submissionId ? doc(firestore, 'submissions', submissionId) : null;
+    const { data: submission, loading: submissionLoading } = useDoc<AssignmentSubmission>(submissionRef);
+    
+    if (submissionLoading) {
+        return <LoadingSkeleton />;
+    }
+
+    if (!submission) {
+        notFound();
+    }
+    
+    return <GradeSubmissionPageContent submission={submission} />;
 }
