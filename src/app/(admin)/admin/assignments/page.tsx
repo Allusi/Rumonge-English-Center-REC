@@ -1,6 +1,6 @@
 
 'use client';
-import { Plus, MoreHorizontal, FilePenLine, Trash2, ArrowLeft, BookOpen } from "lucide-react";
+import { Plus, MoreHorizontal, FilePenLine, Trash2, ArrowLeft, BookOpen, Circle, CheckCircle } from "lucide-react";
 import Link from "next/link";
 import {
   AlertDialog,
@@ -119,6 +119,7 @@ export default function AssignmentsPage() {
               <TableRow>
                 <TableHead>Title</TableHead>
                 <TableHead>Course</TableHead>
+                <TableHead>Status</TableHead>
                 <TableHead>Created At</TableHead>
                 <TableHead>
                   <span className="sr-only">Actions</span>
@@ -131,6 +132,7 @@ export default function AssignmentsPage() {
                     <TableRow key={i}>
                       <TableCell><Skeleton className="h-5 w-40" /></TableCell>
                       <TableCell><Skeleton className="h-6 w-32" /></TableCell>
+                      <TableCell><Skeleton className="h-6 w-24" /></TableCell>
                       <TableCell><Skeleton className="h-5 w-24" /></TableCell>
                       <TableCell><Skeleton className="h-8 w-8 ml-auto" /></TableCell>
                     </TableRow>
@@ -143,6 +145,12 @@ export default function AssignmentsPage() {
                     <Badge variant="outline" className="gap-1">
                         <BookOpen className="h-3 w-3" />
                         {assignment.courseName}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant={assignment.status === 'published' ? 'secondary' : 'outline'} className="capitalize">
+                      {assignment.status === 'published' ? <CheckCircle className="mr-1 h-3 w-3 text-green-600" /> : <Circle className="mr-1 h-3 w-3" />}
+                      {assignment.status}
                     </Badge>
                   </TableCell>
                   <TableCell>{assignment.createdAt ? format(assignment.createdAt.toDate(), 'PPP') : 'Just now'}</TableCell>
@@ -202,7 +210,7 @@ export default function AssignmentsPage() {
               ))}
                {!loading && assignments?.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={4} className="h-24 text-center">
+                  <TableCell colSpan={5} className="h-24 text-center">
                     No assignments found. Get started by creating one.
                   </TableCell>
                 </TableRow>

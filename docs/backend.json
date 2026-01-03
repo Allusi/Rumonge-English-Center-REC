@@ -145,9 +145,14 @@
           "type": "string",
           "format": "date-time",
           "description": "The timestamp when the assignment was created."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["draft", "published"],
+          "description": "The status of the assignment."
         }
       },
-      "required": ["title", "instructions", "courseId", "createdAt", "courseName"]
+      "required": ["title", "instructions", "courseId", "createdAt", "courseName", "status"]
     },
     "AssignmentSubmission": {
         "title": "Assignment Submission",

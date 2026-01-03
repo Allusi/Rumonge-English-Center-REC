@@ -50,6 +50,7 @@ export default function NewAssignmentPage() {
     defaultValues: {
       title: '',
       instructions: '',
+      courseId: '',
     },
   });
 
@@ -64,8 +65,9 @@ export default function NewAssignmentPage() {
             ...values,
             courseName: course?.name || 'Unknown Course',
             createdAt: serverTimestamp(),
+            status: 'draft',
         });
-        toast({ title: 'Success', description: 'Assignment created successfully.' });
+        toast({ title: 'Success', description: 'Assignment draft created successfully.' });
         router.push('/admin/assignments');
     } catch (error) {
         console.error("Error creating assignment: ", error);
@@ -86,7 +88,7 @@ export default function NewAssignmentPage() {
             New Assignment
           </h1>
           <p className="text-muted-foreground">
-            Create a new assignment for a course.
+            Create a new assignment for a course. It will be saved as a draft.
           </p>
         </div>
       </div>
@@ -155,7 +157,7 @@ export default function NewAssignmentPage() {
               />
               <div className="flex justify-end">
                 <Button type="submit" disabled={form.formState.isSubmitting}>
-                  {form.formState.isSubmitting ? 'Creating...' : 'Create Assignment'}
+                  {form.formState.isSubmitting ? 'Saving...' : 'Save as Draft'}
                 </Button>
               </div>
             </form>

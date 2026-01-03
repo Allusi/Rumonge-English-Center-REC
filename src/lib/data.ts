@@ -52,6 +52,7 @@ export type Assignment = {
     courseId: string;
     courseName: string;
     createdAt: Timestamp;
+    status: 'draft' | 'published';
 };
 
 export type AssignmentSubmission = {

@@ -24,7 +24,7 @@ import {
 } from '@/components/ui/card';
 import { useCollection, useDoc, useFirestore } from '@/firebase';
 import { collection, query, where, doc, updateDoc } from 'firebase/firestore';
-import { ArrowLeft, Send } from 'lucide-react';
+import { ArrowLeft, Send, Circle, CheckCircle, EyeOff } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter, useParams, notFound } from 'next/navigation';
@@ -47,7 +47,7 @@ export default function EditAssignmentPage() {
   const { toast } = useToast();
 
   const assignmentRef = firestore && assignmentId ? doc(firestore, 'assignments', assignmentId) : null;
-  const { data: assignment, loading: assignmentLoading } = useDoc<Assignment>(assignmentRef);
+  const { data: assignment, loading: assignmentLoading, error: assignmentError } = useDoc<Assignment>(assignmentRef);
 
   const coursesQuery = firestore ? query(collection(firestore, 'courses'), where('isEnabled', '==', true)) : null;
   const { data: courses, loading: coursesLoading } = useCollection<Course>(coursesQuery);
@@ -87,11 +87,19 @@ export default function EditAssignmentPage() {
     }
   }
 
-  const handleSendToStudents = () => {
-    toast({
-        title: "Feature Coming Soon!",
-        description: "Sending assignments directly to students is not yet implemented.",
-    });
+  const handleTogglePublish = async () => {
+    if (!assignmentRef || !assignment) return;
+    const newStatus = assignment.status === 'published' ? 'draft' : 'published';
+    try {
+        await updateDoc(assignmentRef, { status: newStatus });
+        toast({
+            title: `Assignment ${newStatus === 'published' ? 'Published' : 'Unpublished'}`,
+            description: `The assignment is now ${newStatus === 'published' ? 'visible' : 'hidden'} to students.`,
+        });
+    } catch (error) {
+        console.error("Error updating status:", error);
+        toast({ variant: 'destructive', title: 'Error', description: 'Could not update assignment status.' });
+    }
   }
 
   const isLoading = assignmentLoading || coursesLoading;
@@ -114,7 +122,7 @@ export default function EditAssignmentPage() {
     )
   }
 
-  if (!assignment && !assignmentLoading) {
+  if ((!assignment && !assignmentLoading) || assignmentError) {
     notFound();
   }
 
@@ -199,9 +207,12 @@ export default function EditAssignmentPage() {
                 )}
               />
               <div className="flex justify-between items-center">
-                 <Button type="button" variant="secondary" onClick={handleSendToStudents}>
-                  <Send className="mr-2 h-4 w-4" />
-                  Send to Students
+                 <Button type="button" variant={assignment?.status === 'published' ? "secondary" : "default"} onClick={handleTogglePublish}>
+                  {assignment?.status === 'published' ? (
+                      <><EyeOff className="mr-2 h-4 w-4" />Unpublish</>
+                  ) : (
+                      <><Send className="mr-2 h-4 w-4" />Publish Assignment</>
+                  )}
                 </Button>
                 <Button type="submit" disabled={form.formState.isSubmitting}>
                   {form.formState.isSubmitting ? 'Saving...' : 'Save Changes'}

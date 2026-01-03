@@ -38,7 +38,13 @@ export default function StudentAssignmentsPage() {
   const enrolledCourseIds = useMemo(() => enrollments?.map(e => e.courseId) || [], [enrollments]);
 
   const { data: assignments, loading: assignmentsLoading } = useCollection<Assignment>(
-    firestore && enrolledCourseIds.length > 0 ? query(collection(firestore, 'assignments'), where('courseId', 'in', enrolledCourseIds)) : null
+    firestore && enrolledCourseIds.length > 0 
+    ? query(
+        collection(firestore, 'assignments'), 
+        where('courseId', 'in', enrolledCourseIds),
+        where('status', '==', 'published')
+      ) 
+    : null
   );
   
   const { data: submissions, loading: submissionsLoading } = useCollection<AssignmentSubmission>(
