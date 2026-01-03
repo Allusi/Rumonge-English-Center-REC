@@ -23,14 +23,26 @@ import {
   CardTitle,
   CardDescription,
 } from '@/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose,
+} from "@/components/ui/dialog";
 import { useCollection, useFirestore } from '@/firebase';
 import { collection, addDoc, serverTimestamp, query, where } from 'firebase/firestore';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Sparkles, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import type { Course } from '@/lib/data';
+import { generateAssignment } from '@/ai/flows/generate-assignment-flow';
+import { useState } from 'react';
 
 const formSchema = z.object({
   title: z.string().min(5, { message: 'Title must be at least 5 characters.' }),
@@ -43,6 +55,8 @@ export default function NewAssignmentPage() {
   const firestore = useFirestore();
   const { toast } = useToast();
   const router = useRouter();
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [aiTopic, setAiTopic] = useState('');
 
   const coursesQuery = firestore ? query(collection(firestore, 'courses'), where('isEnabled', '==', true)) : null;
   const { data: courses, loading: coursesLoading } = useCollection<Course>(coursesQuery);
@@ -56,6 +70,27 @@ export default function NewAssignmentPage() {
       maxMarks: 100,
     },
   });
+
+  const handleGenerateAssignment = async () => {
+    if (!aiTopic) {
+        toast({ variant: 'destructive', title: 'Error', description: 'Please enter a topic.' });
+        return;
+    }
+    setIsGenerating(true);
+    try {
+        const result = await generateAssignment({ topic: aiTopic });
+        form.setValue('title', result.title, { shouldValidate: true });
+        form.setValue('instructions', result.instructions, { shouldValidate: true });
+        toast({ title: 'Assignment Generated', description: 'The AI has drafted an assignment for you.' });
+    } catch (error) {
+        console.error("Error generating assignment:", error);
+        toast({ variant: 'destructive', title: 'AI Error', description: 'Could not generate assignment. Please try again.' });
+    } finally {
+        setIsGenerating(false);
+        const closeButton = document.getElementById('ai-dialog-close');
+        if (closeButton) closeButton.click();
+    }
+  }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (!firestore) {
@@ -97,8 +132,51 @@ export default function NewAssignmentPage() {
       </div>
       <Card>
         <CardHeader>
-            <CardTitle>Assignment Details</CardTitle>
-            <CardDescription>Fill in the title, instructions, and select the course.</CardDescription>
+            <div className="flex justify-between items-center">
+                 <div>
+                    <CardTitle>Assignment Details</CardTitle>
+                    <CardDescription>Fill in the title, instructions, and select the course.</CardDescription>
+                </div>
+                 <Dialog>
+                    <DialogTrigger asChild>
+                        <Button variant="outline">
+                            <Sparkles className="mr-2 h-4 w-4" />
+                            AI Generate
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Generate Assignment with AI</DialogTitle>
+                            <DialogDescription>
+                                Enter a topic from the course material (e.g., "English Alphabet") and the AI will generate an assignment for you.
+                            </DialogDescription>
+                        </DialogHeader>
+                        <div className="grid gap-4 py-4">
+                            <div className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor="ai-topic" className="text-right">
+                                    Topic
+                                </Label>
+                                <Input
+                                    id="ai-topic"
+                                    value={aiTopic}
+                                    onChange={(e) => setAiTopic(e.target.value)}
+                                    className="col-span-3"
+                                    placeholder="e.g., Greetings and Introductions"
+                                />
+                            </div>
+                        </div>
+                        <DialogFooter>
+                            <DialogClose asChild>
+                                <Button type="button" variant="secondary">Cancel</Button>
+                            </DialogClose>
+                            <Button onClick={handleGenerateAssignment} disabled={isGenerating}>
+                                {isGenerating ? <><Loader2 className="mr-2 h-4 w-4 animate-spin"/> Generating...</> : 'Generate'}
+                            </Button>
+                        </DialogFooter>
+                        <DialogClose id="ai-dialog-close" className="hidden"/>
+                    </DialogContent>
+                </Dialog>
+            </div>
         </CardHeader>
         <CardContent>
           <Form {...form}>
