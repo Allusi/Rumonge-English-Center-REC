@@ -2268,6 +2268,39 @@ export function UnitOneContent() {
                 <li>My father is building a house. {'->'} Is my father building a house?</li>
             </ul>
             <p className="mt-4 text-sm text-muted-foreground">NB: The words eating, sitting, washing, cooking, listening, walking, speaking, carrying, reading etc...they</p>
+             <h4 className="font-semibold text-lg my-4">DIALOGUE PRACTICE OF THIS SECTION</h4>
+              <div className="p-4 border rounded-lg bg-muted/50 space-y-1 text-sm">
+                <p><strong>Hassan :</strong> Hi !</p>
+                <p><strong>Jackson :</strong> Hi !</p>
+                <p><strong>Hassan :</strong> How are you keeping these days?</p>
+                <p><strong>Jackson :</strong> I am keeping well.</p>
+                <p><strong>Hassan :</strong> what are you doing here?</p>
+                <p><strong>Jackson :</strong> I am waiting for my ex-friend,Jojo.</p>
+                <p><strong>Hassan :</strong> what are your brother and sister doing home?</p>
+                <p><strong>Jackson :</strong> my brother is repairing his bicycle and my sister is cooking food now.</p>
+                <p><strong>Hassan :</strong> when are you going to return home to take lunch?</p>
+                <p><strong>Jackson :</strong> we are taking lunch this mid day.</p>
+                <p><strong>Hassan :</strong> OK,thanks,and I am going to play football match this afternoon.</p>
+                <p><strong>Jackson :</strong> of course! I will come to assist your match after eating.</p>
+                <p><strong>Hassan :</strong> so,may I wait for you?</p>
+                <p><strong>Jackson :</strong> yes,you may.</p>
+                <p><strong>Hassan :</strong> what are those women over there doing?</p>
+                <p><strong>Jackson :</strong> they are swimming.</p>
+                <p><strong>Hassan :</strong> and those men?</p>
+                <p><strong>Jackson :</strong> those men! They are fishing</p>
+                <p><strong>Hassan :</strong> who taught them how to fish?</p>
+                <p><strong>Jackson :</strong> they teach each others among themselves.</p>
+                <p><strong>Hassan :</strong> Good! We can't rely on begging. To have a skill is very essential.</p>
+                <p><strong>Jackson :</strong> Yeah! By the way we say," don't give a man the fish,but teach him how to fish "</p>
+                <p><strong>Hassan :</strong> let's go home now.</p>
+                <p><strong>Jackson :</strong> yes,here we are,let's go.</p>
+              </div>
+              <h4 className="font-semibold text-lg my-4">EXPRESSIONS</h4>
+              <div className="text-sm space-y-2 text-muted-foreground">
+                <p><strong>1.Be so!---></strong> urahora utyo/ urama utyo</p>
+                <p><strong>2.a mother to be----></strong>near to give birth.</p>
+                <p><strong>3.in the family way----></strong>to be pregnant</p>
+              </div>
           </AccordionContent>
         </AccordionItem>
         
@@ -2276,11 +2309,13 @@ export function UnitOneContent() {
             Section 5: Talking about People, Things and Places
           </AccordionTrigger>
           <AccordionContent className="p-4 pt-0">
-            <p className="text-muted-foreground mb-2">We use describing words (adjectives) to tell more about people, things, and places.</p>
+             <p className="text-muted-foreground mb-2">In this part, we will see the words which we use when talking to people, things,animals and places.the words which tell us more about people, things ,animals and places.</p>
+            <p className="text-muted-foreground mb-2">Look at the following examples :</p>
             <ul className="list-disc pl-6 text-muted-foreground">
-              <li>This is a <strong>tall</strong> boy. This is a <strong>short</strong> boy.</li>
-              <li>Anna is a <strong>fat</strong> girl. Christina is a <strong>thin</strong> girl.</li>
-              <li>This is a <strong>small</strong> house. That is a <strong>big</strong> house.</li>
+              <li>This is a <strong>tall</strong> boy. This is a <strong>short</strong> boy.<br/><span className="text-xs">Tall and short tell more about the boys</span></li>
+              <li>Anna is a <strong>fat</strong> girl. Christina is a <strong>thin</strong> girl.<br/><span className="text-xs">Fat and thin tell more about the girls.</span></li>
+              <li>Albert is sad. -Hamisi is happy.<br/><span className="text-xs">Sad and happy tell more about Albert and Hamisi</span></li>
+              <li>Juma is an old man. -Peter is young man<br/>( Juma is 70 years old). ( Peter is 25 years old)<br/><span className="text-xs">Old and young tell more about Juma and Peter</span></li>
             </ul>
           </AccordionContent>
         </AccordionItem>
