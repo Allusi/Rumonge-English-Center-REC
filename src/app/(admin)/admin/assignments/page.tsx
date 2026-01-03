@@ -34,20 +34,40 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useCollection, useFirestore } from "@/firebase";
-import { collection, deleteDoc, doc, orderBy, query } from "firebase/firestore";
+import { collection, deleteDoc, doc, orderBy, query, getDocs, writeBatch, serverTimestamp } from "firebase/firestore";
 import type { Assignment } from "@/lib/data";
+import { initialAssignment } from "@/lib/assignments-data";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
+import { useEffect } from "react";
 
 
 export default function AssignmentsPage() {
   const firestore = useFirestore();
   const router = useRouter();
   const { toast } = useToast();
-  const assignmentsQuery = firestore ? query(collection(firestore, 'assignments'), orderBy('createdAt', 'desc')) : null;
+  
+  const assignmentsCollection = firestore ? collection(firestore, 'assignments') : null;
+
+  useEffect(() => {
+    const seedAssignment = async () => {
+        if (firestore && assignmentsCollection) {
+            const snapshot = await getDocs(assignmentsCollection);
+            if (snapshot.empty) {
+                const batch = writeBatch(firestore);
+                const docRef = doc(assignmentsCollection);
+                batch.set(docRef, { ...initialAssignment, createdAt: serverTimestamp() });
+                await batch.commit();
+            }
+        }
+    };
+    seedAssignment();
+  }, [firestore, assignmentsCollection]);
+
+  const assignmentsQuery = assignmentsCollection ? query(assignmentsCollection, orderBy('createdAt', 'desc')) : null;
   const { data: assignments, loading } = useCollection<Assignment>(assignmentsQuery);
 
   const handleDelete = async (assignmentId: string) => {
@@ -125,7 +145,7 @@ export default function AssignmentsPage() {
                         {assignment.courseName}
                     </Badge>
                   </TableCell>
-                  <TableCell>{format(assignment.createdAt.toDate(), 'PPP')}</TableCell>
+                  <TableCell>{assignment.createdAt ? format(assignment.createdAt.toDate(), 'PPP') : 'Just now'}</TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
