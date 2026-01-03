@@ -8,8 +8,8 @@ import {
   CardTitle,
   CardDescription,
 } from '@/components/ui/card';
-import { useDoc, useFirestore } from '@/firebase';
-import { doc } from 'firebase/firestore';
+import { useFirestore } from '@/firebase';
+import { doc, onSnapshot, type DocumentData } from 'firebase/firestore';
 import { ArrowLeft, FileCheck2, MessageSquareQuote } from 'lucide-react';
 import Link from 'next/link';
 import { useParams, notFound } from 'next/navigation';
@@ -51,14 +51,21 @@ function GradedSubmissionContent({ submission }: { submission: AssignmentSubmiss
 
     useEffect(() => {
         if (firestore && submission) {
+            setAssignmentLoading(true);
             const assignmentRef = doc(firestore, 'assignments', submission.assignmentId);
-            const unsub = onSnapshot(assignmentRef, (doc) => {
-                if (doc.exists()) {
-                    setAssignment({ id: doc.id, ...doc.data() } as Assignment);
+            const unsubscribe = onSnapshot(assignmentRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    setAssignment({ id: docSnap.id, ...docSnap.data() } as Assignment);
+                } else {
+                    setAssignment(null);
                 }
                 setAssignmentLoading(false);
+            }, (error) => {
+                console.error("Error fetching assignment:", error);
+                setAssignment(null);
+                setAssignmentLoading(false);
             });
-            return () => unsub();
+            return () => unsubscribe();
         }
     }, [firestore, submission]);
 
@@ -156,14 +163,21 @@ export default function ViewGradedSubmissionPage() {
 
   useEffect(() => {
     if (firestore && submissionId) {
+        setSubmissionLoading(true);
         const submissionRef = doc(firestore, 'submissions', submissionId);
-        const unsub = onSnapshot(submissionRef, (doc) => {
-            if (doc.exists()) {
-                setSubmission({ id: doc.id, ...doc.data() } as AssignmentSubmission);
+        const unsubscribe = onSnapshot(submissionRef, (docSnap) => {
+            if (docSnap.exists()) {
+                setSubmission({ id: docSnap.id, ...docSnap.data() } as AssignmentSubmission);
+            } else {
+                 setSubmission(null);
             }
             setSubmissionLoading(false);
+        }, (error) => {
+            console.error("Error fetching submission:", error);
+            setSubmission(null);
+            setSubmissionLoading(false);
         });
-        return () => unsub();
+        return () => unsubscribe();
     }
   }, [firestore, submissionId]);
 

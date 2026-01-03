@@ -22,8 +22,8 @@ import {
   CardTitle,
   CardDescription,
 } from '@/components/ui/card';
-import { useDoc, useFirestore } from '@/firebase';
-import { doc, updateDoc } from 'firebase/firestore';
+import { useFirestore } from '@/firebase';
+import { doc, updateDoc, onSnapshot } from 'firebase/firestore';
 import { ArrowLeft, Send } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
@@ -31,7 +31,7 @@ import { useRouter, useParams, notFound } from 'next/navigation';
 import type { Assignment, AssignmentSubmission } from '@/lib/data';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Input } from '@/components/ui/input';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 
 // Define the schema creation as a function to accept dynamic max marks
 const createFormSchema = (maxMarks: number) => z.object({
@@ -53,7 +53,6 @@ function LoadingSkeleton() {
       <Card>
         <CardHeader className="space-y-2">
           <Skeleton className="h-6 w-1/3" />
-          <Skeleton className="h-4 w-1/4" />
         </CardHeader>
         <CardContent className="space-y-6">
            <Skeleton className="h-20" />
@@ -81,11 +80,32 @@ function GradeSubmissionPageContent({ submission }: { submission: AssignmentSubm
     const router = useRouter();
     const { toast } = useToast();
 
-    const assignmentRef = firestore ? doc(firestore, 'assignments', submission.assignmentId) : null;
-    const { data: assignment, loading: assignmentLoading } = useDoc<Assignment>(assignmentRef);
+    const [assignment, setAssignment] = useState<Assignment | null>(null);
+    const [assignmentLoading, setAssignmentLoading] = useState(true);
 
-    // Use a default schema first, which will be replaced once the assignment loads.
-    const formSchema = assignment ? createFormSchema(assignment.maxMarks) : createFormSchema(100);
+    useEffect(() => {
+        if (firestore && submission) {
+            setAssignmentLoading(true);
+            const assignmentRef = doc(firestore, 'assignments', submission.assignmentId);
+            const unsubscribe = onSnapshot(assignmentRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    setAssignment({ id: docSnap.id, ...docSnap.data() } as Assignment);
+                } else {
+                    setAssignment(null);
+                }
+                setAssignmentLoading(false);
+            }, (error) => {
+                console.error("Error fetching assignment:", error);
+                setAssignment(null);
+                setAssignmentLoading(false);
+            });
+            return () => unsubscribe();
+        }
+    }, [firestore, submission]);
+
+    const formSchema = useMemo(() => {
+        return assignment ? createFormSchema(assignment.maxMarks) : createFormSchema(100);
+    }, [assignment]);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -95,18 +115,12 @@ function GradeSubmissionPageContent({ submission }: { submission: AssignmentSubm
         },
     });
 
-    // When the assignment (and its maxMarks) loads, we need to update the form's resolver.
     useEffect(() => {
         if (assignment) {
-            form.reset(
-                {
-                    feedback: submission.feedback || '',
-                    marks: submission.marks ?? 0,
-                },
-                {
-                    keepDirty: true,
-                }
-            );
+            form.reset({
+                feedback: submission.feedback || '',
+                marks: submission.marks ?? 0,
+            });
         }
     }, [assignment, submission, form]);
 
@@ -131,7 +145,6 @@ function GradeSubmissionPageContent({ submission }: { submission: AssignmentSubm
     }
 
     if (!assignment) {
-        // This case is handled by the parent component now, but as a fallback.
         return notFound();
     }
 
@@ -155,7 +168,7 @@ function GradeSubmissionPageContent({ submission }: { submission: AssignmentSubm
       <Card>
         <CardHeader>
             <CardTitle>Assignment & Submission</CardTitle>
-            <CardDescription className="whitespace-pre-wrap pt-2">{assignment.instructions}</CardDescription>
+            <CardDescription as="div" className="whitespace-pre-wrap pt-2">{assignment.instructions.split('\n').map((line, i) => <p key={i}>{line}</p>)}</CardDescription>
         </CardHeader>
         <CardContent>
              <h3 className="text-lg font-semibold mb-2">Student's Answer</h3>
@@ -228,8 +241,29 @@ export default function GradeSubmissionPage() {
     const params = useParams();
     const submissionId = params.submissionId as string;
 
-    const submissionRef = firestore && submissionId ? doc(firestore, 'submissions', submissionId) : null;
-    const { data: submission, loading: submissionLoading } = useDoc<AssignmentSubmission>(submissionRef);
+    const [submission, setSubmission] = useState<AssignmentSubmission | null>(null);
+    const [submissionLoading, setSubmissionLoading] = useState(true);
+
+    useEffect(() => {
+        if (firestore && submissionId) {
+            setSubmissionLoading(true);
+            const submissionRef = doc(firestore, 'submissions', submissionId);
+            const unsubscribe = onSnapshot(submissionRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    setSubmission({ id: docSnap.id, ...docSnap.data() } as AssignmentSubmission);
+                } else {
+                    setSubmission(null);
+                }
+                setSubmissionLoading(false);
+            }, (error) => {
+                console.error("Error fetching submission:", error);
+                setSubmission(null);
+                setSubmissionLoading(false);
+            });
+
+            return () => unsubscribe();
+        }
+    }, [firestore, submissionId]);
     
     if (submissionLoading) {
         return <LoadingSkeleton />;
