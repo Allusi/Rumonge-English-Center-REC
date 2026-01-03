@@ -61,11 +61,11 @@ export default function ProfilePage() {
   const { data: course, loading: courseLoading } = useDoc<Course>(courseRef);
   
   const { data: submissions, loading: submissionsLoading } = useCollection<AssignmentSubmission>(
-    firestore && user ? query(collection(firestore, 'submissions'), where('studentId', '==', user.uid)) : null
+    firestore && user && userProfile?.role === 'student' ? query(collection(firestore, 'submissions'), where('studentId', '==', user.uid)) : null
   );
 
   const { data: assignments, loading: assignmentsLoading } = useCollection<Assignment>(
-    firestore && userProfile?.enrolledCourseId ? query(collection(firestore, 'assignments'), where('courseId', '==', userProfile.enrolledCourseId)) : null
+    firestore && userProfile?.enrolledCourseId && userProfile?.role === 'student' ? query(collection(firestore, 'assignments'), where('courseId', '==', userProfile.enrolledCourseId)) : null
   );
   
   const averageGrade = useMemo(() => {
@@ -91,7 +91,15 @@ export default function ProfilePage() {
   }, [submissions, assignments]);
 
 
-  const isLoading = userLoading || profileLoading || (userProfile?.role === 'student' && (courseLoading || submissionsLoading || assignmentsLoading));
+  const isLoading = useMemo(() => {
+    if (userLoading || profileLoading) return true;
+    if (!userProfile) return false; // Not loading if there's no profile
+    if (userProfile.role === 'student') {
+        return courseLoading || submissionsLoading || assignmentsLoading;
+    }
+    return false; // Admins don't have extra data to load on this page
+  }, [userLoading, profileLoading, userProfile, courseLoading, submissionsLoading, assignmentsLoading]);
+
 
   if (isLoading) {
     return (
@@ -127,7 +135,7 @@ export default function ProfilePage() {
   }
 
   if (!userProfile) {
-    return notFound();
+    notFound();
   }
 
   const educationalStatusMap = {
