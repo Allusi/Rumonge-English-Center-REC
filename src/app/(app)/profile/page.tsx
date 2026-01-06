@@ -57,13 +57,13 @@ export default function ProfilePage() {
   const userDocRef = firestore && user ? doc(firestore, 'users', user.uid) : null;
   const { data: userProfile, loading: profileLoading } = useDoc<Student>(userDocRef);
 
-  // Conditionally create refs based on user role
   const isStudent = userProfile?.role === 'student';
-  const courseRef = firestore && isStudent && userProfile?.enrolledCourseId ? doc(firestore, 'courses', userProfile.enrolledCourseId) : null;
+  const courseId = isStudent ? userProfile.enrolledCourseId : null;
+  
+  const courseRef = firestore && courseId ? doc(firestore, 'courses', courseId) : null;
   const submissionsQuery = firestore && user && isStudent ? query(collection(firestore, 'submissions'), where('studentId', '==', user.uid)) : null;
-  const assignmentsQuery = firestore && isStudent && userProfile?.enrolledCourseId ? query(collection(firestore, 'assignments'), where('courseId', '==', userProfile.enrolledCourseId)) : null;
+  const assignmentsQuery = firestore && courseId ? query(collection(firestore, 'assignments'), where('courseId', '==', courseId)) : null;
 
-  // Fetch data based on the refs
   const { data: course, loading: courseLoading } = useDoc<Course>(courseRef);
   const { data: submissions, loading: submissionsLoading } = useCollection<AssignmentSubmission>(submissionsQuery);
   const { data: assignments, loading: assignmentsLoading } = useCollection<Assignment>(assignmentsQuery);
@@ -93,12 +93,12 @@ export default function ProfilePage() {
 
   const isLoading = useMemo(() => {
     if (userLoading || profileLoading) return true;
-    if (!userProfile) return false; 
-    if (userProfile.role === 'student') {
+    if (!userProfile) return false; // Not loading if there is no profile.
+    if (isStudent) {
         return courseLoading || submissionsLoading || assignmentsLoading;
     }
     return false; // Admins are done loading once their profile is loaded
-  }, [userLoading, profileLoading, userProfile, courseLoading, submissionsLoading, assignmentsLoading]);
+  }, [userLoading, profileLoading, userProfile, isStudent, courseLoading, submissionsLoading, assignmentsLoading]);
 
 
   if (isLoading) {
