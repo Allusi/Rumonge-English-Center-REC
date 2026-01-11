@@ -37,17 +37,12 @@ export function UserNav() {
     ? query(
         collection(firestore, 'notifications'), 
         where('userId', '==', authUser.uid),
-        orderBy('createdAt', 'desc')
+        orderBy('createdAt', 'desc'),
+        limit(10)
       )
     : null;
   const { data: notifications, loading: notificationsLoading } = useCollection<Notification>(notificationsQuery);
   
-  const sortedNotifications = useMemo(() => {
-    if (!notifications) return [];
-    // The query now handles sorting, but we can still limit here.
-    return notifications.slice(0, 10);
-  }, [notifications]);
-
   const unreadCount = useMemo(() => {
       if (!notifications) return 0;
       return notifications.filter(n => !n.isRead).length;
@@ -106,8 +101,8 @@ export function UserNav() {
           <DropdownMenuLabel>Notifications</DropdownMenuLabel>
           <DropdownMenuSeparator />
            {notificationsLoading && <DropdownMenuItem>Loading...</DropdownMenuItem>}
-           {!notificationsLoading && sortedNotifications.length === 0 && <DropdownMenuItem>No new notifications.</DropdownMenuItem>}
-           {!notificationsLoading && sortedNotifications.map(notif => (
+           {!notificationsLoading && notifications && notifications.length === 0 && <DropdownMenuItem>No new notifications.</DropdownMenuItem>}
+           {!notificationsLoading && notifications && notifications.map(notif => (
             <Link href={notif.link} key={notif.id}>
               <DropdownMenuItem className="flex flex-col items-start whitespace-normal">
                 <p className={`text-sm ${!notif.isRead ? 'font-bold' : ''}`}>{notif.message}</p>
