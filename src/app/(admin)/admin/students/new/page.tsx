@@ -26,7 +26,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
 import { useCollection, useFirestore, useAuth } from '@/firebase';
-import { collection, query, where, doc, setDoc, runTransaction, serverTimestamp, addDoc, getDocs } from 'firebase/firestore';
+import { collection, query, where, doc, setDoc, runTransaction, serverTimestamp, addDoc, getDocs, writeBatch } from 'firebase/firestore';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import type { Course } from '@/lib/data';
 import { ArrowLeft, Image } from 'lucide-react';
@@ -87,17 +87,17 @@ export default function NewStudentPage() {
     const tempPassword = "password"; 
 
     try {
-        // Create the user in Firebase Auth first
         const userCredential = await createUserWithEmailAndPassword(auth, authEmail, tempPassword);
         const user = userCredential.user;
 
-        // Now, save the profile information in Firestore
+        const batch = writeBatch(firestore);
+
         const userDocRef = doc(firestore, 'users', user.uid);
         const course = courses?.find(c => c.id === values.enrolledCourseId);
 
-        await setDoc(userDocRef, {
+        batch.set(userDocRef, {
             name: values.fullName,
-            email: authEmail, // Use the generated auth email
+            email: authEmail,
             loginKey: loginKey,
             role: 'student',
             status: 'active',
@@ -110,12 +110,10 @@ export default function NewStudentPage() {
             educationalStatus: values.educationalStatus,
             learningReason: values.learningReason,
             createdAt: serverTimestamp(),
-            // photoURL will be handled separately if implemented
         });
         
-        // Also create the enrollment record
         const enrollmentDocRef = doc(collection(firestore, 'enrollments'));
-        await setDoc(enrollmentDocRef, {
+        batch.set(enrollmentDocRef, {
             studentId: user.uid,
             studentName: values.fullName,
             courseId: values.enrolledCourseId,
@@ -123,11 +121,11 @@ export default function NewStudentPage() {
             enrolledAt: serverTimestamp(),
         });
 
-         // Create notification for admin
         const adminsQuery = query(collection(firestore, 'users'), where('role', '==', 'admin'));
         const adminSnapshot = await getDocs(adminsQuery);
         adminSnapshot.forEach(adminDoc => {
-             addDoc(collection(firestore, 'notifications'), {
+             const adminNotifRef = doc(collection(firestore, 'notifications'));
+             batch.set(adminNotifRef, {
                 userId: adminDoc.id,
                 message: `New student registered: ${values.fullName}`,
                 link: `/admin/students/${user.uid}`,
@@ -136,6 +134,17 @@ export default function NewStudentPage() {
             });
         });
         
+        // Welcome notification for the new student
+        const welcomeNotifRef = doc(collection(firestore, 'notifications'));
+        batch.set(welcomeNotifRef, {
+            userId: user.uid,
+            message: "Welcome to the REC Online Group! Start a conversation with your peers.",
+            link: "/student/chat",
+            isRead: false,
+            createdAt: serverTimestamp(),
+        });
+
+        await batch.commit();
 
         toast({
             title: "Student Registered Successfully!",
@@ -386,5 +395,6 @@ export default function NewStudentPage() {
     </div>
   );
 }
+    
 
     

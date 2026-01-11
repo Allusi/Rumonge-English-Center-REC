@@ -2,9 +2,9 @@
 'use client';
 
 import { useCollection, useDoc, useFirestore, useUser } from '@/firebase';
-import { collection, query, orderBy, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, query, orderBy, addDoc, serverTimestamp, writeBatch } from 'firebase/firestore';
 import type { ChatMessage, Student } from '@/lib/data';
-import { ArrowLeft, Send, Loader2 } from 'lucide-react';
+import { ArrowLeft, Send, Loader2, MessageSquareReply, X } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -17,9 +17,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import { doc } from 'firebase/firestore';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 
 const chatSchema = z.object({
   content: z.string().min(1, 'Message cannot be empty.'),
@@ -30,17 +35,47 @@ export default function GroupChatPage() {
   const { user, loading: userLoading } = useUser();
   const { toast } = useToast();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   
+  const [replyTo, setReplyTo] = useState<ChatMessage | null>(null);
+
   const userProfileRef = firestore && user ? doc(firestore, 'users', user.uid) : null;
   const { data: userProfile, loading: profileLoading } = useDoc<Student>(userProfileRef);
 
-  const messagesQuery = firestore ? query(collection(firestore, 'chat_messages'), orderBy('createdAt', 'asc'),) : null;
+  const messagesQuery = firestore ? query(collection(firestore, 'chat_messages'), orderBy('createdAt', 'asc')) : null;
   const { data: messages, loading: messagesLoading } = useCollection<ChatMessage>(messagesQuery);
   
+  const allUsersQuery = firestore ? query(collection(firestore, 'users')) : null;
+  const { data: allUsers, loading: usersLoading } = useCollection<Student>(allUsersQuery);
+
   const form = useForm<z.infer<typeof chatSchema>>({
     resolver: zodResolver(chatSchema),
     defaultValues: { content: '' },
   });
+  
+  const handleReply = (message: ChatMessage) => {
+    setReplyTo(message);
+    textareaRef.current?.focus();
+  };
+
+  const cancelReply = () => {
+    setReplyTo(null);
+  };
+
+  const getMentions = (content: string) => {
+    const mentionRegex = /@(\w+\s\w+|\w+)/g;
+    let match;
+    const mentions = new Set<string>();
+    while ((match = mentionRegex.exec(content)) !== null) {
+      mentions.add(match[1]);
+    }
+    return Array.from(mentions);
+  };
+  
+  const findUserByName = (name: string) => {
+    return allUsers?.find(u => u.name.toLowerCase() === name.toLowerCase());
+  };
+
 
   const onSubmit = async (values: z.infer<typeof chatSchema>) => {
     if (!firestore || !user || !userProfile) {
@@ -48,14 +83,55 @@ export default function GroupChatPage() {
         return;
     };
 
-    await addDoc(collection(firestore, 'chat_messages'), {
-        content: values.content,
+    const batch = writeBatch(firestore);
+
+    const messageContent = replyTo 
+        ? `> ${replyTo.createdByName}: ${replyTo.content.substring(0, 50)}...\n\n${values.content}`
+        : values.content;
+
+    const newMsgRef = doc(collection(firestore, 'chat_messages'));
+    batch.set(newMsgRef, {
+        content: messageContent,
         createdAt: serverTimestamp(),
         createdById: user.uid,
         createdByName: userProfile.name || 'Anonymous',
         createdByPhotoURL: userProfile.photoURL || null,
+        replyTo: replyTo ? {
+            id: replyTo.id,
+            name: replyTo.createdByName,
+            uid: replyTo.createdById,
+        } : null,
     });
+
+    const mentionedNames = getMentions(values.content);
+    mentionedNames.forEach(name => {
+        const mentionedUser = findUserByName(name);
+        if (mentionedUser && mentionedUser.id !== user.uid) {
+            const notifRef = doc(collection(firestore, 'notifications'));
+            batch.set(notifRef, {
+                userId: mentionedUser.id,
+                message: `${userProfile.name} mentioned you in the group chat.`,
+                link: "/student/chat",
+                isRead: false,
+                createdAt: serverTimestamp(),
+            });
+        }
+    });
+
+    if (replyTo && replyTo.createdById !== user.uid) {
+        const replyNotifRef = doc(collection(firestore, 'notifications'));
+        batch.set(replyNotifRef, {
+            userId: replyTo.createdById,
+            message: `${userProfile.name} replied to your message.`,
+            link: "/student/chat",
+            isRead: false,
+            createdAt: serverTimestamp(),
+        });
+    }
+
+    await batch.commit();
     form.reset();
+    setReplyTo(null);
   };
 
   useEffect(() => {
@@ -64,7 +140,23 @@ export default function GroupChatPage() {
     }
   }, [messages]);
   
-  const isLoading = userLoading || profileLoading || messagesLoading;
+  const isLoading = userLoading || profileLoading || messagesLoading || usersLoading;
+  
+  const renderMessageContent = (content: string) => {
+    const parts = content.split(/(@\w+\s\w+|@\w+)/g);
+    return parts.map((part, index) => {
+        if (part.startsWith('@')) {
+            const name = part.substring(1);
+            const user = findUserByName(name);
+            return (
+                <span key={index} className="bg-primary/10 text-primary font-semibold rounded px-1 py-0.5">
+                    {part}
+                </span>
+            );
+        }
+        return part;
+    });
+  };
 
   return (
     <div className="flex flex-col gap-6 h-[calc(100vh-100px)]">
@@ -75,7 +167,7 @@ export default function GroupChatPage() {
           </Button>
         </Link>
         <div>
-          <h1 className="font-headline text-3xl font-bold tracking-tight">Group Chat</h1>
+          <h1 className="font-headline text-3xl font-bold tracking-tight">REC Online Group</h1>
           <p className="text-muted-foreground">
             A real-time chat for all students and admins.
           </p>
@@ -90,20 +182,23 @@ export default function GroupChatPage() {
                         Array.from({length: 5}).map((_, i) => <MessageSkeleton key={i} />)
                     )}
                     {!isLoading && messages?.map(message => (
-                        <div key={message.id} className="flex items-start gap-3">
+                        <div key={message.id} className="flex items-start gap-3 group">
                             <Avatar className="h-10 w-10">
                                 <AvatarImage src={message.createdByPhotoURL} alt={message.createdByName} />
                                 <AvatarFallback>{message.createdByName.charAt(0)}</AvatarFallback>
                             </Avatar>
-                            <div>
+                            <div className="flex-1">
                                 <div className="flex items-baseline gap-2">
                                     <p className="font-semibold">{message.createdByName}</p>
                                     <p className="text-xs text-muted-foreground">
                                         {message.createdAt ? formatDistanceToNow(message.createdAt.toDate(), { addSuffix: true }) : 'sending...'}
                                     </p>
                                 </div>
-                                <div className="p-3 bg-muted rounded-lg mt-1">
-                                    <p className="whitespace-pre-wrap">{message.content}</p>
+                                <div className="p-3 bg-muted rounded-lg mt-1 group-hover:bg-muted/80 transition-colors relative">
+                                    <p className="whitespace-pre-wrap">{renderMessageContent(message.content)}</p>
+                                    <Button variant="ghost" size="icon" className="absolute -top-3 -right-3 h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => handleReply(message)}>
+                                        <MessageSquareReply className="h-4 w-4" />
+                                    </Button>
                                 </div>
                             </div>
                         </div>
@@ -117,25 +212,41 @@ export default function GroupChatPage() {
             </ScrollArea>
         </CardContent>
         <CardFooter className="pt-4 border-t">
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full flex items-start gap-2">
-              <FormField
-                control={form.control}
-                name="content"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormControl>
-                      <Textarea placeholder="Type your message..." {...field} className="min-h-12 resize-none" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" size="icon" disabled={form.formState.isSubmitting || isLoading}>
-                {form.formState.isSubmitting ? <Loader2 className="h-4 w-4 animate-spin"/> : <Send className="h-4 w-4" />}
-              </Button>
-            </form>
-          </Form>
+          <div className="w-full">
+            {replyTo && (
+                <div className="flex items-center justify-between text-sm bg-muted p-2 rounded-t-md">
+                    <div className="text-muted-foreground truncate">
+                        Replying to <strong>{replyTo.createdByName}</strong>: <em>{replyTo.content.substring(0,50)}...</em>
+                    </div>
+                    <Button variant="ghost" size="icon" className="h-6 w-6" onClick={cancelReply}>
+                        <X className="h-4 w-4"/>
+                    </Button>
+                </div>
+            )}
+            <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="w-full flex items-start gap-2">
+                <FormField
+                    control={form.control}
+                    name="content"
+                    render={({ field }) => (
+                    <FormItem className="flex-1">
+                        <FormControl>
+                        <Textarea 
+                            placeholder="Type your message... use @ to mention" 
+                            {...field} 
+                            ref={textareaRef}
+                            className={`min-h-12 resize-none ${replyTo ? 'rounded-t-none' : ''}`} />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                    )}
+                />
+                <Button type="submit" size="icon" disabled={form.formState.isSubmitting || isLoading}>
+                    {form.formState.isSubmitting ? <Loader2 className="h-4 w-4 animate-spin"/> : <Send className="h-4 w-4" />}
+                </Button>
+                </form>
+            </Form>
+          </div>
         </CardFooter>
       </Card>
     </div>
@@ -156,3 +267,5 @@ function MessageSkeleton() {
         </div>
     )
 }
+
+    
