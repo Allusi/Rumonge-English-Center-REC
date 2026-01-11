@@ -266,6 +266,38 @@
             }
         },
         "required": ["studentId", "studentName", "createdAt", "lastActivity", "history"]
+    },
+    "ForumTopic": {
+      "title": "Forum Topic",
+      "description": "Represents a single topic or thread in the forum.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "createdById": { "type": "string" },
+        "createdByName": { "type": "string" },
+        "createdByPhotoURL": { "type": "string", "format": "uri" },
+        "lastActivity": { "type": "string", "format": "date-time" },
+        "replyCount": { "type": "number" },
+        "isPinned": { "type": "boolean" },
+        "isLocked": { "type": "boolean" }
+      },
+      "required": ["title", "content", "createdAt", "createdById", "createdByName", "lastActivity"]
+    },
+    "ForumPost": {
+      "title": "Forum Post",
+      "description": "Represents a single reply within a forum topic.",
+      "type": "object",
+      "properties": {
+        "topicId": { "type": "string" },
+        "content": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "createdById": { "type": "string" },
+        "createdByName": { "type": "string" },
+        "createdByPhotoURL": { "type": "string", "format": "uri" }
+      },
+      "required": ["topicId", "content", "createdAt", "createdById", "createdByName"]
     }
   },
   "auth": {
@@ -323,6 +355,16 @@
     "/ai_tutor_sessions/{sessionId}": {
       "schema": { "$ref": "#/backend/entities/AITutorSession" },
       "description": "Stores conversation histories from the AI Tutor."
+    },
+    "/forum_topics/{topicId}": {
+      "schema": { "$ref": "#/backend/entities/ForumTopic" },
+      "description": "Stores all forum topics."
+    },
+    "/forum_topics/{topicId}/posts/{postId}": {
+      "schema": { "$ref": "#/backend/entities/ForumPost" },
+      "description": "Stores all posts/replies for a specific forum topic."
     }
   }
 }
+
+    

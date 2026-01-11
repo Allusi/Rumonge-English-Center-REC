@@ -3,7 +3,7 @@
 
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BookCopy, LayoutDashboard, LogOut, Megaphone, Users, Info, Loader2, CalendarCheck, FileText, CheckSquare, MessageCircle, User } from "lucide-react";
+import { BookCopy, LayoutDashboard, LogOut, Megaphone, Users, Info, Loader2, CalendarCheck, FileText, CheckSquare, MessageCircle, User, MessageSquareText } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -102,6 +102,14 @@ export default function AdminLayout({
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>
+             <SidebarMenuItem>
+              <Link href="/admin/forum" passHref>
+                <SidebarMenuButton tooltip="Forum Management">
+                  <MessageSquareText />
+                  Forum
+                </SidebarMenuButton>
+              </Link>
+            </SidebarMenuItem>
             <SidebarMenuItem>
               <Link href="/admin/students" passHref>
                 <SidebarMenuButton tooltip="Students">
@@ -166,3 +174,5 @@ export default function AdminLayout({
     </SidebarProvider>
   );
 }
+
+    

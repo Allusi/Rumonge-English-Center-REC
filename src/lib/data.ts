@@ -97,6 +97,31 @@ export type AITutorSession = {
     }[];
 };
 
+export type ForumTopic = {
+    id: string;
+    title: string;
+    content: string;
+    createdAt: Timestamp;
+    createdById: string;
+    createdByName: string;
+    createdByPhotoURL?: string;
+    lastActivity: Timestamp;
+    replyCount: number;
+    isPinned: boolean;
+    isLocked: boolean;
+};
+
+export type ForumPost = {
+    id: string;
+    topicId: string;
+    content: string;
+    createdAt: Timestamp;
+    createdById: string;
+    createdByName: string;
+    createdByPhotoURL?: string;
+};
+
+
 // Data is now fetched from Firestore. This can be kept for fallback or removed.
 export const courses: Omit<Course, 'id'>[] = [
   { name: 'Unit One: The Basics', description: 'Fundamentals of English language for beginners.', level: 'A1', isEnabled: false },
@@ -111,3 +136,5 @@ export const announcements: Announcement[] = [
   { id: 'A002', title: 'Holiday Closure', content: 'The center will be closed for public holidays from December 24th to January 2nd.', date: '2024-08-28' },
   { id: 'A003', title: 'New Conversation Club', content: 'Join our new conversation club every Friday at 4 PM to practice your speaking skills.', date: '2024-08-25' },
 ];
+
+    
