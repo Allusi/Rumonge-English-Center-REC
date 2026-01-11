@@ -154,7 +154,7 @@ export default function GroupChatPage() {
             batch.set(notifRef, {
                 userId: mentionedUser.id,
                 message: `${userProfile.name} mentioned you in the group chat.`,
-                link: "/chat",
+                link: "/student/chat",
                 isRead: false,
                 createdAt: serverTimestamp(),
             });
@@ -166,7 +166,7 @@ export default function GroupChatPage() {
         batch.set(replyNotifRef, {
             userId: replyTo.createdById,
             message: `${userProfile.name} replied to your message.`,
-            link: "/chat",
+            link: "/student/chat",
             isRead: false,
             createdAt: serverTimestamp(),
         });
@@ -204,9 +204,9 @@ export default function GroupChatPage() {
   return (
     <div className="flex flex-col gap-6 h-[calc(100vh-100px)]">
       <div className="flex items-center gap-4">
-        <Link href={`/${userProfile?.role}/dashboard` || "#"} >
-            <Button variant="outline" size="icon" className="h-9 w-9" disabled={!userProfile}>
-                <ArrowLeft className="h-4 w-4" />
+        <Link href={`/${userProfile?.role}/dashboard` || "#"} passHref legacyBehavior>
+            <Button asChild variant="outline" size="icon" className="h-9 w-9" disabled={!userProfile}>
+                <a><ArrowLeft className="h-4 w-4" /></a>
             </Button>
         </Link>
         <div>
