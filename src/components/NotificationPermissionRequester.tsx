@@ -30,7 +30,6 @@ export function NotificationPermissionRequester() {
              const notificationsQuery = query(
                 collection(firestore, 'notifications'), 
                 where('userId', '==', user.uid),
-                where('isRead', '==', false),
                 where('createdAt', '>', Timestamp.now()) // Listen for future notifications
             );
 
@@ -43,6 +42,8 @@ export function NotificationPermissionRequester() {
                     if (change.type === "added") {
                         const newNotification = change.doc.data() as NotificationData;
                         
+                        if(newNotification.isRead) return;
+
                         // Check if the service worker is available to show the notification
                         if (navigator.serviceWorker && 'showNotification' in ServiceWorkerRegistration.prototype) {
                            navigator.serviceWorker.ready.then(registration => {
