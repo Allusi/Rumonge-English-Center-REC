@@ -4,7 +4,7 @@
 import { CreditCard, LogOut, User as UserIcon, Bell } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { signOut } from "firebase/auth";
 import { collection, doc, query, where, orderBy, limit, writeBatch } from "firebase/firestore";
 import { formatDistanceToNow } from 'date-fns';
@@ -33,10 +33,20 @@ export function UserNav() {
   const userDocRef = (firestore && authUser) ? doc(firestore, 'users', authUser.uid) : null;
   const { data: userProfile, loading: profileLoading } = useDoc<Student>(userDocRef);
 
+  // Simplified query to avoid composite index requirement
   const notificationsQuery = (firestore && authUser) 
-    ? query(collection(firestore, 'notifications'), where('userId', '==', authUser.uid), orderBy('createdAt', 'desc'), limit(10)) 
+    ? query(collection(firestore, 'notifications'), where('userId', '==', authUser.uid))
     : null;
-  const { data: notifications, loading: notificationsLoading } = useCollection<Notification>(notificationsQuery);
+  const { data: allNotifications, loading: notificationsLoading } = useCollection<Notification>(notificationsQuery);
+  
+  const notifications = useMemo(() => {
+    if (!allNotifications) return [];
+    // Sort by date client-side and take the first 10
+    return allNotifications
+      .sort((a, b) => b.createdAt.toMillis() - a.createdAt.toMillis())
+      .slice(0, 10);
+  }, [allNotifications]);
+
 
   const [isClient, setIsClient] = useState(false);
 
@@ -74,7 +84,7 @@ export function UserNav() {
   const displayName = userProfile?.name || authUser?.displayName || "User";
   const displayEmail = userProfile?.email || authUser?.email || "";
   const avatarFallback = displayName?.charAt(0).toUpperCase() || "U";
-  const unreadCount = notifications?.filter(n => !n.isRead).length || 0;
+  const unreadCount = allNotifications?.filter(n => !n.isRead).length || 0;
 
 
   return (
@@ -154,5 +164,3 @@ export function UserNav() {
     </div>
   );
 }
-
-    
