@@ -16,12 +16,13 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { useFirestore, useUser } from '@/firebase';
-import { collection, addDoc, serverTimestamp, getDocs, query, where } from 'firebase/firestore';
+import { useFirestore, useUser, useDoc } from '@/firebase';
+import { collection, addDoc, serverTimestamp, getDocs, query, where, doc } from 'firebase/firestore';
 import { ArrowLeft, Send, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
+import type { Student } from '@/lib/data';
 
 const formSchema = z.object({
   title: z.string().min(10, 'Title must be at least 10 characters.'),
@@ -34,6 +35,9 @@ export default function NewForumTopicPage() {
   const { toast } = useToast();
   const router = useRouter();
 
+  const userProfileRef = firestore && user ? doc(firestore, 'users', user.uid) : null;
+  const { data: userProfile, loading: profileLoading } = useDoc<Student>(userProfileRef);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -43,7 +47,7 @@ export default function NewForumTopicPage() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (!firestore || !user) {
+    if (!firestore || !user || !userProfile) {
       toast({ variant: 'destructive', title: 'Error', description: 'You must be logged in to create a topic.' });
       return;
     }
@@ -53,8 +57,8 @@ export default function NewForumTopicPage() {
         createdAt: serverTimestamp(),
         lastActivity: serverTimestamp(),
         createdById: user.uid,
-        createdByName: user.displayName || 'Anonymous',
-        createdByPhotoURL: user.photoURL || null,
+        createdByName: userProfile.name || 'Anonymous',
+        createdByPhotoURL: userProfile.photoURL || null,
         replyCount: 0,
         isPinned: false,
         isLocked: false,
@@ -81,6 +85,8 @@ export default function NewForumTopicPage() {
       toast({ variant: 'destructive', title: 'Error', description: 'Could not create topic. Please try again.' });
     }
   }
+  
+  const isLoading = userLoading || profileLoading;
 
   return (
     <div className="flex flex-col gap-6">
@@ -138,8 +144,8 @@ export default function NewForumTopicPage() {
                 )}
               />
               <div className="flex justify-end">
-                <Button type="submit" disabled={form.formState.isSubmitting || userLoading}>
-                  {form.formState.isSubmitting ? (
+                <Button type="submit" disabled={form.formState.isSubmitting || isLoading}>
+                  {form.formState.isSubmitting || isLoading ? (
                     <><Loader2 className="mr-2 h-4 w-4 animate-spin"/> Posting...</>
                   ) : (
                     <>Post Topic <Send className="ml-2 h-4 w-4" /></>
