@@ -36,16 +36,16 @@ export function UserNav() {
   const notificationsQuery = (firestore && authUser) 
     ? query(
         collection(firestore, 'notifications'), 
-        where('userId', '==', authUser.uid)
+        where('userId', '==', authUser.uid),
+        orderBy('createdAt', 'desc')
       )
     : null;
   const { data: notifications, loading: notificationsLoading } = useCollection<Notification>(notificationsQuery);
   
   const sortedNotifications = useMemo(() => {
     if (!notifications) return [];
-    return notifications
-      .sort((a, b) => b.createdAt.toMillis() - a.createdAt.toMillis())
-      .slice(0, 10);
+    // The query now handles sorting, but we can still limit here.
+    return notifications.slice(0, 10);
   }, [notifications]);
 
   const unreadCount = useMemo(() => {
@@ -111,7 +111,7 @@ export function UserNav() {
             <Link href={notif.link} key={notif.id}>
               <DropdownMenuItem className="flex flex-col items-start whitespace-normal">
                 <p className={`text-sm ${!notif.isRead ? 'font-bold' : ''}`}>{notif.message}</p>
-                <p className="text-xs text-muted-foreground">{formatDistanceToNow(notif.createdAt.toDate(), { addSuffix: true })}</p>
+                <p className="text-xs text-muted-foreground">{notif.createdAt ? formatDistanceToNow(notif.createdAt.toDate(), { addSuffix: true }) : 'Just now'}</p>
               </DropdownMenuItem>
             </Link>
            ))}
