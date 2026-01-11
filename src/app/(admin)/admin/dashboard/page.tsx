@@ -20,7 +20,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { useCollection, useFirestore, useUser } from '@/firebase';
 import { collection, query, orderBy, limit, where } from 'firebase/firestore';
-import type { Course, Student, Announcement, Enrollment } from '@/lib/data';
+import type { Course, UserProfile, Announcement, Enrollment } from '@/lib/data';
 import {
   ChartContainer,
   ChartTooltip,
@@ -38,7 +38,7 @@ export default function AdminDashboard() {
   const firestore = useFirestore();
   const { user } = useUser();
 
-  const { data: students } = useCollection<Student>(
+  const { data: students } = useCollection<UserProfile>(
     firestore ? query(collection(firestore, 'users'), where('role', '==', 'student')) : null
   );
   const { data: courses } = useCollection<Course>(

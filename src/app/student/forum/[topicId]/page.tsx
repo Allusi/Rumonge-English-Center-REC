@@ -3,7 +3,7 @@
 
 import { useDoc, useCollection, useFirestore, useUser } from '@/firebase';
 import { doc, collection, query, orderBy, addDoc, serverTimestamp, writeBatch, increment } from 'firebase/firestore';
-import type { ForumTopic, ForumPost, Student } from '@/lib/data';
+import type { ForumTopic, ForumPost, UserProfile } from '@/lib/data';
 import { useParams, notFound, useRouter } from 'next/navigation';
 import { ArrowLeft, Send, Loader2, Lock, Pin } from 'lucide-react';
 import Link from 'next/link';
@@ -40,7 +40,7 @@ export default function ForumTopicPage() {
   const { data: posts, loading: postsLoading } = useCollection<ForumPost>(postsQuery);
   
   const userProfileRef = firestore && user ? doc(firestore, 'users', user.uid) : null;
-  const { data: userProfile } = useDoc<Student>(userProfileRef);
+  const { data: userProfile } = useDoc<UserProfile>(userProfileRef);
 
   const form = useForm<z.infer<typeof replySchema>>({
     resolver: zodResolver(replySchema),

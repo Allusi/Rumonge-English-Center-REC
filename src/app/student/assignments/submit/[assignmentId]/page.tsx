@@ -28,7 +28,7 @@ import { ArrowLeft, Send } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter, useParams, notFound } from 'next/navigation';
-import type { Assignment, Student } from '@/lib/data';
+import type { Assignment, UserProfile } from '@/lib/data';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const formSchema = z.object({
@@ -47,7 +47,7 @@ export default function SubmitAssignmentPage() {
   const { data: assignment, loading: assignmentLoading } = useDoc<Assignment>(assignmentRef);
   
   const studentRef = firestore && user ? doc(firestore, 'users', user.uid) : null;
-  const { data: studentProfile, loading: studentLoading } = useDoc<Student>(studentRef);
+  const { data: studentProfile, loading: studentLoading } = useDoc<UserProfile>(studentRef);
 
 
   const form = useForm<z.infer<typeof formSchema>>({

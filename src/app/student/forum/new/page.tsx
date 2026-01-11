@@ -22,7 +22,7 @@ import { ArrowLeft, Send, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
-import type { Student } from '@/lib/data';
+import type { UserProfile } from '@/lib/data';
 
 const formSchema = z.object({
   title: z.string().min(10, 'Title must be at least 10 characters.'),
@@ -36,7 +36,7 @@ export default function NewForumTopicPage() {
   const router = useRouter();
 
   const userProfileRef = firestore && user ? doc(firestore, 'users', user.uid) : null;
-  const { data: userProfile, loading: profileLoading } = useDoc<Student>(userProfileRef);
+  const { data: userProfile, loading: profileLoading } = useDoc<UserProfile>(userProfileRef);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

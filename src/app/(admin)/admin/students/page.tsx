@@ -38,7 +38,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Input } from '@/components/ui/input';
-import { Student, AssignmentSubmission, Assignment } from '@/lib/data';
+import { UserProfile, AssignmentSubmission, Assignment } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
 import {
   AlertDialog,
@@ -60,7 +60,7 @@ export default function StudentsPage() {
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState('');
   
-  const { data: students, loading: studentsLoading } = useCollection<Student>(
+  const { data: students, loading: studentsLoading } = useCollection<UserProfile>(
     firestore ? query(collection(firestore, 'users'), where('role', '==', 'student')) : null
   );
   
@@ -129,7 +129,7 @@ export default function StudentsPage() {
     return result;
   };
 
-  const handleGenerateKey = async (student: Student) => {
+  const handleGenerateKey = async (student: UserProfile) => {
     if (!firestore) return;
     const newKey = generateRandomKey(8);
     const newEmail = `${newKey}@rec-online.app`;
@@ -174,7 +174,7 @@ export default function StudentsPage() {
     }
   };
   
-  const handleToggleStatus = async (student: Student) => {
+  const handleToggleStatus = async (student: UserProfile) => {
     if (!firestore) return;
     const newStatus = student.status === 'active' ? 'inactive' : 'active';
     const studentRef = doc(firestore, "users", student.id);

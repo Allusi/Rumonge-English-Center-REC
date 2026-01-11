@@ -29,7 +29,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useCollection, useDoc, useFirestore, useUser } from '@/firebase';
 import { collection, doc, query, where } from 'firebase/firestore';
-import type { Student, Course, Assignment, AssignmentSubmission } from '@/lib/data';
+import type { UserProfile, Course, Assignment, AssignmentSubmission } from '@/lib/data';
 import { notFound, useRouter } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
@@ -55,7 +55,7 @@ export default function ProfilePage() {
   const router = useRouter();
 
   const userDocRef = firestore && user ? doc(firestore, 'users', user.uid) : null;
-  const { data: userProfile, loading: profileLoading } = useDoc<Student>(userDocRef);
+  const { data: userProfile, loading: profileLoading } = useDoc<UserProfile>(userDocRef);
 
   const isStudent = userProfile?.role === 'student';
   const courseId = isStudent ? userProfile.enrolledCourseId : null;
@@ -150,7 +150,7 @@ export default function ProfilePage() {
       // Admins don't have an edit page yet, so we can disable this or route to a future page.
       // For now, let's assume admins can't edit their profile from here.
     } else {
-       router.push(`/admin/students/${user.id}/edit`);
+       router.push(`/admin/students/${user!.id}/edit`);
     }
   }
 
@@ -192,7 +192,7 @@ export default function ProfilePage() {
             <DetailItem icon={<User />} label="Full Name" value={userProfile.name} />
             <DetailItem icon={<AtSign />} label="Login Email" value={userProfile.email} />
             
-            {userProfile.role === 'student' ? (
+            {userProfile.role === 'student' && userProfile.age ? (
                 <>
                     <DetailItem icon={<Cake />} label="Age" value={userProfile.age} />
                     <DetailItem icon={<Home />} label="Address" value={userProfile.address} />
@@ -205,7 +205,7 @@ export default function ProfilePage() {
                         value={averageGrade !== null ? <Badge className="text-base">{averageGrade}%</Badge> : 'No grades yet'} 
                     />
                     <DetailItem icon={<Heart />} label="Marital Status" value={<span className="capitalize">{userProfile.maritalStatus}</span>} />
-                    <DetailItem icon={<Briefcase />} label="Educational Status" value={educationalStatusMap[userProfile.educationalStatus as keyof typeof educationalStatusMap] || 'N/A'} />
+                    <DetailItem icon={<Briefcase />} label="Educational Status" value={userProfile.educationalStatus ? educationalStatusMap[userProfile.educationalStatus as keyof typeof educationalStatusMap] : 'N/A'} />
                     <DetailItem icon={<HelpCircle />} label="Reason for Learning" value={<p className="text-base font-normal">{userProfile.learningReason}</p>} />
                 </>
             ) : (

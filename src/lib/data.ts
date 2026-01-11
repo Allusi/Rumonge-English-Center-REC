@@ -9,24 +9,26 @@ export type Course = {
   isEnabled: boolean;
 };
 
-export type Student = {
+export type UserProfile = {
   id: string;
   name: string;
   email: string;
-  loginKey: string;
   role: 'student' | 'admin';
   status: 'active' | 'inactive';
-  age: number;
-  address: string;
   photoURL?: string;
-  enrolledCourseId: string;
-  englishLevel: string;
-  phoneNumber?: string;
-  maritalStatus: 'single' | 'married';
-  educationalStatus: 'government_student' | 'dropout' | 'graduated' | 'never_went_to_school';
-  learningReason: string;
   createdAt: Timestamp;
+  // Student-specific fields (optional)
+  loginKey?: string;
+  age?: number;
+  address?: string;
+  enrolledCourseId?: string;
+  englishLevel?: string;
+  phoneNumber?: string;
+  maritalStatus?: 'single' | 'married';
+  educationalStatus?: 'government_student' | 'dropout' | 'graduated' | 'never_went_to_school';
+  learningReason?: string;
 };
+
 
 export type Enrollment = {
   id: string;

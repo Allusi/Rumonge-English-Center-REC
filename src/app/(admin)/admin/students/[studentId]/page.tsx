@@ -29,7 +29,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useCollection, useDoc, useFirestore } from '@/firebase';
 import { collection, doc, query, where } from 'firebase/firestore';
-import type { Student, Course, Assignment, AssignmentSubmission } from '@/lib/data';
+import type { UserProfile, Course, Assignment, AssignmentSubmission } from '@/lib/data';
 import { notFound, useParams } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
@@ -56,7 +56,7 @@ export default function StudentProfilePage() {
   const firestore = useFirestore();
 
   const studentRef = firestore && studentId ? doc(firestore, 'users', studentId) : null;
-  const { data: student, loading: studentLoading } = useDoc<Student>(studentRef);
+  const { data: student, loading: studentLoading } = useDoc<UserProfile>(studentRef);
 
   const courseRef = firestore && student?.enrolledCourseId ? doc(firestore, 'courses', student.enrolledCourseId) : null;
   const { data: course, loading: courseLoading } = useDoc<Course>(courseRef);
@@ -191,7 +191,7 @@ export default function StudentProfilePage() {
                 value={averageGrade !== null ? <Badge className="text-base">{averageGrade}%</Badge> : 'No grades yet'} 
             />
             <DetailItem icon={<Heart />} label="Marital Status" value={<span className="capitalize">{student.maritalStatus}</span>} />
-            <DetailItem icon={<Briefcase />} label="Educational Status" value={educationalStatusMap[student.educationalStatus as keyof typeof educationalStatusMap] || 'N/A'} />
+            <DetailItem icon={<Briefcase />} label="Educational Status" value={student.educationalStatus ? educationalStatusMap[student.educationalStatus as keyof typeof educationalStatusMap] : 'N/A'} />
             <DetailItem icon={<HelpCircle />} label="Reason for Learning" value={<p className="text-base font-normal">{student.learningReason}</p>} />
         </CardContent>
       </Card>

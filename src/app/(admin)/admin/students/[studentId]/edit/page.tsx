@@ -27,7 +27,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
 import { useCollection, useDoc, useFirestore } from '@/firebase';
 import { collection, query, where, doc, updateDoc } from 'firebase/firestore';
-import type { Course, Student } from '@/lib/data';
+import type { Course, UserProfile } from '@/lib/data';
 import { ArrowLeft, Image as ImageIcon, KeyRound, UserCheck, UserX } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
@@ -60,7 +60,7 @@ export default function EditStudentPage() {
     const [previewImage, setPreviewImage] = useState<string | null>(null);
 
     const studentRef = firestore && studentId ? doc(firestore, 'users', studentId) : null;
-    const { data: student, loading: studentLoading } = useDoc<Student>(studentRef);
+    const { data: student, loading: studentLoading } = useDoc<UserProfile>(studentRef);
 
     const coursesQuery = firestore ? query(collection(firestore, 'courses'), where('isEnabled', '==', true)) : null;
     const { data: courses, loading: coursesLoading } = useCollection<Course>(coursesQuery);

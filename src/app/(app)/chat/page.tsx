@@ -118,14 +118,10 @@ export default function GroupChatPage() {
 
 
   const onSubmit = async (values: z.infer<typeof chatSchema>) => {
-    if (!firestore || !user) {
+    if (!firestore || !user || !userProfile) {
         toast({ variant: 'destructive', title: 'Error', description: 'You must be logged in to send a message.'});
         return;
     };
-    if (!userProfile) {
-         toast({ variant: 'destructive', title: 'Error', description: 'Could not load your profile to send a message.'});
-        return;
-    }
 
     const batch = writeBatch(firestore);
 
@@ -335,5 +331,3 @@ function MessageSkeleton() {
         </div>
     )
 }
-
-    

@@ -5,7 +5,7 @@ import { useUser, useDoc, useFirestore } from '@/firebase';
 import AdminLayout from '@/app/(admin)/admin/layout';
 import StudentLayout from '@/app/(student)/student/layout';
 import { doc } from 'firebase/firestore';
-import type { Student } from '@/lib/data';
+import type { UserProfile } from '@/lib/data';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -17,7 +17,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     const firestore = useFirestore();
 
     const userDocRef = (firestore && user) ? doc(firestore, 'users', user.uid) : null;
-    const { data: userProfile, loading: profileLoading } = useDoc<Student>(userDocRef);
+    const { data: userProfile, loading: profileLoading } = useDoc<UserProfile>(userDocRef);
 
     useEffect(() => {
         if (!userLoading && !user) {

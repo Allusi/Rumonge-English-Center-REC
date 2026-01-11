@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth, useDoc, useFirestore, useUser, useCollection } from "@/firebase";
-import type { Student, Notification } from "@/lib/data";
+import type { UserProfile, Notification } from "@/lib/data";
 
 export function UserNav() {
   const router = useRouter();
@@ -31,7 +31,7 @@ export function UserNav() {
   const { user: authUser, loading: authLoading } = useUser();
 
   const userDocRef = (firestore && authUser) ? doc(firestore, 'users', authUser.uid) : null;
-  const { data: userProfile, loading: profileLoading } = useDoc<Student>(userDocRef);
+  const { data: userProfile, loading: profileLoading } = useDoc<UserProfile>(userDocRef);
 
   const notificationsQuery = (firestore && authUser) 
     ? query(

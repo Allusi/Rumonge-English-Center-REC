@@ -33,7 +33,7 @@ import { cn } from "@/lib/utils";
 import { useAudioCache } from "@/context/audio-cache-context";
 import { useFirestore, useUser, useDoc } from "@/firebase";
 import { collection, addDoc, updateDoc, doc, serverTimestamp } from "firebase/firestore";
-import type { Student } from "@/lib/data";
+import type { UserProfile } from "@/lib/data";
 
 const formSchema = z.object({
   message: z.string().min(1, {
@@ -68,7 +68,7 @@ export function AITutorChat() {
   const { user, loading: userLoading } = useUser();
   
   const studentRef = firestore && user ? doc(firestore, 'users', user.uid) : null;
-  const { data: studentProfile, loading: studentLoading } = useDoc<Student>(studentRef);
+  const { data: studentProfile, loading: studentLoading } = useDoc<UserProfile>(studentRef);
 
 
   const playAudio = useCallback((audioUrl: string, messageIndex: number) => {
