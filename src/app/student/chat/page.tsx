@@ -2,12 +2,12 @@
 'use client';
 
 import { useCollection, useDoc, useFirestore, useUser } from '@/firebase';
-import { collection, query, orderBy, addDoc, serverTimestamp, writeBatch } from 'firebase/firestore';
+import { collection, query, orderBy, addDoc, serverTimestamp, writeBatch, doc } from 'firebase/firestore';
 import type { ChatMessage, UserProfile } from '@/lib/data';
 import { ArrowLeft, Send, Loader2, MessageSquareReply, X } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { formatDistanceToNow } from 'date-fns';
@@ -18,7 +18,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 import { useEffect, useRef, useState, useMemo } from 'react';
-import { doc } from 'firebase/firestore';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Popover,
@@ -118,11 +117,11 @@ export default function GroupChatPage() {
 
 
   const onSubmit = async (values: z.infer<typeof chatSchema>) => {
-    if (!firestore || !user) {
+    if (!firestore || !user ) {
         toast({ variant: 'destructive', title: 'Error', description: 'You must be logged in to send a message.'});
         return;
     };
-    if (!userProfile) {
+     if (!userProfile) {
          toast({ variant: 'destructive', title: 'Error', description: 'Could not load your profile to send a message.'});
         return;
     }
@@ -138,8 +137,8 @@ export default function GroupChatPage() {
         content: messageContent,
         createdAt: serverTimestamp(),
         createdById: user.uid,
-        createdByName: userProfile.name,
-        createdByPhotoURL: userProfile.photoURL || null,
+        createdByName: userProfile.name || user.displayName,
+        createdByPhotoURL: userProfile.photoURL || user.photoURL || null,
         replyTo: replyTo ? {
             id: replyTo.id,
             name: replyTo.createdByName,
@@ -205,9 +204,9 @@ export default function GroupChatPage() {
   return (
     <div className="flex flex-col gap-6 h-[calc(100vh-100px)]">
       <div className="flex items-center gap-4">
-        <Link href={`/${userProfile?.role}/dashboard`} passHref legacyBehavior>
-            <Button asChild variant="outline" size="icon" className="h-9 w-9" disabled={!userProfile}>
-                <a><ArrowLeft className="h-4 w-4" /></a>
+        <Link href={`/${userProfile?.role}/dashboard` || "#"}>
+            <Button variant="outline" size="icon" className="h-9 w-9" disabled={!userProfile}>
+                <ArrowLeft className="h-4 w-4" />
             </Button>
         </Link>
         <div>
@@ -335,3 +334,5 @@ function MessageSkeleton() {
         </div>
     )
 }
+
+    
