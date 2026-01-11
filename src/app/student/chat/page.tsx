@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useCollection, useDoc, useFirestore, useUser } from '@/firebase';
@@ -25,6 +24,14 @@ import {
   PopoverContent,
   PopoverAnchor,
 } from "@/components/ui/popover"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command"
 
 const chatSchema = z.object({
   content: z.string().min(1, 'Message cannot be empty.'),
