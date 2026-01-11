@@ -63,6 +63,7 @@ export type AssignmentSubmission = {
     studentId: string;
     studentName: string;
     courseId: string;
+    courseName: string;
     answers: string;
     submittedAt: Timestamp;
     status: 'submitted' | 'graded';
@@ -121,6 +122,15 @@ export type ForumPost = {
     createdByPhotoURL?: string;
 };
 
+export type Notification = {
+    id: string;
+    userId: string;
+    message: string;
+    link: string;
+    isRead: boolean;
+    createdAt: Timestamp;
+};
+
 
 // Data is now fetched from Firestore. This can be kept for fallback or removed.
 export const courses: Omit<Course, 'id'>[] = [
@@ -136,5 +146,7 @@ export const announcements: Announcement[] = [
   { id: 'A002', title: 'Holiday Closure', content: 'The center will be closed for public holidays from December 24th to January 2nd.', date: '2024-08-28' },
   { id: 'A003', title: 'New Conversation Club', content: 'Join our new conversation club every Friday at 4 PM to practice your speaking skills.', date: '2024-08-25' },
 ];
+
+    
 
     

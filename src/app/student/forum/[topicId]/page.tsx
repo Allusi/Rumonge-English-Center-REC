@@ -244,5 +244,3 @@ function LoadingSkeleton() {
         </div>
     );
 }
-
-    

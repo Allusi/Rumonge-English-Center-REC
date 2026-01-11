@@ -1,3 +1,4 @@
+
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -25,7 +26,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
 import { useCollection, useFirestore, useAuth } from '@/firebase';
-import { collection, query, where, doc, setDoc, runTransaction, serverTimestamp } from 'firebase/firestore';
+import { collection, query, where, doc, setDoc, runTransaction, serverTimestamp, addDoc, getDocs } from 'firebase/firestore';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import type { Course } from '@/lib/data';
 import { ArrowLeft, Image } from 'lucide-react';
@@ -121,6 +122,20 @@ export default function NewStudentPage() {
             courseName: course?.name || 'Unknown Course',
             enrolledAt: serverTimestamp(),
         });
+
+         // Create notification for admin
+        const adminsQuery = query(collection(firestore, 'users'), where('role', '==', 'admin'));
+        const adminSnapshot = await getDocs(adminsQuery);
+        adminSnapshot.forEach(adminDoc => {
+             addDoc(collection(firestore, 'notifications'), {
+                userId: adminDoc.id,
+                message: `New student registered: ${values.fullName}`,
+                link: `/admin/students/${user.uid}`,
+                isRead: false,
+                createdAt: serverTimestamp(),
+            });
+        });
+        
 
         toast({
             title: "Student Registered Successfully!",
@@ -371,3 +386,5 @@ export default function NewStudentPage() {
     </div>
   );
 }
+
+    

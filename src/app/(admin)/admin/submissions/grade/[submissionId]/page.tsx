@@ -23,7 +23,7 @@ import {
   CardDescription,
 } from '@/components/ui/card';
 import { useFirestore } from '@/firebase';
-import { doc, updateDoc, onSnapshot } from 'firebase/firestore';
+import { doc, updateDoc, onSnapshot, addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { ArrowLeft, Send } from 'lucide-react';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
@@ -132,6 +132,16 @@ function GradeSubmissionPageContent({ submission }: { submission: AssignmentSubm
                 ...values,
                 status: 'graded',
             });
+            
+            // Create a notification for the student
+            await addDoc(collection(firestore, 'notifications'), {
+                userId: submission.studentId,
+                message: `Your assignment "${submission.assignmentTitle}" has been graded.`,
+                link: `/student/assignments/view/${submission.id}`,
+                isRead: false,
+                createdAt: serverTimestamp(),
+            });
+
             toast({ title: 'Success', description: 'The submission has been graded.' });
             router.push('/admin/submissions');
         } catch (error) {
@@ -275,3 +285,5 @@ export default function GradeSubmissionPage() {
     
     return <GradeSubmissionPageContent submission={submission} />;
 }
+
+    
