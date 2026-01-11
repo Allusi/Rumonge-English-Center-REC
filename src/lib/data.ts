@@ -122,6 +122,15 @@ export type ForumPost = {
     createdByPhotoURL?: string;
 };
 
+export type ChatMessage = {
+    id: string;
+    content: string;
+    createdAt: Timestamp;
+    createdById: string;
+    createdByName: string;
+    createdByPhotoURL?: string;
+};
+
 export type Notification = {
     id: string;
     userId: string;
@@ -146,7 +155,3 @@ export const announcements: Announcement[] = [
   { id: 'A002', title: 'Holiday Closure', content: 'The center will be closed for public holidays from December 24th to January 2nd.', date: '2024-08-28' },
   { id: 'A003', title: 'New Conversation Club', content: 'Join our new conversation club every Friday at 4 PM to practice your speaking skills.', date: '2024-08-25' },
 ];
-
-    
-
-    

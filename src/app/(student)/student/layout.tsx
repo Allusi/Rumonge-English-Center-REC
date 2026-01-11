@@ -3,7 +3,7 @@
 
 import type { Metadata } from "next";
 import Link from "next/link";
-import { LayoutDashboard, LogOut, SpellCheck, Info, MessageCircle, Loader2, Megaphone, CalendarCheck, FileText, User, MessageSquareText } from "lucide-react";
+import { LayoutDashboard, LogOut, SpellCheck, Info, MessageCircle, Loader2, Megaphone, CalendarCheck, FileText, User, MessageSquareText, MessageSquarePlus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -87,6 +87,14 @@ export default function StudentLayout({
               </Link>
             </SidebarMenuItem>
             <SidebarMenuItem>
+              <Link href="/student/chat" passHref>
+                <SidebarMenuButton tooltip="Group Chat">
+                  <MessageSquarePlus />
+                  Group Chat
+                </SidebarMenuButton>
+              </Link>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
               <Link href="/student/forum" passHref>
                 <SidebarMenuButton tooltip="Forum">
                   <MessageSquareText />
@@ -158,5 +166,3 @@ export default function StudentLayout({
     </SidebarProvider>
   );
 }
-
-    
