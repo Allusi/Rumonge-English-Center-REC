@@ -23,7 +23,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger,
+  PopoverAnchor,
 } from "@/components/ui/popover"
 
 const chatSchema = z.object({
@@ -38,6 +38,8 @@ export default function GroupChatPage() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   
   const [replyTo, setReplyTo] = useState<ChatMessage | null>(null);
+  const [mentionQuery, setMentionQuery] = useState('');
+  const [showMentionPopover, setShowMentionPopover] = useState(false);
 
   const userProfileRef = firestore && user ? doc(firestore, 'users', user.uid) : null;
   const { data: userProfile, loading: profileLoading } = useDoc<Student>(userProfileRef);
@@ -47,6 +49,12 @@ export default function GroupChatPage() {
   
   const allUsersQuery = firestore ? query(collection(firestore, 'users')) : null;
   const { data: allUsers, loading: usersLoading } = useCollection<Student>(allUsersQuery);
+
+  const filteredUsers = useMemo(() => {
+    if (!mentionQuery || !allUsers) return [];
+    return allUsers.filter(u => u.name.toLowerCase().includes(mentionQuery.toLowerCase()));
+  }, [mentionQuery, allUsers]);
+
 
   const form = useForm<z.infer<typeof chatSchema>>({
     resolver: zodResolver(chatSchema),
@@ -74,6 +82,30 @@ export default function GroupChatPage() {
   
   const findUserByName = (name: string) => {
     return allUsers?.find(u => u.name.toLowerCase() === name.toLowerCase());
+  };
+
+  const handleMentionSelect = (name: string) => {
+    const currentContent = form.getValues('content');
+    const lastAt = currentContent.lastIndexOf('@');
+    const newContent = `${currentContent.substring(0, lastAt)}@${name} `;
+    form.setValue('content', newContent);
+    setShowMentionPopover(false);
+    setMentionQuery('');
+    textareaRef.current?.focus();
+  };
+  
+  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value;
+    form.setValue('content', value);
+
+    const lastAt = value.lastIndexOf('@');
+    if (lastAt > -1 && value.substring(lastAt + 1).indexOf(' ') === -1) {
+      const query = value.substring(lastAt + 1);
+      setMentionQuery(query);
+      setShowMentionPopover(true);
+    } else {
+      setShowMentionPopover(false);
+    }
   };
 
 
@@ -223,8 +255,10 @@ export default function GroupChatPage() {
                     </Button>
                 </div>
             )}
+            <Popover open={showMentionPopover} onOpenChange={setShowMentionPopover}>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-full flex items-start gap-2">
+                <PopoverAnchor asChild>
                 <FormField
                     control={form.control}
                     name="content"
@@ -235,17 +269,39 @@ export default function GroupChatPage() {
                             placeholder="Type your message... use @ to mention" 
                             {...field} 
                             ref={textareaRef}
+                            onChange={handleContentChange}
                             className={`min-h-12 resize-none ${replyTo ? 'rounded-t-none' : ''}`} />
                         </FormControl>
                         <FormMessage />
                     </FormItem>
                     )}
                 />
+                </PopoverAnchor>
                 <Button type="submit" size="icon" disabled={form.formState.isSubmitting || isLoading}>
                     {form.formState.isSubmitting ? <Loader2 className="h-4 w-4 animate-spin"/> : <Send className="h-4 w-4" />}
                 </Button>
                 </form>
             </Form>
+             <PopoverContent className="w-64 p-0">
+                <Command>
+                  <CommandInput placeholder="Tag a user..." />
+                  <CommandList>
+                    <CommandEmpty>No user found.</CommandEmpty>
+                    <CommandGroup>
+                        {filteredUsers.map(u => (
+                            <CommandItem key={u.id} onSelect={() => handleMentionSelect(u.name)}>
+                                <Avatar className="mr-2 h-8 w-8">
+                                    <AvatarImage src={u.photoURL} alt={u.name} />
+                                    <AvatarFallback>{u.name.charAt(0)}</AvatarFallback>
+                                </Avatar>
+                                {u.name}
+                            </CommandItem>
+                        ))}
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+            </Popover>
           </div>
         </CardFooter>
       </Card>
@@ -267,5 +323,3 @@ function MessageSkeleton() {
         </div>
     )
 }
-
-    
