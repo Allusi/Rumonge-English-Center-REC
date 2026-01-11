@@ -118,10 +118,14 @@ export default function GroupChatPage() {
 
 
   const onSubmit = async (values: z.infer<typeof chatSchema>) => {
-    if (!firestore || !user || !userProfile) {
+    if (!firestore || !user) {
         toast({ variant: 'destructive', title: 'Error', description: 'You must be logged in to send a message.'});
         return;
     };
+    if (!userProfile) {
+         toast({ variant: 'destructive', title: 'Error', description: 'Could not load your profile to send a message.'});
+        return;
+    }
 
     const batch = writeBatch(firestore);
 
@@ -201,10 +205,10 @@ export default function GroupChatPage() {
   return (
     <div className="flex flex-col gap-6 h-[calc(100vh-100px)]">
       <div className="flex items-center gap-4">
-        <Link href={`/${userProfile?.role}/dashboard`} passHref>
-          <Button variant="outline" size="icon" className="h-9 w-9">
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
+        <Link href={`/${userProfile?.role}/dashboard`} passHref legacyBehavior>
+            <Button asChild variant="outline" size="icon" className="h-9 w-9" disabled={!userProfile}>
+                <a><ArrowLeft className="h-4 w-4" /></a>
+            </Button>
         </Link>
         <div>
           <h1 className="font-headline text-3xl font-bold tracking-tight">REC Online Group</h1>

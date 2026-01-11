@@ -205,10 +205,10 @@ export default function GroupChatPage() {
   return (
     <div className="flex flex-col gap-6 h-[calc(100vh-100px)]">
       <div className="flex items-center gap-4">
-        <Link href={`/${userProfile?.role}/dashboard`} passHref>
-          <Button variant="outline" size="icon" className="h-9 w-9">
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
+        <Link href={`/${userProfile?.role}/dashboard`} passHref legacyBehavior>
+            <Button asChild variant="outline" size="icon" className="h-9 w-9" disabled={!userProfile}>
+                <a><ArrowLeft className="h-4 w-4" /></a>
+            </Button>
         </Link>
         <div>
           <h1 className="font-headline text-3xl font-bold tracking-tight">REC Online Group</h1>
@@ -335,5 +335,3 @@ function MessageSkeleton() {
         </div>
     )
 }
-
-    
