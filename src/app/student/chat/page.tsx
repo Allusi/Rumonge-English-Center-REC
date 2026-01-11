@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useCollection, useDoc, useFirestore, useUser } from '@/firebase';
@@ -133,7 +134,7 @@ export default function GroupChatPage() {
         content: messageContent,
         createdAt: serverTimestamp(),
         createdById: user.uid,
-        createdByName: userProfile.name || 'Anonymous',
+        createdByName: userProfile.name,
         createdByPhotoURL: userProfile.photoURL || null,
         replyTo: replyTo ? {
             id: replyTo.id,
@@ -200,7 +201,7 @@ export default function GroupChatPage() {
   return (
     <div className="flex flex-col gap-6 h-[calc(100vh-100px)]">
       <div className="flex items-center gap-4">
-        <Link href="/student/dashboard" passHref>
+        <Link href={`/${userProfile?.role}/dashboard`} passHref>
           <Button variant="outline" size="icon" className="h-9 w-9">
             <ArrowLeft className="h-4 w-4" />
           </Button>
