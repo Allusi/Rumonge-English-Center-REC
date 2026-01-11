@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useMemo } from "react";
 import { signOut } from "firebase/auth";
-import { collection, doc, query, where, orderBy, limit, writeBatch } from "firebase/firestore";
+import { collection, doc, query, where, orderBy, limit, writeBatch, Timestamp } from "firebase/firestore";
 import { formatDistanceToNow } from 'date-fns';
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -36,17 +36,22 @@ export function UserNav() {
   const notificationsQuery = (firestore && authUser) 
     ? query(
         collection(firestore, 'notifications'), 
-        where('userId', '==', authUser.uid),
-        orderBy('createdAt', 'desc'),
-        limit(10)
+        where('userId', '==', authUser.uid)
       )
     : null;
   const { data: notifications, loading: notificationsLoading } = useCollection<Notification>(notificationsQuery);
   
-  const allNotificationsQuery = (firestore && authUser) 
-    ? query(collection(firestore, 'notifications'), where('userId', '==', authUser.uid), where('isRead', '==', false))
-    : null;
-  const { data: unreadNotifications, loading: unreadLoading } = useCollection<Notification>(allNotificationsQuery);
+  const sortedNotifications = useMemo(() => {
+    if (!notifications) return [];
+    return notifications
+      .sort((a, b) => b.createdAt.toMillis() - a.createdAt.toMillis())
+      .slice(0, 10);
+  }, [notifications]);
+
+  const unreadCount = useMemo(() => {
+      if (!notifications) return 0;
+      return notifications.filter(n => !n.isRead).length;
+  }, [notifications]);
 
   const [isClient, setIsClient] = useState(false);
 
@@ -62,10 +67,12 @@ export function UserNav() {
   };
 
   const handleMarkNotificationsAsRead = async () => {
-    if (!firestore || !unreadNotifications || unreadNotifications.length === 0) return;
+    if (!firestore || !notifications) return;
+    const unread = notifications.filter(n => !n.isRead);
+    if (unread.length === 0) return;
     
     const batch = writeBatch(firestore);
-    unreadNotifications.forEach(notification => {
+    unread.forEach(notification => {
         const notifRef = doc(firestore, 'notifications', notification.id);
         batch.update(notifRef, { isRead: true });
     });
@@ -81,8 +88,6 @@ export function UserNav() {
   const displayName = userProfile?.name || authUser?.displayName || "User";
   const displayEmail = userProfile?.email || authUser?.email || "";
   const avatarFallback = displayName?.charAt(0).toUpperCase() || "U";
-  const unreadCount = unreadNotifications?.length || 0;
-
 
   return (
     <div className="flex items-center gap-4">
@@ -101,11 +106,11 @@ export function UserNav() {
           <DropdownMenuLabel>Notifications</DropdownMenuLabel>
           <DropdownMenuSeparator />
            {notificationsLoading && <DropdownMenuItem>Loading...</DropdownMenuItem>}
-           {!notificationsLoading && notifications?.length === 0 && <DropdownMenuItem>No new notifications.</DropdownMenuItem>}
-           {!notificationsLoading && notifications?.map(notif => (
+           {!notificationsLoading && sortedNotifications.length === 0 && <DropdownMenuItem>No new notifications.</DropdownMenuItem>}
+           {!notificationsLoading && sortedNotifications.map(notif => (
             <Link href={notif.link} key={notif.id}>
               <DropdownMenuItem className="flex flex-col items-start whitespace-normal">
-                <p className={`font-medium ${!notif.isRead ? 'font-bold' : ''}`}>{notif.message}</p>
+                <p className={`text-sm ${!notif.isRead ? 'font-bold' : ''}`}>{notif.message}</p>
                 <p className="text-xs text-muted-foreground">{formatDistanceToNow(notif.createdAt.toDate(), { addSuffix: true })}</p>
               </DropdownMenuItem>
             </Link>
