@@ -204,7 +204,7 @@ export default function GroupChatPage() {
   return (
     <div className="flex flex-col gap-6 h-[calc(100vh-100px)]">
       <div className="flex items-center gap-4">
-        <Link href={`/${userProfile?.role}/dashboard` || "#"}>
+        <Link href={`/${userProfile?.role}/dashboard` || "#"} >
             <Button variant="outline" size="icon" className="h-9 w-9" disabled={!userProfile}>
                 <ArrowLeft className="h-4 w-4" />
             </Button>
