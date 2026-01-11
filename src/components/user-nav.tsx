@@ -33,20 +33,20 @@ export function UserNav() {
   const userDocRef = (firestore && authUser) ? doc(firestore, 'users', authUser.uid) : null;
   const { data: userProfile, loading: profileLoading } = useDoc<Student>(userDocRef);
 
-  // Simplified query to avoid composite index requirement
   const notificationsQuery = (firestore && authUser) 
-    ? query(collection(firestore, 'notifications'), where('userId', '==', authUser.uid))
+    ? query(
+        collection(firestore, 'notifications'), 
+        where('userId', '==', authUser.uid),
+        orderBy('createdAt', 'desc'),
+        limit(10)
+      )
     : null;
-  const { data: allNotifications, loading: notificationsLoading } = useCollection<Notification>(notificationsQuery);
+  const { data: notifications, loading: notificationsLoading } = useCollection<Notification>(notificationsQuery);
   
-  const notifications = useMemo(() => {
-    if (!allNotifications) return [];
-    // Sort by date client-side and take the first 10
-    return allNotifications
-      .sort((a, b) => b.createdAt.toMillis() - a.createdAt.toMillis())
-      .slice(0, 10);
-  }, [allNotifications]);
-
+  const allNotificationsQuery = (firestore && authUser) 
+    ? query(collection(firestore, 'notifications'), where('userId', '==', authUser.uid), where('isRead', '==', false))
+    : null;
+  const { data: unreadNotifications, loading: unreadLoading } = useCollection<Notification>(allNotificationsQuery);
 
   const [isClient, setIsClient] = useState(false);
 
@@ -62,11 +62,8 @@ export function UserNav() {
   };
 
   const handleMarkNotificationsAsRead = async () => {
-    if (!firestore || !notifications || notifications.length === 0) return;
+    if (!firestore || !unreadNotifications || unreadNotifications.length === 0) return;
     
-    const unreadNotifications = notifications.filter(n => !n.isRead);
-    if (unreadNotifications.length === 0) return;
-
     const batch = writeBatch(firestore);
     unreadNotifications.forEach(notification => {
         const notifRef = doc(firestore, 'notifications', notification.id);
@@ -84,12 +81,12 @@ export function UserNav() {
   const displayName = userProfile?.name || authUser?.displayName || "User";
   const displayEmail = userProfile?.email || authUser?.email || "";
   const avatarFallback = displayName?.charAt(0).toUpperCase() || "U";
-  const unreadCount = allNotifications?.filter(n => !n.isRead).length || 0;
+  const unreadCount = unreadNotifications?.length || 0;
 
 
   return (
     <div className="flex items-center gap-4">
-      <DropdownMenu onOpenChange={(open) => { if(open) handleMarkNotificationsAsRead() }}>
+      <DropdownMenu onOpenChange={(open) => { if(open && unreadCount > 0) handleMarkNotificationsAsRead() }}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon" className="relative">
             <Bell className="h-5 w-5"/>
@@ -108,7 +105,7 @@ export function UserNav() {
            {!notificationsLoading && notifications?.map(notif => (
             <Link href={notif.link} key={notif.id}>
               <DropdownMenuItem className="flex flex-col items-start whitespace-normal">
-                <p className="font-medium">{notif.message}</p>
+                <p className={`font-medium ${!notif.isRead ? 'font-bold' : ''}`}>{notif.message}</p>
                 <p className="text-xs text-muted-foreground">{formatDistanceToNow(notif.createdAt.toDate(), { addSuffix: true })}</p>
               </DropdownMenuItem>
             </Link>
