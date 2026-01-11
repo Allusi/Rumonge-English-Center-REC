@@ -48,7 +48,7 @@ export default function ForumTopicPage() {
   });
 
   const onSubmit = async (values: z.infer<typeof replySchema>) => {
-    if (!firestore || !user || !topic || !userProfile) return;
+    if (!firestore || !user || !topic) return;
 
     if (topic.isLocked) {
         toast({ variant: 'destructive', title: 'Topic Locked', description: 'This topic is locked and cannot receive new replies.' });
@@ -64,8 +64,8 @@ export default function ForumTopicPage() {
         content: values.content,
         createdAt: serverTimestamp(),
         createdById: user.uid,
-        createdByName: userProfile.name,
-        createdByPhotoURL: userProfile.photoURL,
+        createdByName: userProfile?.name || user.displayName || 'Anonymous',
+        createdByPhotoURL: userProfile?.photoURL || user.photoURL || null,
     });
 
     // Update topic metadata
@@ -78,9 +78,10 @@ export default function ForumTopicPage() {
     // Notify topic owner
     if (user.uid !== topic.createdById) {
       const notificationRef = doc(collection(firestore, 'notifications'));
+      const authorName = userProfile?.name || user.displayName || 'Someone';
       batch.set(notificationRef, {
         userId: topic.createdById,
-        message: `${userProfile.name} replied to your topic: "${topic.title}"`,
+        message: `${authorName} replied to your topic: "${topic.title}"`,
         link: `/student/forum/${topicId}`,
         isRead: false,
         createdAt: serverTimestamp(),
