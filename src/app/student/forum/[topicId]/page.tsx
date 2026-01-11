@@ -48,9 +48,9 @@ export default function ForumTopicPage() {
   });
 
   const onSubmit = async (values: z.infer<typeof replySchema>) => {
-    if (!firestore || !user || !topic) return;
+    if (!firestore || !user) return;
 
-    if (topic.isLocked) {
+    if (topic?.isLocked) {
         toast({ variant: 'destructive', title: 'Topic Locked', description: 'This topic is locked and cannot receive new replies.' });
         return;
     }
@@ -76,7 +76,7 @@ export default function ForumTopicPage() {
     });
 
     // Notify topic owner
-    if (user.uid !== topic.createdById) {
+    if (topic && user.uid !== topic.createdById) {
       const notificationRef = doc(collection(firestore, 'notifications'));
       const authorName = userProfile?.name || user.displayName || 'Someone';
       batch.set(notificationRef, {
@@ -118,7 +118,7 @@ export default function ForumTopicPage() {
                 <h1 className="font-headline text-3xl font-bold tracking-tight">{topic.title}</h1>
             </div>
             <p className="text-muted-foreground">
-              Started by {topic.createdByName} • {format(topic.createdAt.toDate(), 'PPP')}
+              Started by {topic.createdByName} • {topic.createdAt ? format(topic.createdAt.toDate(), 'PPP') : 'Just now'}
             </p>
           </div>
         </div>
@@ -141,7 +141,7 @@ export default function ForumTopicPage() {
           </Avatar>
           <div>
             <p className="font-semibold">{topic.createdByName}</p>
-            <p className="text-sm text-muted-foreground">{format(topic.createdAt.toDate(), 'PPP p')}</p>
+            <p className="text-sm text-muted-foreground">{topic.createdAt ? format(topic.createdAt.toDate(), 'PPP p') : 'Just now'}</p>
           </div>
         </CardHeader>
         <CardContent>
@@ -162,7 +162,7 @@ export default function ForumTopicPage() {
               </Avatar>
               <div>
                 <p className="font-semibold">{post.createdByName}</p>
-                <p className="text-sm text-muted-foreground">{formatDistanceToNow(post.createdAt.toDate(), { addSuffix: true })}</p>
+                <p className="text-sm text-muted-foreground">{post.createdAt ? formatDistanceToNow(post.createdAt.toDate(), { addSuffix: true }) : 'Just now'}</p>
               </div>
             </CardHeader>
             <CardContent>
