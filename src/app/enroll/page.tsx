@@ -1,4 +1,3 @@
-
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -25,7 +24,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useCollection, useFirestore } from '@/firebase';
-import { collection, query, where, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, query, where, addDoc, serverTimestamp, getDocs } from 'firebase/firestore';
 import type { Course } from '@/lib/data';
 import { useToast } from '@/hooks/use-toast';
 import { useState } from 'react';
@@ -72,6 +71,37 @@ export default function EnrollmentPage() {
         }
 
         try {
+            // Check for duplicate enrollment requests
+            const requestsRef = collection(firestore, 'enrollment_requests');
+            const qRequests = query(requestsRef, where('fullName', '==', values.fullName));
+            const requestSnapshot = await getDocs(qRequests);
+            const duplicateRequest = requestSnapshot.docs.some(doc => doc.data().phoneNumber === (values.phoneNumber || null));
+
+            if (duplicateRequest) {
+                toast({
+                    variant: "destructive",
+                    title: "Ibisabwa birasanzweho",
+                    description: "Umuntu ufite iri zina n'iyi nimero ya terefone yamaze gusaba kwiyandikisha.",
+                });
+                return;
+            }
+
+            // Check for existing users with same details
+            const usersRef = collection(firestore, 'users');
+            const qUsers = query(usersRef, where('name', '==', values.fullName));
+            const usersSnapshot = await getDocs(qUsers);
+            const duplicateUser = usersSnapshot.docs.some(doc => doc.data().phoneNumber === (values.phoneNumber || null));
+            
+            if (duplicateUser) {
+                toast({
+                    variant: "destructive",
+                    title: "Umunyeshuri asanzwe yanditswe",
+                    description: "Umunyeshuri ufite iri zina n'iyi nimero ya terefone asanzwe yanditswe muri sisitemu.",
+                });
+                return;
+            }
+
+
             const course = courses?.find(c => c.id === values.enrolledCourseId);
             await addDoc(collection(firestore, 'enrollment_requests'), {
                 fullName: values.fullName,
