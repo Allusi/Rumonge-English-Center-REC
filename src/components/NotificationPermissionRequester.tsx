@@ -1,16 +1,15 @@
 
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useFirestore, useUser } from '@/firebase';
-import { collection, query, where, onSnapshot, Timestamp } from 'firebase/firestore';
+import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import type { Notification as NotificationData } from '@/lib/data';
-import { useToast } from '@/hooks/use-toast';
 
 export function NotificationPermissionRequester() {
   const { user } = useUser();
   const firestore = useFirestore();
-  const { toast } = useToast();
+  const initialLoadHandled = useRef(false);
 
   useEffect(() => {
     if (!user || !firestore) return;
@@ -29,11 +28,15 @@ export function NotificationPermissionRequester() {
         if (permission === 'granted') {
              const notificationsQuery = query(
                 collection(firestore, 'notifications'), 
-                where('userId', '==', user.uid),
-                where('createdAt', '>', Timestamp.now()) // Listen for future notifications
+                where('userId', '==', user.uid)
             );
 
             const unsubscribe = onSnapshot(notificationsQuery, (snapshot) => {
+                 if (!initialLoadHandled.current) {
+                    initialLoadHandled.current = true;
+                    return;
+                }
+
                  if (snapshot.metadata.hasPendingWrites) {
                     return; // Ignore local changes
                 }
@@ -44,7 +47,6 @@ export function NotificationPermissionRequester() {
                         
                         if(newNotification.isRead) return;
 
-                        // Check if the service worker is available to show the notification
                         if (navigator.serviceWorker && 'showNotification' in ServiceWorkerRegistration.prototype) {
                            navigator.serviceWorker.ready.then(registration => {
                              registration.showNotification('REC Online', {
@@ -55,8 +57,6 @@ export function NotificationPermissionRequester() {
                              });
                            });
                         } else {
-                            // Fallback for browsers that don't support service worker notifications
-                            // This will only work if the tab is active
                             new Notification('REC Online', {
                                 body: newNotification.message,
                                 icon: '/icon-192x192.png'
@@ -68,7 +68,6 @@ export function NotificationPermissionRequester() {
                 console.error("Error listening for notifications: ", error);
             });
 
-            // Also listen for clicks on notifications shown by the service worker
             const handleNotificationClick = (event: any) => {
                 const url = event.notification.data?.url;
                 if (url) {
@@ -93,8 +92,12 @@ export function NotificationPermissionRequester() {
     }
 
     requestPermissionAndListen();
+    
+    return () => {
+      initialLoadHandled.current = false;
+    };
 
-  }, [user, firestore, toast]);
+  }, [user, firestore]);
 
   return null;
 }
