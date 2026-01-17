@@ -1,4 +1,3 @@
-
 "use client";
 
 import { CreditCard, LogOut, User as UserIcon, Bell } from "lucide-react";
@@ -33,20 +32,24 @@ export function UserNav() {
   const userDocRef = (firestore && authUser) ? doc(firestore, 'users', authUser.uid) : null;
   const { data: userProfile, loading: profileLoading } = useDoc<UserProfile>(userDocRef);
 
+  // This query now only filters, and does not order. This avoids the need for a composite index.
   const notificationsQuery = (firestore && authUser) 
     ? query(
         collection(firestore, 'notifications'), 
-        where('userId', '==', authUser.uid),
-        orderBy('createdAt', 'asc'),
-        limit(10)
+        where('userId', '==', authUser.uid)
       )
     : null;
   const { data: notifications, loading: notificationsLoading } = useCollection<Notification>(notificationsQuery);
   
   const sortedNotifications = useMemo(() => {
     if (!notifications) return [];
-    // Since we query ascending to avoid index, we reverse here to show newest first.
-    return [...notifications].reverse();
+    // We sort on the client-side to show newest first, and then take the top 10.
+    const sorted = [...notifications].sort((a, b) => {
+        const timeA = a.createdAt?.toDate().getTime() || 0;
+        const timeB = b.createdAt?.toDate().getTime() || 0;
+        return timeB - timeA;
+    });
+    return sorted.slice(0, 10);
   }, [notifications]);
 
   const unreadCount = useMemo(() => {
@@ -167,5 +170,3 @@ export function UserNav() {
     </div>
   );
 }
-
-    
