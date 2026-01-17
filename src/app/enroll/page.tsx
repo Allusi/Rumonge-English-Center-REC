@@ -41,7 +41,7 @@ const formSchema = z.object({
   enrolledCourseId: z.string({ required_error: 'Hitamwo isomo.' }),
   englishLevel: z.string({ required_error: 'Hitamwo urugero rw\'icongereza.' }),
   phoneNumber: z.string().optional(),
-  maritalStatus: z.enum(['single', 'married'], { required_error: 'Hitamwo iratangwa.' }),
+  maritalStatus: z.enum(['single', 'married'], { required_error: 'Hitamwo ego canke oya.' }),
   educationalStatus: z.enum(['government_student', 'dropout', 'graduated', 'never_went_to_school'], { required_error: 'Hitamwo amashure yize.' }),
   learningReason: z.string().min(10, { message: 'Tubwire impamvu nkeyi igituma ushaka kwiga.' }),
 });
@@ -245,25 +245,20 @@ export default function EnrollmentPage() {
                                     control={form.control}
                                     name="maritalStatus"
                                     render={({ field }) => (
-                                        <FormItem className="space-y-3">
-                                        <FormLabel>Iratangwa</FormLabel>
-                                        <FormControl>
-                                            <RadioGroup
-                                            onValueChange={field.onChange}
-                                            defaultValue={field.value}
-                                            className="flex space-x-4"
-                                            >
-                                            <FormItem className="flex items-center space-x-3 space-y-0">
-                                                <FormControl><RadioGroupItem value="single" /></FormControl>
-                                                <FormLabel className="font-normal">Ingaragu</FormLabel>
-                                            </FormItem>
-                                            <FormItem className="flex items-center space-x-3 space-y-0">
-                                                <FormControl><RadioGroupItem value="married" /></FormControl>
-                                                <FormLabel className="font-normal">Yubatse</FormLabel>
-                                            </FormItem>
-                                            </RadioGroup>
-                                        </FormControl>
-                                        <FormMessage />
+                                        <FormItem>
+                                            <FormLabel>Arubatse?</FormLabel>
+                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                <FormControl>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Hitamwo ego canke oya" />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent>
+                                                    <SelectItem value="married">Ego</SelectItem>
+                                                    <SelectItem value="single">Oya</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                            <FormMessage />
                                         </FormItem>
                                     )}
                                 />
