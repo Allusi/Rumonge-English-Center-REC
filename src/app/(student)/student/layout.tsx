@@ -36,7 +36,7 @@ export default function StudentLayout({
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push("/");
+      router.push("/login");
     }
      if (user) {
         document.title = "Student Dashboard - REC Online";
@@ -145,7 +145,7 @@ export default function StudentLayout({
           </SidebarMenu>
         </SidebarContent>
         <SidebarFooter>
-           <Link href="/" passHref>
+           <Link href="/login" passHref>
              <SidebarMenuButton>
                 <LogOut />
                 Logout
@@ -166,3 +166,5 @@ export default function StudentLayout({
     </SidebarProvider>
   );
 }
+
+    
