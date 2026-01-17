@@ -319,7 +319,10 @@ export default function StudentsPage() {
                                 </DropdownMenuItem>
                                 <AlertDialog>
                                     <AlertDialogTrigger asChild>
-                                        <DropdownMenuItem onSelect={(e) => e.stopPropagation()}>
+                                        <DropdownMenuItem
+                                            onSelect={(e) => e.preventDefault()}
+                                            onClick={(e) => e.stopPropagation()}
+                                        >
                                             <RefreshCw className="mr-2" />
                                             Generate New Key
                                         </DropdownMenuItem>
@@ -347,7 +350,11 @@ export default function StudentsPage() {
                                 <DropdownMenuSeparator />
                                 <AlertDialog>
                                     <AlertDialogTrigger asChild>
-                                        <DropdownMenuItem className="text-destructive" onSelect={(e) => e.stopPropagation()}>
+                                        <DropdownMenuItem 
+                                            className="text-destructive" 
+                                            onSelect={(e) => e.preventDefault()}
+                                            onClick={(e) => e.stopPropagation()}
+                                        >
                                             <Trash2 className="mr-2" />
                                             Delete Student
                                         </DropdownMenuItem>
@@ -395,3 +402,5 @@ export default function StudentsPage() {
     </div>
   );
 }
+
+    
