@@ -205,6 +205,74 @@
         },
         "required": ["studentId", "courseId", "enrolledAt"]
     },
+    "EnrollmentRequest": {
+      "title": "Enrollment Request",
+      "description": "A student's request to enroll in a course, submitted via the public enrollment form.",
+      "type": "object",
+      "properties": {
+        "fullName": {
+          "type": "string"
+        },
+        "age": {
+          "type": "number"
+        },
+        "address": {
+          "type": "string"
+        },
+        "enrolledCourseId": {
+          "type": "string"
+        },
+        "englishLevel": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "maritalStatus": {
+          "type": "string",
+          "enum": [
+            "single",
+            "married"
+          ]
+        },
+        "educationalStatus": {
+          "type": "string",
+          "enum": [
+            "government_student",
+            "dropout",
+            "graduated",
+            "never_went_to_school"
+          ]
+        },
+        "learningReason": {
+          "type": "string"
+        },
+        "requestDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "approved",
+            "rejected"
+          ]
+        }
+      },
+      "required": [
+        "fullName",
+        "age",
+        "address",
+        "enrolledCourseId",
+        "englishLevel",
+        "maritalStatus",
+        "educationalStatus",
+        "learningReason",
+        "requestDate",
+        "status"
+      ]
+    },
     "ReadReceipt": {
       "title": "Read Receipt",
       "description": "Marks that a student has read an announcement.",
@@ -369,6 +437,12 @@
             "$ref": "#/backend/entities/Enrollment"
         },
         "description": "Stores records of student enrollments in courses."
+    },
+    "/enrollment_requests/{requestId}": {
+        "schema": {
+            "$ref": "#/backend/entities/EnrollmentRequest"
+        },
+        "description": "Stores student enrollment requests from the public form for admin review."
     },
     "/attendance/{attendanceId}": {
       "schema": { "$ref": "#/backend/entities/Attendance" },

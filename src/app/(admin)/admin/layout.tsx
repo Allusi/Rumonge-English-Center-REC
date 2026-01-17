@@ -36,7 +36,7 @@ export default function AdminLayout({
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push("/login");
+      router.push("/");
     }
     if (user) {
         document.title = "Admin Dashboard - REC Online";
@@ -161,7 +161,7 @@ export default function AdminLayout({
           </SidebarMenu>
         </SidebarContent>
         <SidebarFooter>
-           <Link href="/login" passHref>
+           <Link href="/" passHref>
              <SidebarMenuButton>
                 <LogOut />
                 Logout
