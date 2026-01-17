@@ -3,7 +3,7 @@
 
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BookCopy, LayoutDashboard, LogOut, Megaphone, Users, Info, Loader2, CalendarCheck, FileText, CheckSquare, MessageCircle, User, MessageSquareText, MessageSquarePlus } from "lucide-react";
+import { BookCopy, LayoutDashboard, LogOut, Megaphone, Users, Info, Loader2, CalendarCheck, FileText, CheckSquare, MessageCircle, User, MessageSquareText, MessageSquarePlus, ClipboardList } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -127,6 +127,14 @@ export default function AdminLayout({
               </Link>
             </SidebarMenuItem>
              <SidebarMenuItem>
+              <Link href="/admin/enrollment-requests" passHref>
+                <SidebarMenuButton tooltip="Enrollment Requests">
+                  <ClipboardList />
+                  Enrollment Requests
+                </SidebarMenuButton>
+              </Link>
+            </SidebarMenuItem>
+             <SidebarMenuItem>
               <Link href="/admin/announcements" passHref>
                 <SidebarMenuButton tooltip="Announcements">
                   <Megaphone />
@@ -182,5 +190,3 @@ export default function AdminLayout({
     </SidebarProvider>
   );
 }
-
-    

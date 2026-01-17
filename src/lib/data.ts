@@ -142,6 +142,22 @@ export type Notification = {
     createdAt: Timestamp;
 };
 
+export type EnrollmentRequest = {
+    id: string;
+    fullName: string;
+    age: number;
+    address: string;
+    enrolledCourseId: string;
+    courseName: string;
+    englishLevel: string;
+    phoneNumber?: string;
+    maritalStatus: 'single' | 'married';
+    educationalStatus: 'government_student' | 'dropout' | 'graduated' | 'never_went_to_school';
+    learningReason: string;
+    requestDate: Timestamp;
+    status: 'pending' | 'approved' | 'rejected';
+};
+
 
 // Data is now fetched from Firestore. This can be kept for fallback or removed.
 export const courses: Omit<Course, 'id'>[] = [
