@@ -16,7 +16,6 @@ import {
 } from '@/ai/flows/ai-tutor-types';
 import { z } from 'genkit';
 
-// This is the schema the PROMPT expects, with the isUser flag.
 const AITutorPromptInputSchema = z.object({
   history: z.array(z.object({
     role: z.enum(['user', 'model']),
@@ -25,38 +24,6 @@ const AITutorPromptInputSchema = z.object({
   })),
 });
 
-
-const aiTutorFlow = ai.defineFlow(
-  {
-    name: 'aiTutorFlow',
-    inputSchema: AITutorPromptInputSchema, // Flow now expects the same as the prompt
-    outputSchema: AITutorOutputSchema,
-  },
-  async (input) => {
-    // No transformation needed inside the flow
-    const {output} = await aiTutorPrompt(input);
-    
-    // Explicitly check for empty, whitespace-only, or non-string responses.
-    if (typeof output !== 'string' || output.trim() === '') {
-      console.error("AI tutor returned invalid output. Returning a fallback message. Output was:", output);
-      return "I'm sorry, I'm having a little trouble thinking. Could you say that again?";
-    }
-    
-    return output;
-  }
-);
-
-
-export async function aiTutor(input: AITutorInput): Promise<AITutorOutput> {
-  // If the history is empty, start the conversation.
-  if (input.history.length === 0) {
-    return "Hello! I'm R.E.C, your friendly AI English tutor. How would you like to practice today?";
-  }
-
-  // Transform the data before calling the flow
-  const historyWithUserFlag = input.history.map(m => ({ ...m, isUser: m.role === 'user' }));
-  return aiTutorFlow({ history: historyWithUserFlag });
-}
 
 const aiTutorPrompt = ai.definePrompt({
   name: 'aiTutorPrompt',
@@ -81,3 +48,36 @@ const aiTutorPrompt = ai.definePrompt({
   {{/each}}
   `,
 });
+
+
+const aiTutorFlow = ai.defineFlow(
+  {
+    name: 'aiTutorFlow',
+    inputSchema: AITutorInputSchema,
+    outputSchema: AITutorOutputSchema,
+  },
+  async (input) => {
+    // If the history is empty, start the conversation.
+    if (input.history.length === 0) {
+      return "Hello! I'm R.E.C, your friendly AI English tutor. How would you like to practice today?";
+    }
+
+    // Transform the data to add the `isUser` flag for the prompt template.
+    const historyWithUserFlag = input.history.map(m => ({ ...m, isUser: m.role === 'user' }));
+    
+    const {output} = await aiTutorPrompt({ history: historyWithUserFlag });
+    
+    // Explicitly check for empty, whitespace-only, or non-string responses.
+    if (typeof output !== 'string' || output.trim() === '') {
+      console.error("AI tutor returned invalid output. Returning a fallback message. Output was:", output);
+      return "I'm sorry, I'm having a little trouble thinking. Could you say that again?";
+    }
+    
+    return output;
+  }
+);
+
+
+export async function aiTutor(input: AITutorInput): Promise<AITutorOutput> {
+  return aiTutorFlow(input);
+}

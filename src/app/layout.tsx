@@ -6,6 +6,7 @@ import { AudioCacheProvider } from "@/context/audio-cache-context";
 import { FirebaseClientProvider } from "@/firebase/client-provider";
 import { FirebaseErrorListener } from "@/components/FirebaseErrorListener";
 import { NotificationPermissionRequester } from "@/components/NotificationPermissionRequester";
+import Script from "next/script";
 
 
 export const metadata: Metadata = {
@@ -37,6 +38,12 @@ export default function RootLayout({
             <NotificationPermissionRequester />
           </FirebaseClientProvider>
         <Toaster />
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8584759829627880"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
