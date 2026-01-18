@@ -1,4 +1,5 @@
-import { lookupFlow, runFlow } from 'genkit/node';
+
+import { lookupFlow, runFlow } from 'genkit';
 import { NextRequest, NextResponse } from 'next/server';
 
 // This is the entry point that registers all of our flows.

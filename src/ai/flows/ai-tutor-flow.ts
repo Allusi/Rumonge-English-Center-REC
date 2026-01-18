@@ -16,7 +16,8 @@ import {
 } from '@/ai/flows/ai-tutor-types';
 import { z } from 'genkit';
 
-const AITutorFlowInputSchema = z.object({
+// This is the schema the PROMPT expects, with the isUser flag.
+const AITutorPromptInputSchema = z.object({
   history: z.array(z.object({
     role: z.enum(['user', 'model']),
     content: z.string(),
@@ -24,17 +25,16 @@ const AITutorFlowInputSchema = z.object({
   })),
 });
 
+
 const aiTutorFlow = ai.defineFlow(
   {
     name: 'aiTutorFlow',
-    inputSchema: AITutorInputSchema,
+    inputSchema: AITutorPromptInputSchema, // Flow now expects the same as the prompt
     outputSchema: AITutorOutputSchema,
   },
   async (input) => {
-    const historyWithUserFlag = input.history.map(m => ({ ...m, isUser: m.role === 'user' }));
-    
-    // Call the prompt and handle potential empty/null output.
-    const {output} = await aiTutorPrompt({ history: historyWithUserFlag });
+    // No transformation needed inside the flow
+    const {output} = await aiTutorPrompt(input);
     
     if (!output) {
       console.error("AI tutor returned empty or null output. Returning a fallback message.");
@@ -51,12 +51,15 @@ export async function aiTutor(input: AITutorInput): Promise<AITutorOutput> {
   if (input.history.length === 0) {
     return "Hello! I'm R.E.C, your friendly AI English tutor. How would you like to practice today?";
   }
-  return aiTutorFlow(input);
+
+  // Transform the data before calling the flow
+  const historyWithUserFlag = input.history.map(m => ({ ...m, isUser: m.role === 'user' }));
+  return aiTutorFlow({ history: historyWithUserFlag });
 }
 
 const aiTutorPrompt = ai.definePrompt({
   name: 'aiTutorPrompt',
-  input: {schema: AITutorFlowInputSchema},
+  input: {schema: AITutorPromptInputSchema},
   output: {schema: AITutorOutputSchema},
   prompt: `You are an expert English tutor AI from "Rumonge English School (R.E.C)". Your role is to help students practice and improve their English through conversation. You MUST ALWAYS provide a valid, non-empty string response in English.
 
