@@ -1,7 +1,5 @@
-'use server';
-import { config } from 'dotenv';
-config();
 
+'use server';
 // By importing genkit, we ensure the 'ai' object is created.
 import './genkit';
 
