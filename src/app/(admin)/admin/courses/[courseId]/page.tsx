@@ -1,4 +1,3 @@
-
 'use client';
 import {
   Card,
@@ -10,7 +9,7 @@ import {
 import { notFound, useParams } from "next/navigation";
 import { UnitOneContent } from "@/components/unit-one-content";
 import { useDoc, useCollection, useFirestore } from "@/firebase";
-import { doc, updateDoc, collection, query, where, orderBy } from "firebase/firestore";
+import { doc, updateDoc, collection, query, where } from "firebase/firestore";
 import type { Course, Lesson, LessonActivity } from "@/lib/data";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
@@ -94,9 +93,15 @@ function LessonStatsDialog({ lesson }: { lesson: Lesson }) {
 
     const activitiesQuery = useMemo(() => {
         if (!firestore) return null;
-        return query(collection(firestore, 'lesson_activities'), where('lessonId', '==', lesson.id), orderBy('startedAt', 'desc'));
+        // The orderBy was removed to prevent the composite index requirement. We now sort on the client.
+        return query(collection(firestore, 'lesson_activities'), where('lessonId', '==', lesson.id));
     }, [firestore, lesson.id]);
-    const { data: activities, loading } = useCollection<LessonActivity>(activitiesQuery);
+    const { data: unsortedActivities, loading } = useCollection<LessonActivity>(activitiesQuery);
+
+    const activities = useMemo(() => {
+        if (!unsortedActivities) return null;
+        return [...unsortedActivities].sort((a, b) => b.startedAt.toDate().getTime() - a.startedAt.toDate().getTime());
+    }, [unsortedActivities]);
 
     const stats = useMemo(() => {
         if (!activities) return { views: 0, completed: [], watching: [] };
@@ -122,13 +127,13 @@ function LessonStatsDialog({ lesson }: { lesson: Lesson }) {
                 <DialogHeader>
                     <DialogTitle>Lesson Stats: {lesson.title}</DialogTitle>
                     <DialogDescription>
-                        Analytics for this video lesson. Total Views: {loading ? <Loader2 className="h-4 w-4 animate-spin inline-block"/> : stats.views}
+                        Analytics for this video lesson. Total Views: {loading || !activities ? <Loader2 className="h-4 w-4 animate-spin inline-block"/> : stats.views}
                     </DialogDescription>
                 </DialogHeader>
                 <Tabs defaultValue="completed">
                     <TabsList className="grid w-full grid-cols-2">
-                        <TabsTrigger value="completed">Completed ({loading ? '...' : stats.completed.length})</TabsTrigger>
-                        <TabsTrigger value="watching">Watching Now ({loading ? '...' : stats.watching.length})</TabsTrigger>
+                        <TabsTrigger value="completed">Completed ({loading || !activities ? '...' : stats.completed.length})</TabsTrigger>
+                        <TabsTrigger value="watching">Watching Now ({loading || !activities ? '...' : stats.watching.length})</TabsTrigger>
                     </TabsList>
                     <TabsContent value="completed">
                         <UserActivityTable activities={stats.completed} loading={loading} type="completed" />
