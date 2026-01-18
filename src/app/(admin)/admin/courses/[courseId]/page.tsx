@@ -49,6 +49,8 @@ import {
 } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { format } from "date-fns";
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError } from '@/firebase/errors';
 
 const lessonFormSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters."),
@@ -152,7 +154,7 @@ function VideoManager({ course }: { course: Course }) {
     return match ? match[1] : null;
   };
 
-  const onSubmit = async (values: z.infer<typeof lessonFormSchema>>) => {
+  const onSubmit = (values: z.infer<typeof lessonFormSchema>) => {
     const videoId = getYouTubeVideoId(values.youtubeUrl);
     if (!videoId) {
       toast({ variant: "destructive", title: "Invalid URL", description: "Could not extract video ID from YouTube URL." });
@@ -171,27 +173,34 @@ function VideoManager({ course }: { course: Course }) {
     const courseRef = doc(firestore, "courses", course.id);
     const updatedLessons = [...(course.lessons || []), newLesson];
 
-    try {
-      await updateDoc(courseRef, { lessons: updatedLessons });
-      toast({ title: "Lesson Added", description: `"${values.title}" has been added to the course.`});
-      form.reset();
-    } catch(error) {
-       console.error("Error adding lesson:", error);
-       toast({ variant: "destructive", title: "Error", description: "Could not add the lesson." });
-    }
+    updateDoc(courseRef, { lessons: updatedLessons }).then(() => {
+        toast({ title: "Lesson Added", description: `"${values.title}" has been added to the course.` });
+        form.reset();
+    }).catch(async (serverError) => {
+        const permissionError = new FirestorePermissionError({
+            path: courseRef.path,
+            operation: 'update',
+            requestResourceData: { lessons: updatedLessons }
+        });
+        errorEmitter.emit('permission-error', permissionError);
+    });
   };
   
-  const handleDeleteLesson = async (lessonId: string) => {
+  const handleDeleteLesson = (lessonId: string) => {
      if (!firestore) return;
      const courseRef = doc(firestore, "courses", course.id);
      const updatedLessons = (course.lessons || []).filter(lesson => lesson.id !== lessonId);
-     try {
-      await updateDoc(courseRef, { lessons: updatedLessons });
-      toast({ title: "Lesson Removed", description: "The video lesson has been removed from the course."});
-    } catch(error) {
-       console.error("Error removing lesson:", error);
-       toast({ variant: "destructive", title: "Error", description: "Could not remove the lesson." });
-    }
+     
+     updateDoc(courseRef, { lessons: updatedLessons }).then(() => {
+        toast({ title: "Lesson Removed", description: "The video lesson has been removed from the course."});
+     }).catch(async (serverError) => {
+        const permissionError = new FirestorePermissionError({
+            path: courseRef.path,
+            operation: 'update',
+            requestResourceData: { lessons: updatedLessons }
+        });
+        errorEmitter.emit('permission-error', permissionError);
+    });
   };
 
   return (
