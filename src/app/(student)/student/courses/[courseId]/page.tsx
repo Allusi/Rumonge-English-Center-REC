@@ -15,13 +15,13 @@ import {
 import { notFound, useParams } from "next/navigation";
 import { UnitOneContent } from "@/components/unit-one-content";
 import { useDoc, useCollection, useFirestore, useUser } from "@/firebase";
-import { doc, collection, query, where, setDoc, serverTimestamp } from "firebase/firestore";
-import type { Course, Enrollment, CompletedLesson, Lesson } from "@/lib/data";
+import { doc, collection, query, where, setDoc, serverTimestamp, getDocs, addDoc, writeBatch, updateDoc } from "firebase/firestore";
+import type { Course, Enrollment, CompletedLesson, Lesson, UserProfile } from "@/lib/data";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { BookLock, CheckCircle, Circle, Loader2 } from "lucide-react";
 import YouTube from 'react-youtube';
-import { useMemo, useState } from "react";
+import { useMemo, useState, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 function LessonPlayer({ lesson, courseId, isCompleted }: { lesson: Lesson; courseId: string; isCompleted: boolean }) {
@@ -30,15 +30,65 @@ function LessonPlayer({ lesson, courseId, isCompleted }: { lesson: Lesson; cours
   const { toast } = useToast();
   const [justCompleted, setJustCompleted] = useState(false);
 
-  const handleVideoEnd = async () => {
-    if (!user || !firestore || isCompleted || justCompleted) return;
+  const userProfileRef = firestore && user ? doc(firestore, 'users', user.uid) : null;
+  const { data: userProfile } = useDoc<UserProfile>(userProfileRef);
 
+  const handleVideoPlay = useCallback(async () => {
+    if (!user || !firestore || !userProfile) return;
+
+    const activityQuery = query(
+        collection(firestore, 'lesson_activities'),
+        where('userId', '==', user.uid),
+        where('lessonId', '==', lesson.id)
+    );
+    const existingActivity = await getDocs(activityQuery);
+
+    if (existingActivity.empty) {
+        try {
+            await addDoc(collection(firestore, 'lesson_activities'), {
+                userId: user.uid,
+                userName: userProfile.name,
+                lessonId: lesson.id,
+                lessonTitle: lesson.title,
+                courseId: courseId,
+                status: 'watching',
+                startedAt: serverTimestamp(),
+            });
+        } catch (error) {
+            console.error("Error creating lesson activity record:", error);
+        }
+    }
+  }, [user, firestore, userProfile, lesson.id, lesson.title, courseId]);
+
+  const handleVideoEnd = useCallback(async () => {
+    if (!user || !firestore || isCompleted || justCompleted) return;
+    
+    const batch = writeBatch(firestore);
+
+    // 1. Mark lesson as completed for student progress UI (in their private subcollection)
     const completedLessonRef = doc(firestore, `users/${user.uid}/completedLessons`, lesson.id);
-    try {
-      await setDoc(completedLessonRef, {
+    batch.set(completedLessonRef, {
         completedAt: serverTimestamp(),
         courseId: courseId
-      });
+    });
+
+    // 2. Update the public activity log to 'completed'
+    const activityQuery = query(
+        collection(firestore, 'lesson_activities'),
+        where('userId', '==', user.uid),
+        where('lessonId', '==', lesson.id),
+    );
+    const activitySnapshot = await getDocs(activityQuery);
+    if (!activitySnapshot.empty) {
+        const activityDocRef = activitySnapshot.docs[0].ref;
+        batch.update(activityDocRef, {
+            status: 'completed',
+            completedAt: serverTimestamp(),
+        });
+    }
+
+    try {
+      await batch.commit();
       setJustCompleted(true);
       toast({
         title: "Lesson Completed!",
@@ -47,7 +97,8 @@ function LessonPlayer({ lesson, courseId, isCompleted }: { lesson: Lesson; cours
     } catch (error) {
       console.error("Error marking lesson as complete:", error);
     }
-  };
+  }, [user, firestore, isCompleted, justCompleted, lesson.id, courseId, toast]);
+
 
   return (
     <div className="space-y-4">
@@ -61,8 +112,11 @@ function LessonPlayer({ lesson, courseId, isCompleted }: { lesson: Lesson; cours
               playerVars: {
                 autoplay: 0,
                 fs: 1,
+                rel: 0,
+                modestbranding: 1,
               },
             }}
+            onPlay={handleVideoPlay}
             onEnd={handleVideoEnd}
             className="w-full h-full"
           />

@@ -8,13 +8,13 @@ import {
 } from "@/components/ui/card";
 import { notFound, useParams } from "next/navigation";
 import { UnitOneContent } from "@/components/unit-one-content";
-import { useDoc, useFirestore } from "@/firebase";
-import { doc, updateDoc, collection } from "firebase/firestore";
-import type { Course, Lesson } from "@/lib/data";
+import { useDoc, useCollection, useFirestore } from "@/firebase";
+import { doc, updateDoc, collection, query, where, orderBy } from "firebase/firestore";
+import type { Course, Lesson, LessonActivity } from "@/lib/data";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowLeft, Plus, Trash2, Video, Loader2 } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, Video, Loader2, BarChart } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,12 +23,118 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Separator } from "@/components/ui/separator";
+import { useMemo } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { format } from "date-fns";
 
 const lessonFormSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters."),
   description: z.string().optional(),
   youtubeUrl: z.string().url("Please enter a valid YouTube URL."),
 });
+
+function UserActivityTable({ activities, loading, type }: { activities: LessonActivity[], loading: boolean, type: 'completed' | 'watching' }) {
+    if (loading) {
+        return <Skeleton className="h-40 w-full" />
+    }
+
+    if (activities.length === 0) {
+        return <p className="text-center text-sm text-muted-foreground py-8">No students in this category.</p>
+    }
+
+    return (
+        <ScrollArea className="h-64">
+            <Table>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead>Student</TableHead>
+                        <TableHead>{type === 'completed' ? 'Completed On' : 'Started Watching'}</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {activities.map(activity => (
+                        <TableRow key={activity.id}>
+                            <TableCell>{activity.userName}</TableCell>
+                            <TableCell>{format(type === 'completed' ? activity.completedAt!.toDate() : activity.startedAt.toDate(), 'PPP p')}</TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </ScrollArea>
+    )
+}
+
+function LessonStatsDialog({ lesson }: { lesson: Lesson }) {
+    const firestore = useFirestore();
+
+    const activitiesQuery = firestore ? query(collection(firestore, 'lesson_activities'), where('lessonId', '==', lesson.id), orderBy('startedAt', 'desc')) : null;
+    const { data: activities, loading } = useCollection<LessonActivity>(activitiesQuery);
+
+    const stats = useMemo(() => {
+        if (!activities) return { views: 0, completed: [], watching: [] };
+        
+        const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+        
+        const completed = activities.filter(a => a.status === 'completed');
+        const watching = activities.filter(a => a.status === 'watching' && a.startedAt.toDate() > fiveMinutesAgo);
+
+        return {
+            views: activities.length,
+            completed,
+            watching,
+        }
+    }, [activities]);
+
+    return (
+         <Dialog>
+            <DialogTrigger asChild>
+                <Button variant="outline" size="sm"><BarChart className="h-4 w-4 mr-2" /> View Stats</Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-2xl">
+                <DialogHeader>
+                    <DialogTitle>Lesson Stats: {lesson.title}</DialogTitle>
+                    <DialogDescription>
+                        Analytics for this video lesson. Total Views: {loading ? <Loader2 className="h-4 w-4 animate-spin inline-block"/> : stats.views}
+                    </DialogDescription>
+                </DialogHeader>
+                <Tabs defaultValue="completed">
+                    <TabsList className="grid w-full grid-cols-2">
+                        <TabsTrigger value="completed">Completed ({stats.completed.length})</TabsTrigger>
+                        <TabsTrigger value="watching">Watching Now ({stats.watching.length})</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="completed">
+                        <UserActivityTable activities={stats.completed} loading={loading} type="completed" />
+                    </TabsContent>
+                    <TabsContent value="watching">
+                        <UserActivityTable activities={stats.watching} loading={loading} type="watching" />
+                    </TabsContent>
+                </Tabs>
+            </DialogContent>
+        </Dialog>
+    )
+}
 
 function VideoManager({ course }: { course: Course }) {
   const firestore = useFirestore();
@@ -45,7 +151,7 @@ function VideoManager({ course }: { course: Course }) {
     return match ? match[1] : null;
   };
 
-  const onSubmit = async (values: z.infer<typeof lessonFormSchema>) => {
+  const onSubmit = async (values: z.infer<typeof lessonFormSchema>>) => {
     const videoId = getYouTubeVideoId(values.youtubeUrl);
     if (!videoId) {
       toast({ variant: "destructive", title: "Invalid URL", description: "Could not extract video ID from YouTube URL." });
@@ -128,9 +234,12 @@ function VideoManager({ course }: { course: Course }) {
                                <p className="text-sm text-muted-foreground">{lesson.description}</p>
                            </div>
                         </div>
-                        <Button variant="ghost" size="icon" onClick={() => handleDeleteLesson(lesson.id)}>
-                            <Trash2 className="h-4 w-4 text-destructive"/>
-                        </Button>
+                        <div className="flex items-center gap-2">
+                           <LessonStatsDialog lesson={lesson} />
+                            <Button variant="ghost" size="icon" onClick={() => handleDeleteLesson(lesson.id)}>
+                                <Trash2 className="h-4 w-4 text-destructive"/>
+                            </Button>
+                        </div>
                     </div>
                 )) : (
                     <p className="text-sm text-muted-foreground text-center py-4">No video lessons have been added to this course yet.</p>

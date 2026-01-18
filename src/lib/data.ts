@@ -172,6 +172,18 @@ export type CompletedLesson = {
     courseId: string;
 };
 
+export type LessonActivity = {
+    id: string;
+    userId: string;
+    userName: string;
+    lessonId: string;
+    lessonTitle: string;
+    courseId: string;
+    status: 'watching' | 'completed';
+    startedAt: Timestamp;
+    completedAt?: Timestamp;
+};
+
 
 // Data is now fetched from Firestore. This can be kept for fallback or removed.
 export const courses: Omit<Course, 'id'>[] = [

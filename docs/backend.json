@@ -434,6 +434,22 @@
         }
       },
       "required": ["completedAt", "courseId"]
+    },
+    "LessonActivity": {
+      "title": "Lesson Activity",
+      "description": "Tracks student interaction with a video lesson.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "lessonId": { "type": "string" },
+        "lessonTitle": { "type": "string" },
+        "courseId": { "type": "string" },
+        "status": { "type": "string", "enum": ["watching", "completed"] },
+        "startedAt": { "type": "string", "format": "date-time" },
+        "completedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "userName", "lessonId", "lessonTitle", "courseId", "status", "startedAt"]
     }
   },
   "auth": {
@@ -519,6 +535,10 @@
      "/notifications/{notificationId}": {
       "schema": { "$ref": "#/backend/entities/Notification" },
       "description": "Stores notifications for users."
+    },
+    "/lesson_activities/{activityId}": {
+      "schema": { "$ref": "#/backend/entities/LessonActivity" },
+      "description": "Stores records of students watching or completing video lessons."
     }
   }
 }
