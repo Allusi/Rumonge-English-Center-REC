@@ -28,7 +28,6 @@ const AITutorPromptInputSchema = z.object({
 const aiTutorPrompt = ai.definePrompt({
   name: 'aiTutorPrompt',
   input: {schema: AITutorPromptInputSchema},
-  output: {schema: AITutorOutputSchema},
   prompt: `You are an expert English tutor AI from "Rumonge English School (R.E.C)". Your role is to help students practice and improve their English through conversation. You MUST ALWAYS provide a valid, non-empty string response in English.
 
   - Your name is R.E.C.
@@ -65,7 +64,8 @@ const aiTutorFlow = ai.defineFlow(
     // Transform the data to add the `isUser` flag for the prompt template.
     const historyWithUserFlag = input.history.map(m => ({ ...m, isUser: m.role === 'user' }));
     
-    const {output} = await aiTutorPrompt({ history: historyWithUserFlag });
+    const response = await aiTutorPrompt({ history: historyWithUserFlag });
+    const output = response.text;
     
     // Explicitly check for empty, whitespace-only, or non-string responses.
     if (typeof output !== 'string' || output.trim() === '') {
