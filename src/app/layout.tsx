@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { PT_Sans } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { AudioCacheProvider } from "@/context/audio-cache-context";
@@ -37,6 +38,7 @@ export default function RootLayout({
             <NotificationPermissionRequester />
           </FirebaseClientProvider>
         <Toaster />
+        <Script src="https://pl28509159.effectivegatecpm.com/f2/8a/99/f28a99c04dc1fd1970a26d0550fb6208.js" strategy="afterInteractive" />
       </body>
     </html>
   );
