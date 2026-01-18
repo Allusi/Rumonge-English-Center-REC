@@ -36,8 +36,9 @@ const aiTutorFlow = ai.defineFlow(
     // No transformation needed inside the flow
     const {output} = await aiTutorPrompt(input);
     
-    if (!output) {
-      console.error("AI tutor returned empty or null output. Returning a fallback message.");
+    // Explicitly check for empty, whitespace-only, or non-string responses.
+    if (typeof output !== 'string' || output.trim() === '') {
+      console.error("AI tutor returned invalid output. Returning a fallback message. Output was:", output);
       return "I'm sorry, I'm having a little trouble thinking. Could you say that again?";
     }
     
