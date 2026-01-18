@@ -10,7 +10,7 @@ export const AITutorInputSchema = z.object({
 });
 export type AITutorInput = z.infer<typeof AITutorInputSchema>;
 
-export const AITutorOutputSchema = z.string();
+export const AITutorOutputSchema = z.string().min(1, "The AI tutor's response cannot be empty.");
 export type AITutorOutput = z.infer<typeof AITutorOutputSchema>;
 
 export const audioResponseSchema = z.object({

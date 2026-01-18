@@ -28,16 +28,16 @@ const aiTutorFlow = ai.defineFlow(
   {
     name: 'aiTutorFlow',
     inputSchema: AITutorInputSchema,
-    outputSchema: AITutorOutputSchema.nullable(),
+    outputSchema: AITutorOutputSchema,
   },
   async (input) => {
     const historyWithUserFlag = input.history.map(m => ({ ...m, isUser: m.role === 'user' }));
     
-    // Call the prompt and handle potential null output directly.
+    // Call the prompt and handle potential empty/null output.
     const {output} = await aiTutorPrompt({ history: historyWithUserFlag });
     
-    if (output === null) {
-      console.error("AI tutor returned null output. Returning a fallback message.");
+    if (!output) {
+      console.error("AI tutor returned empty or null output. Returning a fallback message.");
       return "I'm sorry, I'm having a little trouble thinking. Could you say that again?";
     }
     
@@ -57,8 +57,7 @@ export async function aiTutor(input: AITutorInput): Promise<AITutorOutput> {
 const aiTutorPrompt = ai.definePrompt({
   name: 'aiTutorPrompt',
   input: {schema: AITutorFlowInputSchema},
-  // Allow for null output so the flow can handle it gracefully.
-  output: {schema: AITutorOutputSchema.nullable()},
+  output: {schema: AITutorOutputSchema},
   prompt: `You are an expert English tutor AI from "Rumonge English School (R.E.C)". Your role is to help students practice and improve their English through conversation. You MUST ALWAYS provide a valid, non-empty string response in English.
 
   - Your name is R.E.C.
