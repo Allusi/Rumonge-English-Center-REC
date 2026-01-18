@@ -92,7 +92,10 @@ function UserActivityTable({ activities, loading, type }: { activities: LessonAc
 function LessonStatsDialog({ lesson }: { lesson: Lesson }) {
     const firestore = useFirestore();
 
-    const activitiesQuery = firestore ? query(collection(firestore, 'lesson_activities'), where('lessonId', '==', lesson.id), orderBy('startedAt', 'desc')) : null;
+    const activitiesQuery = useMemo(() => {
+        if (!firestore) return null;
+        return query(collection(firestore, 'lesson_activities'), where('lessonId', '==', lesson.id), orderBy('startedAt', 'desc'));
+    }, [firestore, lesson.id]);
     const { data: activities, loading } = useCollection<LessonActivity>(activitiesQuery);
 
     const stats = useMemo(() => {
@@ -124,8 +127,8 @@ function LessonStatsDialog({ lesson }: { lesson: Lesson }) {
                 </DialogHeader>
                 <Tabs defaultValue="completed">
                     <TabsList className="grid w-full grid-cols-2">
-                        <TabsTrigger value="completed">Completed ({stats.completed.length})</TabsTrigger>
-                        <TabsTrigger value="watching">Watching Now ({stats.watching.length})</TabsTrigger>
+                        <TabsTrigger value="completed">Completed ({loading ? '...' : stats.completed.length})</TabsTrigger>
+                        <TabsTrigger value="watching">Watching Now ({loading ? '...' : stats.watching.length})</TabsTrigger>
                     </TabsList>
                     <TabsContent value="completed">
                         <UserActivityTable activities={stats.completed} loading={loading} type="completed" />
@@ -176,7 +179,7 @@ function VideoManager({ course }: { course: Course }) {
     updateDoc(courseRef, { lessons: updatedLessons }).then(() => {
         toast({ title: "Lesson Added", description: `"${values.title}" has been added to the course.` });
         form.reset();
-    }).catch(async (serverError) => {
+    }).catch((serverError) => {
         const permissionError = new FirestorePermissionError({
             path: courseRef.path,
             operation: 'update',
@@ -193,7 +196,7 @@ function VideoManager({ course }: { course: Course }) {
      
      updateDoc(courseRef, { lessons: updatedLessons }).then(() => {
         toast({ title: "Lesson Removed", description: "The video lesson has been removed from the course."});
-     }).catch(async (serverError) => {
+     }).catch((serverError) => {
         const permissionError = new FirestorePermissionError({
             path: courseRef.path,
             operation: 'update',
