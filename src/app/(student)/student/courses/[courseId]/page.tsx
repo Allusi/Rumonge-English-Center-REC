@@ -60,6 +60,7 @@ function LessonPlayer({ lesson, courseId, isCompleted }: { lesson: Lesson; cours
               width: '100%',
               playerVars: {
                 autoplay: 0,
+                fs: 1,
               },
             }}
             onEnd={handleVideoEnd}
