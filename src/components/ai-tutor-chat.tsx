@@ -70,6 +70,12 @@ export function AITutorChat() {
   const studentRef = firestore && user ? doc(firestore, 'users', user.uid) : null;
   const { data: studentProfile, loading: studentLoading } = useDoc<UserProfile>(studentRef);
 
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      message: "",
+    },
+  });
 
   const playAudio = useCallback((audioUrl: string, messageIndex: number) => {
     if (audioRef.current) {
