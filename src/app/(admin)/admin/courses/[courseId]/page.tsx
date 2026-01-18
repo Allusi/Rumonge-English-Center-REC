@@ -1,3 +1,4 @@
+
 'use client';
 import {
   Card,
@@ -77,7 +78,7 @@ function UserActivityTable({ activities, loading, type }: { activities: LessonAc
                     {activities.map(activity => (
                         <TableRow key={activity.id}>
                             <TableCell>{activity.userName}</TableCell>
-                            <TableCell>{format(type === 'completed' ? activity.completedAt!.toDate() : activity.startedAt.toDate(), 'PPP p')}</TableCell>
+                            <TableCell>{format(type === 'completed' && activity.completedAt ? activity.completedAt.toDate() : activity.startedAt.toDate(), 'PPP p')}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
@@ -191,7 +192,7 @@ function VideoManager({ course }: { course: Course }) {
        console.error("Error removing lesson:", error);
        toast({ variant: "destructive", title: "Error", description: "Could not remove the lesson." });
     }
-  }
+  };
 
   return (
     <Card>
