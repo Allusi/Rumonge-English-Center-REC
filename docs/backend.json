@@ -95,6 +95,29 @@
         "isEnabled": {
             "type": "boolean",
             "description": "Whether the course is visible and available to students."
+        },
+        "lessons": {
+          "type": "array",
+          "description": "An array of video lessons for the course.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "A unique ID for the lesson."
+              },
+              "title": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "youtubeVideoId": {
+                "type": "string"
+              }
+            },
+            "required": ["id", "title", "youtubeVideoId"]
+          }
         }
       },
       "required": ["name", "description", "level", "isEnabled"]
@@ -396,6 +419,21 @@
         "createdAt": { "type": "string", "format": "date-time", "description": "When the notification was created." }
       },
       "required": ["userId", "message", "link", "isRead", "createdAt"]
+    },
+    "CompletedLesson": {
+      "title": "Completed Lesson",
+      "description": "Marks that a student has completed a video lesson.",
+      "type": "object",
+      "properties": {
+        "completedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "courseId": {
+            "type": "string"
+        }
+      },
+      "required": ["completedAt", "courseId"]
     }
   },
   "auth": {
@@ -407,6 +445,12 @@
         "$ref": "#/backend/entities/UserProfile"
       },
       "description": "Stores public profile information for each user, keyed by their UID."
+    },
+    "/users/{userId}/completedLessons/{lessonId}": {
+      "schema": {
+        "$ref": "#/backend/entities/CompletedLesson"
+      },
+      "description": "Tracks which video lessons a student has completed."
     },
     "/courses/{courseId}": {
         "schema": {

@@ -1,12 +1,20 @@
 
 import type { Timestamp } from "firebase/firestore";
 
+export type Lesson = {
+  id: string;
+  title: string;
+  description: string;
+  youtubeVideoId: string;
+};
+
 export type Course = {
   id: string;
   name: string;
   description: string;
   level: string;
   isEnabled: boolean;
+  lessons?: Lesson[];
 };
 
 export type UserProfile = {
@@ -156,6 +164,12 @@ export type EnrollmentRequest = {
     learningReason: string;
     requestDate: Timestamp;
     status: 'pending' | 'approved' | 'rejected';
+};
+
+export type CompletedLesson = {
+    id: string; // This will be the lessonId from the path
+    completedAt: Timestamp;
+    courseId: string;
 };
 
 
