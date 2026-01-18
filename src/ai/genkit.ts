@@ -10,6 +10,3 @@ export const ai = genkit({
   ],
   model: 'googleai/gemini-2.5-flash',
 });
-
-// This ensures all flows from dev.ts are registered with Genkit.
-import './dev';
