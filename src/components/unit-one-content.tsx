@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
@@ -33,6 +32,20 @@ export function UnitOneContent() {
   const { toast } = useToast();
 
   const getImage = (id: string) => PlaceHolderImages.find((img) => img.id === id);
+
+  const placeTownImage = getImage('place-town');
+  const placeVillageImage = getImage('place-village');
+  const animalLionImage = getImage('animal-lion');
+  const animalElephantImage = getImage('animal-elephant');
+  const animalMonkeyImage = getImage('animal-monkey');
+  const animalCowImage = getImage('animal-cow');
+  const animalGoatImage = getImage('animal-goat');
+  const animalHenImage = getImage('animal-hen');
+  const animalDogImage = getImage('animal-dog');
+  const positionOnImage = getImage('position-on');
+  const positionUnderImage = getImage('position-under');
+  const positionBehindImage = getImage('position-behind');
+  const positionInFrontImage = getImage('position-in-front');
 
   useEffect(() => {
     setIsClient(true);
@@ -718,11 +731,11 @@ export function UnitOneContent() {
                         <p className="text-muted-foreground mb-2">What is a place? A place is everywhere we can find people or animals.</p>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 my-4">
                             <div className="text-center">
-                                <Image src={getImage('place-town')?.imageUrl!} alt="Town" width={400} height={250} className="rounded-lg object-cover aspect-video" data-ai-hint={getImage('place-town')?.imageHint!} />
+                                {placeTownImage?.imageUrl && <Image src={placeTownImage.imageUrl} alt="Town" width={400} height={250} className="rounded-lg object-cover aspect-video" data-ai-hint={placeTownImage.imageHint} />}
                                 <p className="text-sm font-semibold mt-1">Town</p>
                             </div>
                             <div className="text-center">
-                                <Image src={getImage('place-village')?.imageUrl!} alt="Village" width={400} height={250} className="rounded-lg object-cover aspect-video" data-ai-hint={getImage('place-village')?.imageHint!} />
+                                {placeVillageImage?.imageUrl && <Image src={placeVillageImage.imageUrl} alt="Village" width={400} height={250} className="rounded-lg object-cover aspect-video" data-ai-hint={placeVillageImage.imageHint} />}
                                 <p className="text-sm font-semibold mt-1">Village</p>
                             </div>
                         </div>
@@ -944,15 +957,15 @@ export function UnitOneContent() {
                             <CardContent>
                                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
                                     <div className="text-center">
-                                        <Image src={getImage('animal-lion')?.imageUrl!} alt="Lion" width={300} height={200} className="rounded-lg object-cover aspect-video" data-ai-hint={getImage('animal-lion')?.imageHint!} />
+                                        {animalLionImage?.imageUrl && <Image src={animalLionImage.imageUrl} alt="Lion" width={300} height={200} className="rounded-lg object-cover aspect-video" data-ai-hint={animalLionImage.imageHint} />}
                                         <p className="text-sm font-semibold mt-1">Lion</p>
                                     </div>
                                     <div className="text-center">
-                                        <Image src={getImage('animal-elephant')?.imageUrl!} alt="Elephant" width={300} height={200} className="rounded-lg object-cover aspect-video" data-ai-hint={getImage('animal-elephant')?.imageHint!} />
+                                        {animalElephantImage?.imageUrl && <Image src={animalElephantImage.imageUrl} alt="Elephant" width={300} height={200} className="rounded-lg object-cover aspect-video" data-ai-hint={animalElephantImage.imageHint} />}
                                         <p className="text-sm font-semibold mt-1">Elephant</p>
                                     </div>
                                     <div className="text-center">
-                                        <Image src={getImage('animal-monkey')?.imageUrl!} alt="Monkey" width={300} height={200} className="rounded-lg object-cover aspect-video" data-ai-hint={getImage('animal-monkey')?.imageHint!} />
+                                        {animalMonkeyImage?.imageUrl && <Image src={animalMonkeyImage.imageUrl} alt="Monkey" width={300} height={200} className="rounded-lg object-cover aspect-video" data-ai-hint={animalMonkeyImage.imageHint} />}
                                         <p className="text-sm font-semibold mt-1">Monkey</p>
                                     </div>
                                 </div>
@@ -1042,19 +1055,19 @@ export function UnitOneContent() {
                             <CardContent>
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                                      <div className="text-center">
-                                        <Image src={getImage('animal-cow')?.imageUrl!} alt="Cow" width={300} height={200} className="rounded-lg object-cover aspect-video" data-ai-hint={getImage('animal-cow')?.imageHint!} />
+                                        {animalCowImage?.imageUrl && <Image src={animalCowImage.imageUrl} alt="Cow" width={300} height={200} className="rounded-lg object-cover aspect-video" data-ai-hint={animalCowImage.imageHint} />}
                                         <p className="text-sm font-semibold mt-1">Cow</p>
                                     </div>
                                     <div className="text-center">
-                                        <Image src={getImage('animal-goat')?.imageUrl!} alt="Goat" width={300} height={200} className="rounded-lg object-cover aspect-video" data-ai-hint={getImage('animal-goat')?.imageHint!} />
+                                        {animalGoatImage?.imageUrl && <Image src={animalGoatImage.imageUrl} alt="Goat" width={300} height={200} className="rounded-lg object-cover aspect-video" data-ai-hint={animalGoatImage.imageHint} />}
                                         <p className="text-sm font-semibold mt-1">Goat</p>
                                     </div>
                                      <div className="text-center">
-                                        <Image src={getImage('animal-hen')?.imageUrl!} alt="Hen" width={300} height={200} className="rounded-lg object-cover aspect-video" data-ai-hint={getImage('animal-hen')?.imageHint!} />
+                                        {animalHenImage?.imageUrl && <Image src={animalHenImage.imageUrl} alt="Hen" width={300} height={200} className="rounded-lg object-cover aspect-video" data-ai-hint={animalHenImage.imageHint} />}
                                         <p className="text-sm font-semibold mt-1">Hen</p>
                                     </div>
                                     <div className="text-center">
-                                        <Image src={getImage('animal-dog')?.imageUrl!} alt="Dog" width={300} height={200} className="rounded-lg object-cover aspect-video" data-ai-hint={getImage('animal-dog')?.imageHint!} />
+                                        {animalDogImage?.imageUrl && <Image src={animalDogImage.imageUrl} alt="Dog" width={300} height={200} className="rounded-lg object-cover aspect-video" data-ai-hint={animalDogImage.imageHint} />}
                                         <p className="text-sm font-semibold mt-1">Dog</p>
                                     </div>
                                 </div>
@@ -2239,7 +2252,7 @@ able to make it.</p>
             Section 5: Talking about People, Things and Places
           </AccordionTrigger>
           <AccordionContent className="p-4 pt-0">
-             <p className="text-muted-foreground mb-2">In this part, we will see the words which we use when talking to people, things,animals and places.the words which tell us more about people, things ,animals and places.</p>
+             <p className="text-muted-foreground mb-2">In this part, we will see the words which we use when talking to people, things ,animals and places.the words which tell us more about people, things ,animals and places.</p>
             <p className="text-muted-foreground mb-2">Look at the following examples :</p>
             <ul className="list-disc pl-6 text-muted-foreground">
               <li>This is a <strong>tall</strong> boy. - This is a <strong>short</strong> boy.<br/><span className="text-xs">Tall and short tell more about the boys</span></li>
@@ -2323,19 +2336,19 @@ able to make it.</p>
                 <ul className="list-disc pl-6 text-muted-foreground text-sm space-y-4">
                     <li>
                         The ball is <span className="font-bold">on</span> the table.
-                        <Image src={getImage('position-on')?.imageUrl!} alt="Ball on table" width={300} height={200} className="rounded-lg object-cover my-2" data-ai-hint={getImage('position-on')?.imageHint!} />
+                        {positionOnImage?.imageUrl && <Image src={positionOnImage.imageUrl} alt="Ball on table" width={300} height={200} className="rounded-lg object-cover my-2" data-ai-hint={positionOnImage.imageHint} />}
                     </li>
                     <li>
                         The bottle is <span className="font-bold">under</span> the table.
-                        <Image src={getImage('position-under')?.imageUrl!} alt="Bottle under table" width={300} height={200} className="rounded-lg object-cover my-2" data-ai-hint={getImage('position-under')?.imageHint!} />
+                        {positionUnderImage?.imageUrl && <Image src={positionUnderImage.imageUrl} alt="Bottle under table" width={300} height={200} className="rounded-lg object-cover my-2" data-ai-hint={positionUnderImage.imageHint} />}
                     </li>
                     <li>
                         The boy is <span className="font-bold">behind</span> the car.
-                        <Image src={getImage('position-behind')?.imageUrl!} alt="Boy behind car" width={300} height={200} className="rounded-lg object-cover my-2" data-ai-hint={getImage('position-behind')?.imageHint!} />
+                        {positionBehindImage?.imageUrl && <Image src={positionBehindImage.imageUrl} alt="Boy behind car" width={300} height={200} className="rounded-lg object-cover my-2" data-ai-hint={positionBehindImage.imageHint} />}
                     </li>
                     <li>
                         The girl is <span className="font-bold">in front of</span> the car.
-                        <Image src={getImage('position-in-front')?.imageUrl!} alt="Girl in front of car" width={300} height={200} className="rounded-lg object-cover my-2" data-ai-hint={getImage('position-in-front')?.imageHint!} />
+                        {positionInFrontImage?.imageUrl && <Image src={positionInFrontImage.imageUrl} alt="Girl in front of car" width={300} height={200} className="rounded-lg object-cover my-2" data-ai-hint={positionInFrontImage.imageHint} />}
                     </li>
                     <li>The cup is inside the box.</li>
                     <li>The bottle is outside the house.</li>
