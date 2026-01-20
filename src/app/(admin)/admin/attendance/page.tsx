@@ -105,19 +105,17 @@ export default function AdminAttendancePage() {
         <CardHeader>
             <CardTitle className="flex items-center gap-2"><QrCode />QR Code Attendance</CardTitle>
             <CardDescription>
-                A new way to take attendance quickly.
+                Click the button below to open the in-app scanner and mark attendance.
             </CardDescription>
         </CardHeader>
         <CardContent>
-            <div className="space-y-2">
-                <p className="text-sm text-muted-foreground">You can now mark attendance by scanning a student's QR code.</p>
-                <ol className="list-decimal list-inside text-sm space-y-1">
-                    <li>Go to the student's profile page to find their unique QR code.</li>
-                    <li>Use your phone or tablet's camera app to scan the code.</li>
-                    <li>This will open a link in your browser that automatically marks the student as present for today.</li>
-                </ol>
-                <p className="text-xs text-muted-foreground pt-2">Each student's QR code can be printed and used as an ID card.</p>
-            </div>
+            <Link href="/admin/attendance/scan" passHref>
+                <Button className="w-full">
+                    <QrCode className="mr-2 h-4 w-4" />
+                    Open Scanner
+                </Button>
+            </Link>
+            <p className="text-xs text-muted-foreground pt-4 text-center">Student QR codes can be found on their individual profile pages.</p>
         </CardContent>
       </Card>
 
