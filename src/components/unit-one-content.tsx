@@ -20,6 +20,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./ui/
 import { Button } from "./ui/button";
 import { Loader2, Volume2 } from "lucide-react";
 import { useAudioCache } from "@/context/audio-cache-context";
+import { useToast } from "@/hooks/use-toast";
 
 export function UnitOneContent() {
   const [playingText, setPlayingText] = useState<string | null>(null);
@@ -27,6 +28,7 @@ export function UnitOneContent() {
   const [isClient, setIsClient] = useState(false);
   const { getAudioForText } = useAudioCache();
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
     setIsClient(true);
@@ -42,7 +44,15 @@ export function UnitOneContent() {
     
     setPlayingText(text);
     
-    audio.play().catch(e => console.error("Audio play failed", e));
+    audio.play().catch(e => {
+        console.error("Audio play failed", e);
+        toast({
+            variant: "destructive",
+            title: "Playback Error",
+            description: "Could not play audio. Your browser might be blocking it."
+        });
+        setPlayingText(null);
+    });
     
     audio.onended = () => {
         setPlayingText(null);
@@ -50,10 +60,15 @@ export function UnitOneContent() {
     };
     audio.onerror = (e) => {
         console.error("Error playing audio from cache:", e);
+        toast({
+            variant: "destructive",
+            title: "Audio Playback Error",
+            description: "An unexpected error occurred while trying to play the audio.",
+        });
         setPlayingText(null);
         audioRef.current = null;
     }
-  }, []);
+  }, [toast]);
 
 
   const playText = useCallback(async (text: string) => {
@@ -74,10 +89,15 @@ export function UnitOneContent() {
       playAudio(audioUrl, text);
     } catch (error) {
       console.error("Error getting audio for text:", error);
+      toast({
+        variant: "destructive",
+        title: "Audio Generation Error",
+        description: "Could not generate audio for the selected text. Please try again.",
+      });
     } finally {
       setLoadingText(null);
     }
-  }, [loadingText, playingText, getAudioForText, playAudio]);
+  }, [loadingText, playingText, getAudioForText, playAudio, toast]);
 
   const AudioButton = ({ text }: { text: string }) => (
     <Button variant="ghost" size="icon" className="h-6 w-6 shrink-0" onClick={() => playText(text)} disabled={!!loadingText && loadingText !== text}>
