@@ -19,6 +19,7 @@ import {
   Percent,
   Building,
   QrCode,
+  Download,
 } from 'lucide-react';
 import Image from 'next/image';
 import {
@@ -218,6 +219,15 @@ export default function StudentProfilePage() {
                 width={250}
                 height={250}
             />
+            <Button asChild>
+                <a
+                    href={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(qrData)}`}
+                    download={`${student.name.replace(/\s+/g, '_')}-QRCode.png`}
+                >
+                    <Download className="mr-2 h-4 w-4" />
+                    Download QR Code
+                </a>
+            </Button>
             <p className="text-xs text-muted-foreground">If scanning a relative path doesn't work, ensure your environment variable <code className='bg-muted p-1 rounded'>NEXT_PUBLIC_APP_URL</code> is set.</p>
         </CardContent>
     </Card>
