@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -16,49 +16,74 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./ui/card";
 import { Button } from "./ui/button";
 import { Loader2, Volume2 } from "lucide-react";
 import { useAudioCache } from "@/context/audio-cache-context";
 
 export function UnitOneContent() {
-  const [playingLetter, setPlayingLetter] = useState<string | null>(null);
-  const [loadingLetter, setLoadingLetter] = useState<string | null>(null);
+  const [playingText, setPlayingText] = useState<string | null>(null);
+  const [loadingText, setLoadingText] = useState<string | null>(null);
   const [isClient, setIsClient] = useState(false);
   const { getAudioForText } = useAudioCache();
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  const playAudio = useCallback((audioUrl: string, letter: string) => {
+  const playAudio = useCallback((audioUrl: string, text: string) => {
+    if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = "";
+    }
     const audio = new Audio(audioUrl);
-    setPlayingLetter(letter);
-    audio.play();
-    audio.onended = () => setPlayingLetter(null);
+    audioRef.current = audio;
+    
+    setPlayingText(text);
+    
+    audio.play().catch(e => console.error("Audio play failed", e));
+    
+    audio.onended = () => {
+        setPlayingText(null);
+        audioRef.current = null;
+    };
     audio.onerror = (e) => {
         console.error("Error playing audio from cache:", e);
-        setPlayingLetter(null);
+        setPlayingText(null);
+        audioRef.current = null;
     }
   }, []);
 
 
-  const playLetter = useCallback(async (letter: string) => {
-    if (loadingLetter) return;
+  const playText = useCallback(async (text: string) => {
+    if (loadingText) return;
+    
+    if (audioRef.current) {
+        audioRef.current.pause();
+    }
+    if (playingText === text) {
+        setPlayingText(null);
+        return;
+    }
 
-    const textToSay = `The letter ${letter}`;
-    setLoadingLetter(letter);
+    setLoadingText(text);
 
     try {
-      const audioUrl = await getAudioForText(textToSay);
-      playAudio(audioUrl, letter);
+      const audioUrl = await getAudioForText(text);
+      playAudio(audioUrl, text);
     } catch (error) {
-      console.error("Error getting audio for letter:", error);
+      console.error("Error getting audio for text:", error);
     } finally {
-      setLoadingLetter(null);
+      setLoadingText(null);
     }
-  }, [loadingLetter, playAudio, getAudioForText]);
+  }, [loadingText, playingText, getAudioForText, playAudio]);
+
+  const AudioButton = ({ text }: { text: string }) => (
+    <Button variant="ghost" size="icon" className="h-6 w-6 shrink-0" onClick={() => playText(text)} disabled={!!loadingText && loadingText !== text}>
+        {loadingText === text ? <Loader2 className="h-4 w-4 animate-spin"/> : <Volume2 className={`h-4 w-4 ${playingText === text ? "text-primary animate-pulse" : ""}`} />}
+    </Button>
+  );
 
   const alphabet = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z".split(',');
   const vowels = ["A", "E", "I", "O", "U"];
@@ -94,9 +119,9 @@ export function UnitOneContent() {
                 <p className="font-semibold">Full Alphabet:</p>
                 <div className="flex flex-wrap gap-2">
                   {alphabet.map(l => (
-                    <Button variant="outline" key={l} onClick={() => playLetter(l)} disabled={!!loadingLetter} className="w-12 h-12 text-lg">
-                       {loadingLetter === l ? <Loader2 className="animate-spin"/> : l}
-                       {playingLetter === l && <Volume2 className="ml-2 h-4 w-4 text-primary animate-pulse" />}
+                    <Button variant="outline" key={l} onClick={() => playText(`The letter ${l}`)} disabled={!!loadingText} className="w-12 h-12 text-lg">
+                       {loadingText === `The letter ${l}` ? <Loader2 className="animate-spin"/> : l}
+                       {playingText === `The letter ${l}` && <Volume2 className="ml-2 h-4 w-4 text-primary animate-pulse" />}
                     </Button>
                   ))}
                 </div>
@@ -106,9 +131,9 @@ export function UnitOneContent() {
                 <h4 className="font-semibold text-lg mb-2">Vowels (5)</h4>
                 <div className="flex flex-wrap gap-2">
                   {vowels.map(l => (
-                     <Button variant="secondary" key={l} onClick={() => playLetter(l)} disabled={!!loadingLetter} className="w-12 h-12 text-lg">
-                       {loadingLetter === l ? <Loader2 className="animate-spin"/> : l}
-                       {playingLetter === l && <Volume2 className="ml-2 h-4 w-4 text-primary animate-pulse" />}
+                     <Button variant="secondary" key={l} onClick={() => playText(`The letter ${l}`)} disabled={!!loadingText} className="w-12 h-12 text-lg">
+                       {loadingText === `The letter ${l}` ? <Loader2 className="animate-spin"/> : l}
+                       {playingText === `The letter ${l}` && <Volume2 className="ml-2 h-4 w-4 text-primary animate-pulse" />}
                     </Button>
                   ))}
                 </div>
@@ -131,35 +156,21 @@ export function UnitOneContent() {
             </div>
             <div>
               <h4 className="font-semibold text-lg mb-2">Dialogue Practice</h4>
-              <div className="p-4 border rounded-lg bg-muted/50 space-y-1 text-sm">
-                <p><strong>Anna:</strong> Good morning, Juma!</p>
-                <p><strong>Juma:</strong> Good morning, Anna!</p>
-                <p><strong>Anna:</strong> how are you ?</p>
-                <p><strong>Juma:</strong> I am fine thank you and you?</p>
-                <p><strong>Anna:</strong> fine too, I am happy to meet you, Juma.</p>
-                <p><strong>Juma:</strong> I am happy to meet you too, Anna, where were you nowadays?</p>
-                <p><strong>Anna:</strong> I was at kasulu to learn English language.</p>
-                <p><strong>Juma:</strong> what did you learn?</p>
-                <p><strong>Anna:</strong> we learnt English alphabet.</p>
-                <p><strong>Juma:</strong> how many English letters do we have?</p>
-                <p><strong>Anna:</strong> we have 26 English letters,divided into two classes namely vowels and consonants.</p>
-                <p><strong>Juma:</strong> it means that there are thirteen vowels and thirteen consonants?</p>
-                <p><strong>Anna:</strong> no, there are five vowels and twenty-one consonants.</p>
-                <p><strong>Juma:</strong> can you please teach me those letters?</p>
-                <p><strong>Anna:</strong> yes, let me teach you how to sing them.</p>
-                <p><strong>Juma:</strong> I shall be thankful to you.</p>
-                <p><strong>Anna:</strong> let me sing alone after we will sing together.</p>
-                <p><strong>Juma:</strong> no matter what.</p>
-                <p><strong>Anna:</strong> [ A,B,C,D........Z]</p>
-                <p><strong>Juma:</strong> it is a difficult song.</p>
-                <p><strong>Anna:</strong> no, you are going to find it easy.</p>
-                <p><strong>Juma:</strong> let me wait ,I shall see.</p>
-                <p><strong>Anna:</strong> so , be all ears and repeat after me [A,B,C....]</p>
-                <p><strong>Juma:</strong> okay ,thank you very much for teaching me how to sing English alphabet ,tomorrow I shall go to join unit one at I.E.T.S.</p>
-                <p><strong>Anna:</strong> it is your choice because English is very important nowadays.</p>
-                <p><strong>Juma:</strong> Yeah, see you next week.</p>
-                <p><strong>Anna:</strong> we shall meet if God wishes.</p>
-              </div>
+               <div className="p-4 border rounded-lg bg-muted/50 space-y-2 text-sm">
+                    <div className="flex items-center gap-2"><p><strong>Anna:</strong> Good morning, Juma!</p><AudioButton text="Good morning, Juma!" /></div>
+                    <div className="flex items-center gap-2 justify-end text-right"><p><strong>Juma:</strong> Good morning, Anna!</p><AudioButton text="Good morning, Anna!" /></div>
+                    <div className="flex items-center gap-2"><p><strong>Anna:</strong> how are you ?</p><AudioButton text="how are you ?" /></div>
+                    <div className="flex items-center gap-2 justify-end text-right"><p><strong>Juma:</strong> I am fine thank you and you?</p><AudioButton text="I am fine thank you and you?" /></div>
+                    <div className="flex items-center gap-2"><p><strong>Anna:</strong> fine too, I am happy to meet you, Juma.</p><AudioButton text="fine too, I am happy to meet you, Juma." /></div>
+                    <div className="flex items-center gap-2 justify-end text-right"><p><strong>Juma:</strong> I am happy to meet you too, Anna, where were you nowadays?</p><AudioButton text="I am happy to meet you too, Anna, where were you nowadays?" /></div>
+                    <div className="flex items-center gap-2"><p><strong>Anna:</strong> I was at kasulu to learn English language.</p><AudioButton text="I was at kasulu to learn English language." /></div>
+                    <div className="flex items-center gap-2 justify-end text-right"><p><strong>Juma:</strong> what did you learn?</p><AudioButton text="what did you learn?" /></div>
+                    <div className="flex items-center gap-2"><p><strong>Anna:</strong> we learnt English alphabet.</p><AudioButton text="we learnt English alphabet." /></div>
+                    <div className="flex items-center gap-2 justify-end text-right"><p><strong>Juma:</strong> how many English letters do we have?</p><AudioButton text="how many English letters do we have?" /></div>
+                    <div className="flex items-center gap-2"><p><strong>Anna:</strong> we have 26 English letters,divided into two classes namely vowels and consonants.</p><AudioButton text="we have 26 English letters,divided into two classes namely vowels and consonants." /></div>
+                    <div className="flex items-center gap-2 justify-end text-right"><p><strong>Juma:</strong> it means that there are thirteen vowels and thirteen consonants?</p><AudioButton text="it means that there are thirteen vowels and thirteen consonants?" /></div>
+                    <div className="flex items-center gap-2"><p><strong>Anna:</strong> no, there are five vowels and twenty-one consonants.</p><AudioButton text="no, there are five vowels and twenty-one consonants." /></div>
+                </div>
             </div>
              <div>
                 <h4 className="font-semibold text-lg mb-2">Expressions</h4>
@@ -780,167 +791,19 @@ export function UnitOneContent() {
                                 <CardTitle>Things We Find in the House/or at Home</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <ul className="list-disc pl-6 text-muted-foreground columns-2 md:columns-3 space-y-1 text-sm">
-                                    <li>casserole: isafuriya</li>
-                                    <li>knife: imbugita</li>
-                                    <li>metal stove: imbabura</li>
-                                    <li>three Stones: amashiga</li>
-                                    <li>cooking stones: amashiga</li>
-                                    <li>sickle: agakero</li>
-                                    <li>saw: umusumeno</li>
-                                    <li>mat: ikirago</li>
-                                    <li>watering can: irozwari</li>
-                                    <li>toolcan: ikidumu</li>
-                                    <li>kettle: ibirika</li>
-                                    <li>mirror: ikiyo</li>
-                                    <li>glasses: ibirahuri/amarori</li>
-                                    <li>needle: urushinge</li>
-                                    <li>sword: inkota</li>
-                                    <li>soap: isabuni</li>
-                                    <li>fire: umuriro</li>
-                                    <li>scissors: umukasi</li>
-                                    <li>mortar: isekuro</li>
-                                    <li>pestle: umuhini</li>
-                                    <li>comb: igisokozo</li>
-                                    <li>sieve: akayungiro</li>
-                                    <li>can: ikigopo</li>
-                                    <li>tin: umugereni</li>
-                                    <li>lid: umufuniko</li>
-                                    <li>sachet: isashe</li>
-                                    <li>spade: igipawa</li>
-                                    <li>tool: igikoresho</li>
-                                    <li>Broom: umukubuzo</li>
-                                    <li>key lock: igufuri</li>
-                                    <li>padlock: igufuri</li>
-                                    <li>gallon: akadumu</li>
-                                    <li>bag: ibegi</li>
-                                    <li>basin: ibase</li>
-                                    <li>wheelbarrow: inkorofani</li>
-                                    <li>stretcher: inderuzo</li>
-                                    <li>nails: imisumari</li>
-                                    <li>hammer: inyundo</li>
-                                    <li>door: umuryango</li>
-                                    <li>window: idirisha</li>
-                                    <li>honey-comb: ikimamara cinzuki</li>
-                                    <li>mallet: ubuhiri</li>
-                                    <li>iron sheet: amabati</li>
-                                    <li>safety-pin: igikwashu</li>
-                                    <li>razor: urwembe</li>
-                                    <li>brush: uburoso</li>
-                                    <li>funnel: umubirikira</li>
-                                    <li>dropper: umwino</li>
-                                    <li>shoes: ibirato</li>
-                                    <li>watch: isaha</li>
-                                    <li>axe: ishoka</li>
-                                    <li>bricks: amatofari</li>
-                                    <li>tablecloth: Igitambara cokumeza</li>
-                                    <li>lamp: itara</li>
-                                    <li>hotpot: isahan zigumya ubushuh</li>
-                                    <li>cork: akarumyo</li>
-                                    <li>pillars: inkingi</li>
-                                    <li>steel wire: utwobogesha ivyombo</li>
-                                    <li>coffin: isandugu</li>
-                                    <li>partition plate: isahani</li>
-                                    <li>bathroom: ubwogero</li>
-                                    <li>roof: toit/igisenge</li>
-                                    <li>floor: hasi munzu</li>
-                                    <li>stool: intebe yistuli</li>
-                                    <li>spear: icumu</li>
-                                    <li>arrows: imyampi</li>
-                                    <li>mattress: imatera</li>
-                                    <li>ladder: ingazi</li>
-                                    <li>rope: umugozi</li>
-                                    <li>jerrycan: akadumu</li>
-                                    <li>tile: amategura</li>
-                                    <li>mosquito net: umusegetera</li>
-                                    <li>Thread: urunyuzi</li>
-                                    <li>Clothline: umugozi wimpuzu</li>
-                                    <li>washing net: ikiwavu c ivyombo</li>
-                                    <li>stopper: ikizibo</li>
-                                    <li>Sauce spoon: ikimamiyo</li>
-                                    <li>wire cloth: clothline</li>
-                                    <li>cradle: isimbizo</li>
-                                    <li>Air-conditioning: climatiseur</li>
-                                    <li>pickaxe: isipiri</li>
-                                    <li>Bath tab: aho kwogera</li>
-                                    <li>rake: irato</li>
-                                    <li>closet: porte manteau</li>
-                                    <li>jar: umubindi</li>
-                                    <li>clothes dryer: imashine yumutsa impuzu</li>
-                                    <li>pitcher: umubindi</li>
-                                    <li>computer: tarakilishi</li>
-                                    <li>kitchen: igikoni</li>
-                                    <li>pillow: umusego</li>
-                                    <li>panga</li>
-                                    <li>curtains: irido</li>
-                                    <li>blanket: uburengeti</li>
-                                    <li>sewing machine: imashine ishona</li>
-                                    <li>bedsheets: amashuka</li>
-                                    <li>telephone: isimu</li>
-                                    <li>teaspoon: akayiko gato</li>
-                                    <li>television: imboneshakure</li>
-                                    <li>slicespoon: ikiyiko kitobaguye</li>
-                                    <li>washing machine: imashin imesa</li>
-                                    <li>billhook: umuhoro (serpette)</li>
-                                    <li>sofa: ifoteye</li>
-                                    <li>cupboard: akabati</li>
-                                    <li>stairs: escaliers/ingazi</li>
-                                    <li>pail: indobo yicuma</li>
-                                    <li>tap: ibomba</li>
-                                    <li>bucket: indobo</li>
-                                    <li>palm oil: amavuta yibigazi</li>
-                                    <li>basket: igiseke</li>
-                                    <li>dishes: ivyombo</li>
-                                    <li>matchbox: ikibiriti cubwampi</li>
-                                    <li>bowl: isorori/ibakuri</li>
-                                    <li>matchsticks: ubwampi</li>
-                                    <li>fridge: ifirigo</li>
-                                    <li>firewood: inkwi</li>
-                                    <li>thermos: iteremosi</li>
-                                    <li>vaccum flask: thermos</li>
-                                    <li>Vaccum bottle: thermos</li>
-                                    <li>flashlight: itoroshe</li>
-                                    <li>Food ingrendients: ibirungo</li>
-                                    <li>mixer: kavanga ibirungo</li>
-                                    <li>iron-press: ipasi</li>
-                                    <li>grill: igikarango</li>
-                                    <li>harcoals: amakara</li>
-                                    <li>electrical stove: iziko ryubumeme</li>
-                                    <li>fork: ifurusheti</li>
-                                    <li>Improved stove: igishiga</li>
-                                    <li>hoe: isuka</li>
-                                    <li>plate: isahani</li>
-                                    <li>plastic sheet: ihema</li>
-                                    <li>pot: inkono</li>
-                                    <li>carpet: itapi</li>
-                                    <li>cup: igikombe</li>
-                                    <li>crochet hook: ikoroshi</li>
-                                    <li>spoon: ikiyiko</li>
-                                    <li>millstone: urusyo</li>
-                                    <li>woodenspoon: umudahara</li>
-                                    <li>box: ikarato</li>
-                                    <li>chair: chaise</li>
-                                    <li>tray: isiniya</li>
-                                    <li>radio: iradiyo</li>
-                                    <li>Chamberpot: Icombo basobamwo</li>
-                                    <li>pan: isafuriya</li>
-                                    <li>baby potty: Ipo yumwana</li>
-                                    <li>steamer: isafuriya igumya ubushuhe</li>
-                                    <li>mousetrap: akamashu</li>
-                                    <li>bed: igitanda</li>
-                                    <li>fryingpan: agasafuriya bakarangamwo</li>
-                                    <li>toilet paper: impapuro zokwiwese</li>
-                                    <li>suitcase: ivarise</li>
-                                    <li>rucksack: akabagi kokurutugu</li>
-                                    <li>rubbish bin: inyabarega</li>
-                                    <li>plastic chair: iyeboyebo</li>
-                                    <li>Bingo mug: igikombe</li>
-                                    <li>machete: igipanga</li>
-                                    <li>dishtowel: akoguhanagura ivyombo</li>
-                                    <li>dish cloth: ikiwavu civyombo</li>
-                                    <li>string: imirya</li>
-                                    <li>shelf: akagege</li>
-                                    <li>stake: imambo , ikirembezo canke urwego</li>
+                                 <ul className="pl-0 text-muted-foreground columns-2 md:columns-3 space-y-1 text-sm">
+                                    <li className="flex items-center gap-1"><AudioButton text="casserole" /><span>casserole: isafuriya</span></li>
+                                    <li className="flex items-center gap-1"><AudioButton text="knife" /><span>knife: imbugita</span></li>
+                                    <li className="flex items-center gap-1"><AudioButton text="metal stove" /><span>metal stove: imbabura</span></li>
+                                    <li className="flex items-center gap-1"><AudioButton text="three Stones" /><span>three Stones: amashiga</span></li>
+                                    <li className="flex items-center gap-1"><AudioButton text="sickle" /><span>sickle: agakero</span></li>
+                                    <li className="flex items-center gap-1"><AudioButton text="saw" /><span>saw: umusumeno</span></li>
+                                    <li className="flex items-center gap-1"><AudioButton text="mat" /><span>mat: ikirago</span></li>
+                                    <li className="flex items-center gap-1"><AudioButton text="watering can" /><span>watering can: irozwari</span></li>
+                                    <li className="flex items-center gap-1"><AudioButton text="kettle" /><span>kettle: ibirika</span></li>
+                                    <li className="flex items-center gap-1"><AudioButton text="mirror" /><span>mirror: ikiyo</span></li>
+                                    <li className="flex items-center gap-1"><AudioButton text="glasses" /><span>glasses: ibirahuri/amarori</span></li>
+                                    <li className="flex items-center gap-1"><AudioButton text="needle" /><span>needle: urushinge</span></li>
                                 </ul>
                                 <div className="mt-4 space-y-2 text-sm">
                                     <h5 className="font-semibold">Examples in a Sentence</h5>
@@ -1596,7 +1459,7 @@ export function UnitOneContent() {
                             </CardContent>
                         </Card>
                     </AccordionContent>
-                </AccordionItem>
+                 </AccordionItem>
                  <AccordionItem value="people">
                     <AccordionTrigger>C. People</AccordionTrigger>
                     <AccordionContent>
