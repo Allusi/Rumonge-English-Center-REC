@@ -2,6 +2,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import Image from "next/image";
 import {
   Accordion,
   AccordionContent,
@@ -21,6 +22,7 @@ import { Button } from "./ui/button";
 import { Loader2, Volume2 } from "lucide-react";
 import { useAudioCache } from "@/context/audio-cache-context";
 import { useToast } from "@/hooks/use-toast";
+import { PlaceHolderImages } from "@/lib/placeholder-images";
 
 export function UnitOneContent() {
   const [playingText, setPlayingText] = useState<string | null>(null);
@@ -29,6 +31,8 @@ export function UnitOneContent() {
   const { getAudioForText } = useAudioCache();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const { toast } = useToast();
+
+  const getImage = (id: string) => PlaceHolderImages.find((img) => img.id === id);
 
   useEffect(() => {
     setIsClient(true);
@@ -712,6 +716,16 @@ export function UnitOneContent() {
                     <AccordionTrigger>A. Places</AccordionTrigger>
                     <AccordionContent>
                         <p className="text-muted-foreground mb-2">What is a place? A place is everywhere we can find people or animals.</p>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 my-4">
+                            <div className="text-center">
+                                <Image src={getImage('place-town')?.imageUrl!} alt="Town" width={400} height={250} className="rounded-lg object-cover aspect-video" data-ai-hint={getImage('place-town')?.imageHint!} />
+                                <p className="text-sm font-semibold mt-1">Town</p>
+                            </div>
+                            <div className="text-center">
+                                <Image src={getImage('place-village')?.imageUrl!} alt="Village" width={400} height={250} className="rounded-lg object-cover aspect-video" data-ai-hint={getImage('place-village')?.imageHint!} />
+                                <p className="text-sm font-semibold mt-1">Village</p>
+                            </div>
+                        </div>
                         <ul className="list-disc pl-6 text-muted-foreground columns-2">
                             <li>Town: agasagara</li>
                             <li>Bank: ibanki</li>
@@ -928,6 +942,20 @@ export function UnitOneContent() {
                                 <CardDescription>In the forest we find animals we call them "wild animals"</CardDescription>
                             </CardHeader>
                             <CardContent>
+                                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+                                    <div className="text-center">
+                                        <Image src={getImage('animal-lion')?.imageUrl!} alt="Lion" width={300} height={200} className="rounded-lg object-cover aspect-video" data-ai-hint={getImage('animal-lion')?.imageHint!} />
+                                        <p className="text-sm font-semibold mt-1">Lion</p>
+                                    </div>
+                                    <div className="text-center">
+                                        <Image src={getImage('animal-elephant')?.imageUrl!} alt="Elephant" width={300} height={200} className="rounded-lg object-cover aspect-video" data-ai-hint={getImage('animal-elephant')?.imageHint!} />
+                                        <p className="text-sm font-semibold mt-1">Elephant</p>
+                                    </div>
+                                    <div className="text-center">
+                                        <Image src={getImage('animal-monkey')?.imageUrl!} alt="Monkey" width={300} height={200} className="rounded-lg object-cover aspect-video" data-ai-hint={getImage('animal-monkey')?.imageHint!} />
+                                        <p className="text-sm font-semibold mt-1">Monkey</p>
+                                    </div>
+                                </div>
                                 <ul className="list-disc pl-6 text-muted-foreground columns-2 md:columns-3 space-y-1 text-sm">
                                     <li>Buffalo: imbogo</li>
                                     <li>Elephants: inzovu</li>
@@ -1012,6 +1040,24 @@ export function UnitOneContent() {
                                 <CardDescription>At home we find those animals that we call "domestic animals"</CardDescription>
                             </CardHeader>
                             <CardContent>
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                                     <div className="text-center">
+                                        <Image src={getImage('animal-cow')?.imageUrl!} alt="Cow" width={300} height={200} className="rounded-lg object-cover aspect-video" data-ai-hint={getImage('animal-cow')?.imageHint!} />
+                                        <p className="text-sm font-semibold mt-1">Cow</p>
+                                    </div>
+                                    <div className="text-center">
+                                        <Image src={getImage('animal-goat')?.imageUrl!} alt="Goat" width={300} height={200} className="rounded-lg object-cover aspect-video" data-ai-hint={getImage('animal-goat')?.imageHint!} />
+                                        <p className="text-sm font-semibold mt-1">Goat</p>
+                                    </div>
+                                     <div className="text-center">
+                                        <Image src={getImage('animal-hen')?.imageUrl!} alt="Hen" width={300} height={200} className="rounded-lg object-cover aspect-video" data-ai-hint={getImage('animal-hen')?.imageHint!} />
+                                        <p className="text-sm font-semibold mt-1">Hen</p>
+                                    </div>
+                                    <div className="text-center">
+                                        <Image src={getImage('animal-dog')?.imageUrl!} alt="Dog" width={300} height={200} className="rounded-lg object-cover aspect-video" data-ai-hint={getImage('animal-dog')?.imageHint!} />
+                                        <p className="text-sm font-semibold mt-1">Dog</p>
+                                    </div>
+                                </div>
                                 <Table>
                                     <TableHeader>
                                         <TableRow>
@@ -2274,11 +2320,23 @@ able to make it.</p>
              <div className="mt-4">
                 <h5 className="font-semibold text-md mb-2">Study the following examples:</h5>
                 <p className="text-sm text-muted-foreground">Where is the ball?</p>
-                <ul className="list-disc pl-6 text-muted-foreground text-sm space-y-1">
-                    <li>The ball is on the table.</li>
-                    <li>The bottle is under the table.</li>
-                    <li>The boy is behind the car.</li>
-                    <li>The girl is in front of the car.</li>
+                <ul className="list-disc pl-6 text-muted-foreground text-sm space-y-4">
+                    <li>
+                        The ball is <span className="font-bold">on</span> the table.
+                        <Image src={getImage('position-on')?.imageUrl!} alt="Ball on table" width={300} height={200} className="rounded-lg object-cover my-2" data-ai-hint={getImage('position-on')?.imageHint!} />
+                    </li>
+                    <li>
+                        The bottle is <span className="font-bold">under</span> the table.
+                        <Image src={getImage('position-under')?.imageUrl!} alt="Bottle under table" width={300} height={200} className="rounded-lg object-cover my-2" data-ai-hint={getImage('position-under')?.imageHint!} />
+                    </li>
+                    <li>
+                        The boy is <span className="font-bold">behind</span> the car.
+                        <Image src={getImage('position-behind')?.imageUrl!} alt="Boy behind car" width={300} height={200} className="rounded-lg object-cover my-2" data-ai-hint={getImage('position-behind')?.imageHint!} />
+                    </li>
+                    <li>
+                        The girl is <span className="font-bold">in front of</span> the car.
+                        <Image src={getImage('position-in-front')?.imageUrl!} alt="Girl in front of car" width={300} height={200} className="rounded-lg object-cover my-2" data-ai-hint={getImage('position-in-front')?.imageHint!} />
+                    </li>
                     <li>The cup is inside the box.</li>
                     <li>The bottle is outside the house.</li>
                     <li>The water is inside the bottle.</li>

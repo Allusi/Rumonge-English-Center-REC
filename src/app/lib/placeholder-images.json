@@ -1,0 +1,88 @@
+{
+  "placeholderImages": [
+    {
+      "id": "user-avatar",
+      "description": "Default user avatar",
+      "imageUrl": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxwZXJzb24lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NjcyOTI1NDF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person portrait"
+    },
+    {
+      "id": "place-town",
+      "description": "A bustling town street",
+      "imageUrl": "https://picsum.photos/seed/placeTown/400/250",
+      "imageHint": "city street"
+    },
+    {
+      "id": "place-village",
+      "description": "A quiet rural village",
+      "imageUrl": "https://picsum.photos/seed/placeVillage/400/250",
+      "imageHint": "rural village"
+    },
+    {
+      "id": "animal-lion",
+      "description": "A majestic lion",
+      "imageUrl": "https://picsum.photos/seed/animalLion/300/200",
+      "imageHint": "lion"
+    },
+    {
+      "id": "animal-elephant",
+      "description": "A large elephant",
+      "imageUrl": "https://picsum.photos/seed/animalElephant/300/200",
+      "imageHint": "elephant"
+    },
+    {
+      "id": "animal-monkey",
+      "description": "A playful monkey",
+      "imageUrl": "https://picsum.photos/seed/animalMonkey/300/200",
+      "imageHint": "monkey"
+    },
+    {
+      "id": "animal-cow",
+      "description": "A cow in a field",
+      "imageUrl": "https://picsum.photos/seed/animalCow/300/200",
+      "imageHint": "cow field"
+    },
+    {
+      "id": "animal-goat",
+      "description": "A goat on a farm",
+      "imageUrl": "https://picsum.photos/seed/animalGoat/300/200",
+      "imageHint": "goat"
+    },
+    {
+      "id": "animal-hen",
+      "description": "A hen in a farm",
+      "imageUrl": "https://picsum.photos/seed/animalHen/300/200",
+      "imageHint": "hen chicken"
+    },
+    {
+      "id": "animal-dog",
+      "description": "A friendly dog",
+      "imageUrl": "https://picsum.photos/seed/animalDog/300/200",
+      "imageHint": "dog pet"
+    },
+    {
+      "id": "position-on",
+      "description": "A ball on a table",
+      "imageUrl": "https://picsum.photos/seed/posOn/300/200",
+      "imageHint": "ball on table"
+    },
+    {
+      "id": "position-under",
+      "description": "A bottle under a table",
+      "imageUrl": "https://picsum.photos/seed/posUnder/300/200",
+      "imageHint": "bottle under table"
+    },
+    {
+      "id": "position-behind",
+      "description": "A person behind a car",
+      "imageUrl": "https://picsum.photos/seed/posBehind/300/200",
+      "imageHint": "person behind car"
+    },
+    {
+      "id": "position-in-front",
+      "description": "A person in front of a car",
+      "imageUrl": "https://picsum.photos/seed/posInfront/300/200",
+      "imageHint": "person front car"
+    }
+  ]
+}
