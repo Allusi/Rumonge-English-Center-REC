@@ -1,4 +1,3 @@
-
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -37,7 +36,7 @@ import { useEffect, useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Calendar } from '@/components/ui/calendar';
 import { Skeleton } from '@/components/ui/skeleton';
-import { CheckCircle2, XCircle, ArrowLeft } from 'lucide-react';
+import { CheckCircle2, XCircle, ArrowLeft, QrCode } from 'lucide-react';
 import { format } from 'date-fns';
 import Link from 'next/link';
 
@@ -101,6 +100,26 @@ export default function AdminAttendancePage() {
             </p>
         </div>
       </div>
+
+      <Card>
+        <CardHeader>
+            <CardTitle className="flex items-center gap-2"><QrCode />QR Code Attendance</CardTitle>
+            <CardDescription>
+                A new way to take attendance quickly.
+            </CardDescription>
+        </CardHeader>
+        <CardContent>
+            <div className="space-y-2">
+                <p className="text-sm text-muted-foreground">You can now mark attendance by scanning a student's QR code.</p>
+                <ol className="list-decimal list-inside text-sm space-y-1">
+                    <li>Go to the student's profile page to find their unique QR code.</li>
+                    <li>Use your phone or tablet's camera app to scan the code.</li>
+                    <li>This will open a link in your browser that automatically marks the student as present for today.</li>
+                </ol>
+                <p className="text-xs text-muted-foreground pt-2">Each student's QR code can be printed and used as an ID card.</p>
+            </div>
+        </CardContent>
+      </Card>
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         <div className="lg:col-span-1">

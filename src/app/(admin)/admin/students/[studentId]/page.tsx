@@ -1,4 +1,3 @@
-
 'use client';
 
 import {
@@ -18,7 +17,10 @@ import {
   ShieldCheck,
   ShieldX,
   Percent,
+  Building,
+  QrCode,
 } from 'lucide-react';
+import Image from 'next/image';
 import {
   Card,
   CardContent,
@@ -135,6 +137,9 @@ export default function StudentProfilePage() {
     graduated: 'Graduated',
     never_went_to_school: 'Never Went to School'
   };
+  
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || '';
+  const qrData = `${appUrl}/admin/attendance/mark-present?studentId=${student.id}`;
 
   return (
     <div className="flex flex-col gap-8">
@@ -195,6 +200,27 @@ export default function StudentProfilePage() {
             <DetailItem icon={<HelpCircle />} label="Reason for Learning" value={<p className="text-base font-normal">{student.learningReason}</p>} />
         </CardContent>
       </Card>
+
+      <Card>
+        <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+                <QrCode />
+                Attendance QR Code
+            </CardTitle>
+            <CardDescription>
+            This QR code is unique to {student.name}. Scan it with a camera to mark attendance. It can be printed on an ID card.
+            </CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col items-center justify-center p-6 gap-4">
+            <Image
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(qrData)}`}
+                alt={`QR Code for ${student.name}`}
+                width={250}
+                height={250}
+            />
+            <p className="text-xs text-muted-foreground">If scanning a relative path doesn't work, ensure your environment variable <code className='bg-muted p-1 rounded'>NEXT_PUBLIC_APP_URL</code> is set.</p>
+        </CardContent>
+    </Card>
     </div>
   );
 }
