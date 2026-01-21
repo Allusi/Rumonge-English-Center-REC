@@ -14,7 +14,7 @@ const withPWA = require('next-pwa')({
 const nextConfig: NextConfig = {
   output: 'export',
   basePath: '/Rumonge-English-Center-REC',
-  assetPrefix: '/Rumonge-English-Center-REC/',
+  assetPrefix: '/Rumonge-English-Center-REC',
   typescript: {
     ignoreBuildErrors: true,
   },
