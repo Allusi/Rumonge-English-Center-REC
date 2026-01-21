@@ -50,6 +50,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  pageExtensions: ['page.tsx'],
 };
 
 export default withPWA(nextConfig);
