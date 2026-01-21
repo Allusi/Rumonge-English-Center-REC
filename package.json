@@ -1,8 +1,8 @@
 {
-  "name": "nextn",
+  "name": "rumonge-english-center-rec",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://your-username.github.io/nextn",
+  "homepage": "https://Allusi.github.io/Rumonge-English-Center-REC",
   "scripts": {
     "dev": "next dev -p 9002",
     "genkit:dev": "genkit start -- tsx src/ai/dev.ts",
